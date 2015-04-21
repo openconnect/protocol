@@ -264,21 +264,85 @@
   </section>
 
   <section anchor="secondary-channel-establishment" title="Establishment of Secondary (UDP) Channel">
-  <t>xxx
+  <t>To establish the secondary UDP channel the client must advertise
+  support for it during the issue of the HTTP CONNECT request. This
+  is done by appending the following headers.
+       <list style="hanging">
+	<t>X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
+	for the DTLS session.</t>
+	<t>X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
+	string AES256-SHA:AES128-SHA:DES-CBC3-SHA).</t>
+       </list>
   </t>
+  <t>
+  The DTLS established DTLS channel utilizes session resumption as a method
+  for preshared-key authentication. That is the value presented in
+  X-DTLS-Master-Secret is set as a master secret to be resumed.
+  </t>
+  <t>
+  The following table lists the ciphers negotiated via the
+  X-DTLS-CipherSuite header, and the corresponding DTLS ciphersuite.
+  	</t>
+	<texttable anchor='cipher_table'>
+		<preamble></preamble>
+		<ttcol width="30%" align='center'>OpenConnect cipher</ttcol>
+		<ttcol width="40%" align='center'>DTLS ciphersuite</ttcol>
+		<ttcol width="20%" align='center'>DTLS version</ttcol>
+<c>   DES-CBC3-SHA</c><c>TLS_RSA_WITH_AES_128_CBC_SHA1</c><c>DTLS 0.9 (pre-draft version)</c>
+<c>   AES128-SHA</c><c>TLS_RSA_WITH_3DES_EDE_CBC_SHA1s</c><c>DTLS 0.9 (pre-draft version)</c>
+<c>   OC-DTLS1_2-AES128-GCM</c><c>TLS_RSA_WITH_AES_128_GCM_SHA256</c><c>DTLS 1.2</c>
+<c>   OC-DTLS1_2-AES256-GCM</c><c>TLS_RSA_WITH_AES_256_GCM_SHA256</c><c>DTLS 1.2</c>
+		<postamble></postamble>
+	</texttable>
   </section>
 
 </section>
 
 <section anchor="primary-channel-protocol" title="The Primary Channel Protocol">
 <t>
-xxx
+The format of the packets sent over the primary channel consists of an
+8-bytes header followed by the raw TLS record packet. The header is shown below.
 </t>
+
+	<texttable anchor='cstp_table'>
+		<preamble></preamble>
+		<ttcol width="30%" align='center'>byte</ttcol>
+		<ttcol width="30%" align='left'>value</ttcol>
+<c>0</c><c>fixed to 0x53 (S)</c>
+<c>1</c><c>fixed to 0x54 (T)</c>
+<c>2</c><c>fixed to 0x46 (F)</c>
+<c>3</c><c>fixed to 0x01</c>
+<c>4-5</c><c>The length of the packet in big endian order</c>
+<c>6</c><c>The type of the packet (see below for available types)</c>
+<c>7</c><c>fixed to 0x00</c>
+		<postamble></postamble>
+	</texttable>
+
+<t>
+The available packet types are listed in <xref target="packet_table"/>.
+</t>
+	<texttable anchor='packet_table'>
+		<preamble></preamble>
+		<ttcol width="30%" align='center'>Value</ttcol>
+		<ttcol width="50%" align='left'>Description</ttcol>
+<c>0x00</c><c>Data: the TLS record packet contains an IP or IPv6 packet</c>
+<c>0x03</c><c>DPD-REQ: used for dead peer detection. Once sent the peer
+should reply with a DPD-RESP packet, that has the same contents as this
+one.</c>
+<c>0x04</c><c>DPD-RESP: used as a response to a previously received DPD-REQ.</c>
+<c>0x05</c><c>Disconnect: sent by the server to ask the client to disconnect.</c>
+<c>0x07</c><c>Keepalive: sent by any peer.</c>
+<c>0x08</c><c>Compressed Data: a Data packet which is compressed prior to encryption.</c>
+<c>0x09</c><c>Terminate: sent by the server to indicate that the server is shutting down.</c>
+		<postamble></postamble>
+	</texttable>
 </section>
 
 <section anchor="secondary-channel-protocol" title="The Secondary (UDP) Channel Protocol">
 <t>
-xxx
+The format of the packets sent over the UDP channel consists of an
+1-byte header followed by the raw DTLS record packet. The header byte 
+contains the packet type as in <xref target="packet_table"/>.
 </t>
 </section>
 
