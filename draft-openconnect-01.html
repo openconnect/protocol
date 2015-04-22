@@ -1,560 +1,785 @@
-
-
-
-
-Network Working Group                               N. Mavrogiannopoulos
-Internet-Draft                                                   Red Hat
-Intended status: Historic                                   January 2015
-Expires: July 5, 2015
-
-
-                The OpenConnect VPN Protocol Version 1.0
-                          draft-openconnect-01
-
-Abstract
-
-   This document specifies version 1.0 of the OpenConnect VPN protocol,
-   a secure VPN protocol that provides communications privacy over the
-   Internet.  That protocol is believed to be compatible with CISCO's
-   AnyConnect VPN protocol.  The protocol allows the establishment of
-   VPN tunnels in a way that is designed to prevent eavesdropping,
-   tampering, or message forgery.
-
-Status of This Memo
-
-   This Internet-Draft is submitted in full conformance with the
-   provisions of BCP 78 and BCP 79.
-
-   Internet-Drafts are working documents of the Internet Engineering
-   Task Force (IETF).  Note that other groups may also distribute
-   working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at http://datatracker.ietf.org/drafts/current/.
-
-   Internet-Drafts are draft documents valid for a maximum of six months
-   and may be updated, replaced, or obsoleted by other documents at any
-   time.  It is inappropriate to use Internet-Drafts as reference
-   material or to cite them other than as "work in progress."
-
-   This Internet-Draft will expire on July 5, 2015.
-
-Copyright Notice
-
-   Copyright (c) 2015 IETF Trust and the persons identified as the
-   document authors.  All rights reserved.
-
-   This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
-   publication of this document.  Please review these documents
-   carefully, as they describe your rights and restrictions with respect
-   to this document.  Code Components extracted from this document must
-   include Simplified BSD License text as described in Section 4.e of
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 1]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-   the Trust Legal Provisions and are provided without warranty as
-   described in the Simplified BSD License.
-
-Table of Contents
-
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Goals of This Document  . . . . . . . . . . . . . . . . . . .   2
-   3.  The OpenConnect Protocol  . . . . . . . . . . . . . . . . . .   2
-     3.1.  VPN Session Establishment . . . . . . . . . . . . . . . .   3
-       3.1.1.  Authentication  . . . . . . . . . . . . . . . . . . .   3
-       3.1.2.  Exchange of Session Parameters  . . . . . . . . . . .   5
-       3.1.3.  Establishment of Primary (TCP) Channel  . . . . . . .   6
-       3.1.4.  Establishment of Secondary (UDP) Channel  . . . . . .   6
-     3.2.  The Primary Channel Protocol  . . . . . . . . . . . . . .   7
-     3.3.  The Secondary (UDP) Channel Protocol  . . . . . . . . . .   9
-     3.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .   9
-     3.5.  The Dead Peer Detection Protocol  . . . . . . . . . . . .   9
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
-   6.  Normative References  . . . . . . . . . . . . . . . . . . . .  10
-
-1.  Introduction
-
-   The purpose of this document is to specify the OpenConnect VPN
-   protocol in a detail in order to allow for multiple interoperable
-   implementations.  That is a protocol that is believed to be
-   compatible with CISCO's AnyConnect protocol.
-
-   While there are many competing VPN protocol solutions, none of them
-   was ever described in a publicly available document.  Even open
-   source VPN solutions have their source code as the primary
-   description of their protocol.  That allowed no easy study of each
-   protocol's properties and weaknesses, and that is one of the points
-   addressed by this document.
-
-2.  Goals of This Document
-
-   The OpenConnect protocol version 1.0 specification is intended
-   primarily for readers who will be implementing the protocol and those
-   doing cryptographic analysis of it.
-
-3.  The OpenConnect Protocol
-
-   The OpenConnect protocol combines the TLS protocol [RFC5246],
-   datagram TLS protocol [RFC6347] and HTTP protocols [RFC2616] to
-   provide an Internet-Layer VPN channel.  The channel is designed to
-   operate using UDP packets, and fallback on TCP if that's not
-   possible.
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 2]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-   In brief the protocol initiates an HTTP over TLS connection on a
-   known port, where client authentication is performed.  After this
-   step, the client initiates an HTTP CONNECT command to establish a VPN
-   channel over TCP.  A secondary VPN channel over UDP will be
-   established using information provided by the server using HTTP
-   headers.  At that point the raw IP packets flow, over the VPN
-   channels.
-
-3.1.  VPN Session Establishment
-
-3.1.1.  Authentication
-
-   The OpenConnect VPN protocol allows for the following types of client
-   authentication, or combinations of them.
-
-   1.  Password: a user can authenticate itself using a password.
-
-   2.  Certificate: a user can authenticate itself using a PKIX
-       certificate it possesses.
-
-   The server is authenticated to the client using a PKIX certificate.
-
-   Once a client establishes a TCP connection to the server's well known
-   port, it initiates the TLS protocol.  The server may require a client
-   certificate to be presented, depending on its configuration.  In the
-   first connection to the server, the client SHOULD verify the provided
-   by the server certificate, and SHOULD store its public key for
-   verification of subsequent sessions.  Thus, subsequent sessions will
-   simply check whether the server's key match the initial.
-
-   [XXX: We need to define a DTD] After the TLS session is established
-   the client sends an HTTP POST request on "/" with the following
-   contents.
-
-       <?xml version="1.0" encoding="UTF-8"?>
-       <config-auth client="vpn" type="init">
-           <version who="vpn">v5.01</version>
-       </config-auth>
-
-   Note that all Content-Types specified in this section are 'text/xml'.
-   At this point the server will reply using forms the client software
-   should prompt the user to fill in.
-
-
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 3]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-       <?xml version="1.0" encoding="UTF-8"?>
-       <auth id="main">
-           <message>Please enter your username</message>
-           <form action="/auth" method="post">
-               <input label="Username:" name="username" type="text" />
-           </form>
-       </auth>
-
-   [XXX: groups?]  The client may be asked to provide the information in
-   separate forms as above, or may be asked combined as below.
-
-     <?xml version="1.0" encoding="UTF-8"?>
-     <auth id="main">
-         <message>Please enter your username</message>
-         <form action="/auth" method="post">
-             <input label="Username:" name="username" type="text" />
-             <input label="Password:" name="password" type="password" />
-         </form>
-     </auth>
-
-   The client software will then fill in the provided form and sent it
-   back to the server using an HTTP POST on the location specified by
-   the server (in the above examples it was "/auth").  The reply could
-   then be the following.
-
-       <?xml version="1.0" encoding="UTF-8"?>
-       <config-auth client="vpn" type="auth-reply">
-           <version who="vpn">v5.01</version>
-           <auth><username>test</username>
-           </auth>
-       </config-auth>
-
-   As mentioned above, the server may ask repeatedly for information
-   until it believes the user is authenticated.  For example, the server
-   could present a second form asking for the password, after the
-   username is provided, or ask for a second password if that is
-   necessary.  In these cases the server should respond with an HTTP 200
-   OK status code, and proceed sending its new request.
-
-   If client authentication fails, the server MUST respond with an HTTP
-   401 unauthorized status code.  Otherwise the server should reply
-   using the following XML structure.
-
-
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 4]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-       <?xml version="1.0" encoding="UTF-8"?>
-       <config-auth client="vpn" type="complete">
-           <version who="sg">0.1(1)</version>
-           <auth id="success">
-           </auth>
-       </config-auth>
-
-3.1.2.  Exchange of Session Parameters
-
-   By the receipt of a success XML structure, the client should issue an
-   HTTP CONNECT request.  In addition it should provide the "X-CSTP-
-   Address-Type" and "X-CSTP-Base-MTU" headers.  The X-CSTP-Address-Type
-   contains one of the following values.
-
-      IPv4: when the client only supports IPv4 addresses.
-
-      IPv6: when the client only supports IPv6 addresses.
-
-      IPv4,IPv6: when the client supports both types of IP addresses.
-
-   The X-CSTP-Base-MTU contains the MTU of the link between the client
-   and the server as estimated by the client.  An example CONNECT
-   request is shown below.
-
-       User-Agent: Open AnyConnect VPN Agent v5.01
-       X-CSTP-Base-MTU: 1280
-       X-CSTP-Address-Type: IPv6,IPv4
-       CONNECT /CSCOSSLC/tunnel HTTP/1.1
-
-   After a successful receipt of an HTTP CONNECT request, the server
-   should reply and provide the client with configuration parameters.
-   The available options follow.
-
-      X-CSTP-Address: The IPv4 address of the client, if IPv4 has been
-      requested.
-
-      X-CSTP-Netmask: The IPv4 netmask of the client, if IPv4 has been
-      requested.
-
-      X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
-      notation, if IPv6 has been requested.
-
-      X-CSTP-DNS: The IP address of a DNS server that can be used for
-      that session.
-
-      X-CSTP-Default-Domain: The DNS domains the provided DNS servers
-      respond for.
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-      X-CSTP-Split-Include: The network address of a route which is
-      provided by this server.
-
-      X-CSTP-Split-Exclude: The network address of a route that is not
-      provided by this server.
-
-      X-CSTP-Base-MTU: The MTU of the link as estimated by this server.
-
-      X-CSTP-DynDNS: Set to "true" if the server is operating on a
-      dynamic DNS.
-
-   [XXX: compression]
-
-3.1.3.  Establishment of Primary (TCP) Channel
-
-   The previous HTTP message is the last HTTP message sent by the
-   server.  After that message, the established TCP channel is used to
-   transport IP packets between the client and the server.  The
-   transferred packets encoding is discussed in Section 3.2.
-
-3.1.4.  Establishment of Secondary (UDP) Channel
-
-   To establish the secondary UDP channel the client must advertise
-   support for it during the issue of the HTTP CONNECT request.  This is
-   done by appending the following headers.
-
-      X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
-      for the DTLS session.
-
-      X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
-      string AES256-SHA:AES128-SHA:DES-CBC3-SHA).
-
-   The DTLS established DTLS channel utilizes session resumption as a
-   method for preshared-key authentication.  That is the value presented
-   in X-DTLS-Master-Secret is set as a master secret to be resumed.
-
-   The following table lists the ciphers negotiated via the X-DTLS-
-   CipherSuite header, and the corresponding DTLS ciphersuite.
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-   +----------------------+-------------------------------+------------+
-   |  OpenConnect cipher  |        DTLS ciphersuite       |    DTLS    |
-   |                      |                               |  version   |
-   +----------------------+-------------------------------+------------+
-   |     DES-CBC3-SHA     | TLS_RSA_WITH_AES_128_CBC_SHA1 |  DTLS 0.9  |
-   |                      |                               | (pre-draft |
-   |                      |                               |  version)  |
-   |                      |                               |            |
-   |      AES128-SHA      | TLS_RSA_WITH_3DES_EDE_CBC_SHA |  DTLS 0.9  |
-   |                      |               1s              | (pre-draft |
-   |                      |                               |  version)  |
-   |                      |                               |            |
-   |         OC-          | TLS_RSA_WITH_AES_128_GCM_SHA2 |  DTLS 1.2  |
-   |  DTLS1_2-AES128-GCM  |               56              |            |
-   |                      |                               |            |
-   |         OC-          | TLS_RSA_WITH_AES_256_GCM_SHA2 |  DTLS 1.2  |
-   |  DTLS1_2-AES256-GCM  |               56              |            |
-   +----------------------+-------------------------------+------------+
-
-                                  Table 1
-
-3.2.  The Primary Channel Protocol
-
-   The format of the packets sent over the primary channel consists of
-   an 8-bytes header followed by data.  The whole packet in encapsulated
-   in a TLS record (see [RFC5246]).  The bytes of the header indicate
-   the type of data that follow, and are listed in Table 2.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-   +---------------------+---------------------------------------------+
-   |         byte        | value                                       |
-   +---------------------+---------------------------------------------+
-   |          0          | fixed to 0x53 (S)                           |
-   |                     |                                             |
-   |          1          | fixed to 0x54 (T)                           |
-   |                     |                                             |
-   |          2          | fixed to 0x46 (F)                           |
-   |                     |                                             |
-   |          3          | fixed to 0x01                               |
-   |                     |                                             |
-   |         4-5         | The length of the packet in big endian      |
-   |                     | order                                       |
-   |                     |                                             |
-   |          6          | The type of the data that follows (see      |
-   |                     | Table 3 for available types)                |
-   |                     |                                             |
-   |          7          | fixed to 0x00                               |
-   +---------------------+---------------------------------------------+
-
-                                  Table 2
-
-   The available data types are listed in Table 3.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-   +---------------------+---------------------------------------------+
-   |        Value        | Description                                 |
-   +---------------------+---------------------------------------------+
-   |         0x00        | Data: the TLS record packet contains an     |
-   |                     | IPv4 or IPv6 packet                         |
-   |                     |                                             |
-   |         0x03        | DPD-REQ: used for dead peer detection. Once |
-   |                     | sent the peer should reply with a DPD-RESP  |
-   |                     | packet, that has the same contents as the   |
-   |                     | original request.                           |
-   |                     |                                             |
-   |         0x04        | DPD-RESP: used as a response to a           |
-   |                     | previously received DPD-REQ.                |
-   |                     |                                             |
-   |         0x05        | Disconnect: sent by the client (or server)  |
-   |                     | to terminate the session.  No data is       |
-   |                     | associated with this request.               |
-   |                     |                                             |
-   |         0x07        | Keepalive: sent by any peer. No data is     |
-   |                     | associated with this request.               |
-   |                     |                                             |
-   |         0x08        | Compressed Data: a Data packet which is     |
-   |                     | compressed prior to encryption.             |
-   |                     |                                             |
-   |         0x09        | Terminate: sent by the server to indicate   |
-   |                     | that the server is shutting down. No data   |
-   |                     | is associated with this request.            |
-   +---------------------+---------------------------------------------+
-
-                                  Table 3
-
-3.3.  The Secondary (UDP) Channel Protocol
-
-   The format of the packets sent over the UDP channel consists of an
-   1-byte header followed by data.  The header byte indicates the type
-   of data that follow as in Table 3.  The header and the data are
-   encapsulated in a DTLS record packet (see [RFC6347]).
-
-3.4.  The Channel Re-Key Protocol
-
-   xxx
-
-3.5.  The Dead Peer Detection Protocol
-
-   xxx
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-4.  Security Considerations
-
-   None yet.
-
-5.  Acknowledgements
-
-   None yet.
-
-6.  Normative References
-
-   [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
-              (TLS) Protocol Version 1.2", RFC 5246, August 2008.
-
-   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
-              Security Version 1.2", RFC 6347, January 2012.
-
-   [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
-              Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
-              Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999.
-
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119, March 1997.
-
-Author's Address
-
-   Nikos Mavrogiannopoulos
-   Red Hat
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>The OpenConnect VPN Protocol Version 1.0</title>
+
+  <style type="text/css" title="Xml2Rfc (sans serif)">
+  /*<![CDATA[*/
+	  a {
+	  text-decoration: none;
+	  }
+      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+      a.info {
+          /* This is the key. */
+          position: relative;
+          z-index: 24;
+          text-decoration: none;
+      }
+      a.info:hover {
+          z-index: 25;
+          color: #FFF; background-color: #900;
+      }
+      a.info span { display: none; }
+      a.info:hover span.info {
+          /* The span will display just on :hover state. */
+          display: block;
+          position: absolute;
+          font-size: smaller;
+          top: 2em; left: -5em; width: 15em;
+          padding: 2px; border: 1px solid #333;
+          color: #900; background-color: #EEE;
+          text-align: left;
+      }
+	  a.smpl {
+	  color: black;
+	  }
+	  a:hover {
+	  text-decoration: underline;
+	  }
+	  a:active {
+	  text-decoration: underline;
+	  }
+	  address {
+	  margin-top: 1em;
+	  margin-left: 2em;
+	  font-style: normal;
+	  }
+	  body {
+	  color: black;
+	  font-family: verdana, helvetica, arial, sans-serif;
+	  font-size: 10pt;
+	  max-width: 55em;
+	  
+	  }
+	  cite {
+	  font-style: normal;
+	  }
+	  dd {
+	  margin-right: 2em;
+	  }
+	  dl {
+	  margin-left: 2em;
+	  }
+	
+	  ul.empty {
+	  list-style-type: none;
+	  }
+	  ul.empty li {
+	  margin-top: .5em;
+	  }
+	  dl p {
+	  margin-left: 0em;
+	  }
+	  dt {
+	  margin-top: .5em;
+	  }
+	  h1 {
+	  font-size: 14pt;
+	  line-height: 21pt;
+	  page-break-after: avoid;
+	  }
+	  h1.np {
+	  page-break-before: always;
+	  }
+	  h1 a {
+	  color: #333333;
+	  }
+	  h2 {
+	  font-size: 12pt;
+	  line-height: 15pt;
+	  page-break-after: avoid;
+	  }
+	  h3, h4, h5, h6 {
+	  font-size: 10pt;
+	  page-break-after: avoid;
+	  }
+	  h2 a, h3 a, h4 a, h5 a, h6 a {
+	  color: black;
+	  }
+	  img {
+	  margin-left: 3em;
+	  }
+	  li {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  ol p {
+	  margin-left: 0em;
+	  }
+	  p {
+	  margin-left: 2em;
+	  margin-right: 2em;
+	  }
+	  pre {
+	  margin-left: 3em;
+	  background-color: lightyellow;
+	  padding: .25em;
+	  }
+	  pre.text2 {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f0f0f0;
+	  width: 69em;
+	  }
+	  pre.inline {
+	  background-color: white;
+	  padding: 0em;
+	  }
+	  pre.text {
+	  border-style: dotted;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  width: 69em;
+	  }
+	  pre.drawing {
+	  border-style: solid;
+	  border-width: 1px;
+	  background-color: #f8f8f8;
+	  padding: 2em;
+	  }
+	  table {
+	  margin-left: 2em;
+	  }
+	  table.tt {
+	  vertical-align: top;
+	  }
+	  table.full {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.headers {
+	  border-style: outset;
+	  border-width: 1px;
+	  }
+	  table.tt td {
+	  vertical-align: top;
+	  }
+	  table.full td {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.tt th {
+	  vertical-align: top;
+	  }
+	  table.full th {
+	  border-style: inset;
+	  border-width: 1px;
+	  }
+	  table.headers th {
+	  border-style: none none inset none;
+	  border-width: 1px;
+	  }
+	  table.left {
+	  margin-right: auto;
+	  }
+	  table.right {
+	  margin-left: auto;
+	  }
+	  table.center {
+	  margin-left: auto;
+	  margin-right: auto;
+	  }
+	  caption {
+	  caption-side: bottom;
+	  font-weight: bold;
+	  font-size: 9pt;
+	  margin-top: .5em;
+	  }
+	
+	  table.header {
+	  border-spacing: 1px;
+	  width: 95%;
+	  font-size: 10pt;
+	  color: white;
+	  }
+	  td.top {
+	  vertical-align: top;
+	  }
+	  td.topnowrap {
+	  vertical-align: top;
+	  white-space: nowrap; 
+	  }
+	  table.header td {
+	  background-color: gray;
+	  width: 50%;
+	  }
+	  table.header a {
+	  color: white;
+	  }
+	  td.reference {
+	  vertical-align: top;
+	  white-space: nowrap;
+	  padding-right: 1em;
+	  }
+	  thead {
+	  display:table-header-group;
+	  }
+	  ul.toc, ul.toc ul {
+	  list-style: none;
+	  margin-left: 1.5em;
+	  margin-right: 0em;
+	  padding-left: 0em;
+	  }
+	  ul.toc li {
+	  line-height: 150%;
+	  font-weight: bold;
+	  font-size: 10pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  ul.toc li li {
+	  line-height: normal;
+	  font-weight: normal;
+	  font-size: 9pt;
+	  margin-left: 0em;
+	  margin-right: 0em;
+	  }
+	  li.excluded {
+	  font-size: 0pt;
+	  }
+	  ul p {
+	  margin-left: 0em;
+	  }
+	
+	  .comment {
+	  background-color: yellow;
+	  }
+	  .center {
+	  text-align: center;
+	  }
+	  .error {
+	  color: red;
+	  font-style: italic;
+	  font-weight: bold;
+	  }
+	  .figure {
+	  font-weight: bold;
+	  text-align: center;
+	  font-size: 9pt;
+	  }
+	  .filename {
+	  color: #333333;
+	  font-weight: bold;
+	  font-size: 12pt;
+	  line-height: 21pt;
+	  text-align: center;
+	  }
+	  .fn {
+	  font-weight: bold;
+	  }
+	  .hidden {
+	  display: none;
+	  }
+	  .left {
+	  text-align: left;
+	  }
+	  .right {
+	  text-align: right;
+	  }
+	  .title {
+	  color: #990000;
+	  font-size: 18pt;
+	  line-height: 18pt;
+	  font-weight: bold;
+	  text-align: center;
+	  margin-top: 36pt;
+	  }
+	  .vcardline {
+	  display: block;
+	  }
+	  .warning {
+	  font-size: 14pt;
+	  background-color: yellow;
+	  }
+	
+	
+	  @media print {
+	  .noprint {
+		display: none;
+	  }
+	
+	  a {
+		color: black;
+		text-decoration: none;
+	  }
+	
+	  table.header {
+		width: 90%;
+	  }
+	
+	  td.header {
+		width: 50%;
+		color: black;
+		background-color: white;
+		vertical-align: top;
+		font-size: 12pt;
+	  }
+	
+	  ul.toc a::after {
+		content: leader('.') target-counter(attr(href), page);
+	  }
+	
+	  ul.ind li li a {
+		content: target-counter(attr(href), page);
+	  }
+	
+	  .print2col {
+		column-count: 2;
+		-moz-column-count: 2;
+		column-fill: auto;
+	  }
+	  }
+	
+	  @page {
+	  @top-left {
+		   content: "Internet-Draft"; 
+	  } 
+	  @top-right {
+		   content: "December 2010"; 
+	  } 
+	  @top-center {
+		   content: "Abbreviated Title";
+	  } 
+	  @bottom-left {
+		   content: "Doe"; 
+	  } 
+	  @bottom-center {
+		   content: "Expires June 2011"; 
+	  } 
+	  @bottom-right {
+		   content: "[Page " counter(page) "]"; 
+	  } 
+	  }
+	
+	  @page:first { 
+		@top-left {
+		  content: normal;
+		}
+		@top-right {
+		  content: normal;
+		}
+		@top-center {
+		  content: normal;
+		}
+	  }
+  /*]]>*/
+  </style>
+
+  <link href="#rfc.toc" rel="Contents"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Goals of This Document"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 The OpenConnect Protocol"/>
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 VPN Session Establishment"/>
+<link href="#rfc.section.3.1.1" rel="Chapter" title="3.1.1 Authentication"/>
+<link href="#rfc.section.3.1.2" rel="Chapter" title="3.1.2 Exchange of Session Parameters"/>
+<link href="#rfc.section.3.1.3" rel="Chapter" title="3.1.3 Establishment of Primary (TCP) Channel"/>
+<link href="#rfc.section.3.1.4" rel="Chapter" title="3.1.4 Establishment of Secondary (UDP) Channel"/>
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 The Primary Channel Protocol"/>
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 The Secondary (UDP) Channel Protocol"/>
+<link href="#rfc.section.3.4" rel="Chapter" title="3.4 The Channel Re-Key Protocol"/>
+<link href="#rfc.section.3.5" rel="Chapter" title="3.5 The Dead Peer Detection Protocol"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Acknowledgements"/>
+<link href="#rfc.references" rel="Chapter" title="6 Normative References"/>
+
+
+  <meta name="generator" content="xml2rfc version 2.4.8 - http://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Mavrogiannopoulos, N." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-openconnect-01" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-1" />
+  <meta name="dct.abstract" content="This document specifies version 1.0 of the OpenConnect VPN protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
+  <meta name="description" content="This document specifies version 1.0 of the OpenConnect VPN protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+  <td class="left">Network Working Group</td>
+  <td class="right">N. Mavrogiannopoulos</td>
+</tr>
+<tr>
+  <td class="left">Internet-Draft</td>
+  <td class="right">Red Hat</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Historic</td>
+  <td class="right">January 2015</td>
+</tr>
+<tr>
+  <td class="left">Expires: July 5, 2015</td>
+  <td class="right"></td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">The OpenConnect VPN Protocol Version 1.0<br />
+  <span class="filename">draft-openconnect-01</span></p>
+  
+  <h1 id="rfc.abstract">
+  <a href="#rfc.abstract">Abstract</a>
+</h1>
+<p>This document specifies version 1.0 of the OpenConnect VPN protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  </p>
+<h1 id="rfc.status">
+  <a href="#rfc.status">Status of This Memo</a>
+</h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on July 5, 2015.</p>
+<h1 id="rfc.copyrightnotice">
+  <a href="#rfc.copyrightnotice">Copyright Notice</a>
+</h1>
+<p>Copyright (c) 2015 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
+<li>2.   <a href="#rfc.section.2">Goals of This Document</a></li>
+<li>3.   <a href="#rfc.section.3">The OpenConnect Protocol</a></li>
+<li>3.1.   <a href="#rfc.section.3.1">VPN Session Establishment</a></li>
+<li>3.1.1.   <a href="#rfc.section.3.1.1">Authentication</a></li>
+<li>3.1.2.   <a href="#rfc.section.3.1.2">Exchange of Session Parameters</a></li>
+<li>3.1.3.   <a href="#rfc.section.3.1.3">Establishment of Primary (TCP) Channel</a></li>
+<li>3.1.4.   <a href="#rfc.section.3.1.4">Establishment of Secondary (UDP) Channel</a></li>
+<li>3.2.   <a href="#rfc.section.3.2">The Primary Channel Protocol</a></li>
+<li>3.3.   <a href="#rfc.section.3.3">The Secondary (UDP) Channel Protocol</a></li>
+<li>3.4.   <a href="#rfc.section.3.4">The Channel Re-Key Protocol</a></li>
+<li>3.5.   <a href="#rfc.section.3.5">The Dead Peer Detection Protocol</a></li>
+<li>4.   <a href="#rfc.section.4">Security Considerations</a></li>
+<li>5.   <a href="#rfc.section.5">Acknowledgements</a></li>
+<li>6.   <a href="#rfc.references">Normative References</a></li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
+<p id="rfc.section.1.p.1">The purpose of this document is to specify the OpenConnect VPN protocol in a detail in order to allow for multiple interoperable implementations.  That is a protocol that is believed to be compatible with CISCO's AnyConnect protocol.  </p>
+<p id="rfc.section.1.p.2">While there are many competing VPN protocol solutions, none of them was ever described in a publicly available document. Even open source VPN solutions have their source code as the primary description of their protocol. That allowed no easy study of each protocol's properties and weaknesses, and that is one of the points addressed by this document.  </p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#goals-document" id="goals-document">Goals of This Document</a></h1>
+<p id="rfc.section.2.p.1">The OpenConnect protocol version 1.0 specification is intended primarily for readers who will be implementing the protocol and those doing cryptographic analysis of it.  </p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#oc-protocol" id="oc-protocol">The OpenConnect Protocol</a></h1>
+<p id="rfc.section.3.p.1">The OpenConnect protocol combines the TLS protocol <a href="#RFC5246">[RFC5246]</a>, datagram TLS protocol <a href="#RFC6347">[RFC6347]</a> and HTTP protocols <a href="#RFC2616">[RFC2616]</a> to provide an Internet-Layer VPN channel.  The channel is designed to operate using UDP packets, and fallback on TCP if that's not possible.  </p>
+<p id="rfc.section.3.p.2">In brief the protocol initiates an HTTP over TLS connection on a known port, where client authentication is performed. After this step, the client initiates an HTTP CONNECT command to establish a VPN channel over TCP. A secondary VPN channel over UDP will be established using information provided by the server using HTTP headers. At that point the raw IP packets flow, over the VPN channels.  </p>
+<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#session-establishment" id="session-establishment">VPN Session Establishment</a></h1>
+<h1 id="rfc.section.3.1.1"><a href="#rfc.section.3.1.1">3.1.1.</a> <a href="#authentication" id="authentication">Authentication</a></h1>
+<p id="rfc.section.3.1.1.p.1">The OpenConnect VPN protocol allows for the following types of client authentication, or combinations of them.  </p>
+
+<ol>
+  <li>Password: a user can authenticate itself using a password.</li>
+  <li>Certificate: a user can authenticate itself using a PKIX certificate it possesses.</li>
+</ol>
+
+<p> The server is authenticated to the client using a PKIX certificate.  </p>
+<p id="rfc.section.3.1.1.p.2">Once a client establishes a TCP connection to the server's well known port, it initiates the TLS protocol. The server may require a client certificate to be presented, depending on its configuration.  In the first connection to the server, the client SHOULD verify the provided by the server certificate, and SHOULD store its public key for verification of subsequent sessions. Thus, subsequent sessions will simply check whether the server's key match the initial.  </p>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;config-auth client="vpn" type="init"&gt;
+        &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
+    &lt;/config-auth&gt;
+  </pre>
+<p id="rfc.section.3.1.1.p.3">[XXX: We need to define a DTD] After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;auth id="main"&gt;
+        &lt;message&gt;Please enter your username&lt;/message&gt;
+        &lt;form action="/auth" method="post"&gt;
+            &lt;input label="Username:" name="username" type="text" /&gt;
+        &lt;/form&gt;
+    &lt;/auth&gt;
+  </pre>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;auth id="main"&gt;
+        &lt;message&gt;Please enter your username&lt;/message&gt;
+        &lt;form action="/auth" method="post"&gt;
+            &lt;input label="Username:" name="username" type="text" /&gt;
+            &lt;input label="Password:" name="password" type="password" /&gt;
+        &lt;/form&gt;
+    &lt;/auth&gt;
+  </pre>
+<p id="rfc.section.3.1.1.p.4">Note that all Content-Types specified in this section are 'text/xml'. At this point the server will reply using forms the client software should prompt the user to fill in.  </p>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;config-auth client="vpn" type="auth-reply"&gt;
+        &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
+        &lt;auth&gt;&lt;username&gt;test&lt;/username&gt;
+        &lt;/auth&gt;
+    &lt;/config-auth&gt;  
+  </pre>
+<p id="rfc.section.3.1.1.p.5">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply could then be the following.  </p>
+<p id="rfc.section.3.1.1.p.6">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;config-auth client="vpn" type="complete"&gt;
+        &lt;version who="sg"&gt;0.1(1)&lt;/version&gt;
+        &lt;auth id="success"&gt;
+        &lt;/auth&gt;
+    &lt;/config-auth&gt;
+  </pre>
+<p id="rfc.section.3.1.1.p.7">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise the server should reply using the following XML structure.  </p>
+<h1 id="rfc.section.3.1.2"><a href="#rfc.section.3.1.2">3.1.2.</a> <a href="#params-exchange" id="params-exchange">Exchange of Session Parameters</a></h1>
+<pre>
+    User-Agent: Open AnyConnect VPN Agent v5.01
+    X-CSTP-Base-MTU: 1280
+    X-CSTP-Address-Type: IPv6,IPv4
+    CONNECT /CSCOSSLC/tunnel HTTP/1.1
+  </pre>
+<p id="rfc.section.3.1.2.p.1">By the receipt of a success XML structure, the client should issue an HTTP CONNECT request. In addition it should provide the "X-CSTP-Address-Type" and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the following values.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">IPv4: when the client only supports IPv4 addresses.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">IPv6: when the client only supports IPv6 addresses.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">IPv4,IPv6: when the client supports both types of IP addresses.</dd>
+</dl>
+
+<p> The X-CSTP-Base-MTU contains the MTU of the link between the client and the server as estimated by the client. An example CONNECT request is shown below.  </p>
+<p id="rfc.section.3.1.2.p.2">After a successful receipt of an HTTP CONNECT request, the server should reply and provide the client with configuration parameters. The available options follow.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Address: The IPv4 address of the client, if IPv4 has been requested.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Netmask: The IPv4 netmask of the client, if IPv4 has been requested.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Address-IP6: The IPv6 address of the client in CIDR notation, if IPv6 has been requested.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-DNS: The IP address of a DNS server that can be used for that session.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Default-Domain: The DNS domains the provided DNS servers respond for.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Split-Include: The network address of a route which is provided by this server.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Split-Exclude: The network address of a route that is not provided by this server.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Base-MTU: The MTU of the link as estimated by this server.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-DynDNS: Set to "true" if the server is operating on a dynamic DNS.</dd>
+</dl>
+
+<p> [XXX: compression] </p>
+<h1 id="rfc.section.3.1.3"><a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary (TCP) Channel</a></h1>
+<p id="rfc.section.3.1.3.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 3.2</a>.  </p>
+<h1 id="rfc.section.3.1.4"><a href="#rfc.section.3.1.4">3.1.4.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary (UDP) Channel</a></h1>
+<p id="rfc.section.3.1.4.p.1">To establish the secondary UDP channel the client must advertise support for it during the issue of the HTTP CONNECT request. This is done by appending the following headers.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Master-Secret: A hex encoded pre-master secret to be used for the DTLS session.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the string AES256-SHA:AES128-SHA:DES-CBC3-SHA).</dd>
+</dl>
+
+<p> </p>
+<p id="rfc.section.3.1.4.p.2">The DTLS established DTLS channel utilizes session resumption as a method for preshared-key authentication. That is the value presented in X-DTLS-Master-Secret is set as a master secret to be resumed.  </p>
+<p id="rfc.section.3.1.4.p.3">The following table lists the ciphers negotiated via the X-DTLS-CipherSuite header, and the corresponding DTLS ciphersuite.  </p>
+<div id="rfc.table.1"/>
+<div id="cipher_table"/>
+<p/>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+  <thead>
+    <tr>
+      <th class="center">OpenConnect cipher</th>
+      <th class="center">DTLS ciphersuite</th>
+      <th class="center">DTLS version</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center">DES-CBC3-SHA</td>
+      <td class="center">TLS_RSA_WITH_AES_128_CBC_SHA1</td>
+      <td class="center">DTLS 0.9 (pre-draft version)</td>
+    </tr>
+    <tr>
+      <td class="center">AES128-SHA</td>
+      <td class="center">TLS_RSA_WITH_3DES_EDE_CBC_SHA1s</td>
+      <td class="center">DTLS 0.9 (pre-draft version)</td>
+    </tr>
+    <tr>
+      <td class="center">OC-DTLS1_2-AES128-GCM</td>
+      <td class="center">TLS_RSA_WITH_AES_128_GCM_SHA256</td>
+      <td class="center">DTLS 1.2</td>
+    </tr>
+    <tr>
+      <td class="center">OC-DTLS1_2-AES256-GCM</td>
+      <td class="center">TLS_RSA_WITH_AES_256_GCM_SHA256</td>
+      <td class="center">DTLS 1.2</td>
+    </tr>
+  </tbody>
+</table>
+<p/>
+<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#primary-channel-protocol" id="primary-channel-protocol">The Primary Channel Protocol</a></h1>
+<p id="rfc.section.3.2.p.1">The format of the packets sent over the primary channel consists of an 8-bytes header followed by data. The whole packet in encapsulated in a TLS record (see <a href="#RFC5246">[RFC5246]</a>). The bytes of the header indicate the type of data that follow, and are listed in <a href="#cstp_table">Table 2</a>.  </p>
+<div id="rfc.table.2"/>
+<div id="cstp_table"/>
+<p/>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+  <thead>
+    <tr>
+      <th class="center">byte</th>
+      <th class="left">value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center">0</td>
+      <td class="left">fixed to 0x53 (S)</td>
+    </tr>
+    <tr>
+      <td class="center">1</td>
+      <td class="left">fixed to 0x54 (T)</td>
+    </tr>
+    <tr>
+      <td class="center">2</td>
+      <td class="left">fixed to 0x46 (F)</td>
+    </tr>
+    <tr>
+      <td class="center">3</td>
+      <td class="left">fixed to 0x01</td>
+    </tr>
+    <tr>
+      <td class="center">4-5</td>
+      <td class="left">The length of the packet in big endian order</td>
+    </tr>
+    <tr>
+      <td class="center">6</td>
+      <td class="left">The type of the data that follows (see <a href="#packet_table">Table 3</a> for available types)</td>
+    </tr>
+    <tr>
+      <td class="center">7</td>
+      <td class="left">fixed to 0x00</td>
+    </tr>
+  </tbody>
+</table>
+<p/>
+<p id="rfc.section.3.2.p.2">The available data types are listed in <a href="#packet_table">Table 3</a>.  </p>
+<div id="rfc.table.3"/>
+<div id="packet_table"/>
+<p/>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+  <thead>
+    <tr>
+      <th class="center">Value</th>
+      <th class="left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center">0x00</td>
+      <td class="left">Data: the TLS record packet contains an IPv4 or IPv6 packet</td>
+    </tr>
+    <tr>
+      <td class="center">0x03</td>
+      <td class="left">DPD-REQ: used for dead peer detection. Once sent the peer should reply with a DPD-RESP packet, that has the same contents as the original request.</td>
+    </tr>
+    <tr>
+      <td class="center">0x04</td>
+      <td class="left">DPD-RESP: used as a response to a previously received DPD-REQ.</td>
+    </tr>
+    <tr>
+      <td class="center">0x05</td>
+      <td class="left">Disconnect: sent by the client (or server) to terminate the session.  No data is associated with this request.</td>
+    </tr>
+    <tr>
+      <td class="center">0x07</td>
+      <td class="left">Keepalive: sent by any peer. No data is associated with this request.</td>
+    </tr>
+    <tr>
+      <td class="center">0x08</td>
+      <td class="left">Compressed Data: a Data packet which is compressed prior to encryption.</td>
+    </tr>
+    <tr>
+      <td class="center">0x09</td>
+      <td class="left">Terminate: sent by the server to indicate that the server is shutting down. No data is associated with this request.</td>
+    </tr>
+  </tbody>
+</table>
+<p/>
+<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#secondary-channel-protocol" id="secondary-channel-protocol">The Secondary (UDP) Channel Protocol</a></h1>
+<p id="rfc.section.3.3.p.1">The format of the packets sent over the UDP channel consists of an 1-byte header followed by data. The header byte indicates the type of data that follow as in <a href="#packet_table">Table 3</a>.  The header and the data are encapsulated in a DTLS record packet (see <a href="#RFC6347">[RFC6347]</a>).  </p>
+<h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> <a href="#rekey-protocol" id="rekey-protocol">The Channel Re-Key Protocol</a></h1>
+<p id="rfc.section.3.4.p.1">xxx </p>
+<h1 id="rfc.section.3.5"><a href="#rfc.section.3.5">3.5.</a> <a href="#dead-peer-detection" id="dead-peer-detection">The Dead Peer Detection Protocol</a></h1>
+<p id="rfc.section.3.5.p.1">xxx </p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#security-analysis" id="security-analysis">Security Considerations</a></h1>
+<p id="rfc.section.4.p.1">None yet.  </p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Acknowledgements</h1>
+<p id="rfc.section.5.p.1">None yet.  </p>
+<h1 id="rfc.references"><a href="#rfc.references">6.</a> Normative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC5246">[RFC5246]</b>
+      </td>
+      <td class="top"><a>Dierks, T.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5246">The Transport Layer Security (TLS) Protocol Version 1.2</a>", RFC 5246, August 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6347">[RFC6347]</b>
+      </td>
+      <td class="top"><a>Rescorla, E.</a> and <a>N. Modadugu</a>, "<a href="http://tools.ietf.org/html/rfc6347">Datagram Transport Layer Security Version 1.2</a>", RFC 6347, January 2012.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2616">[RFC2616]</b>
+      </td>
+      <td class="top"><a href="mailto:fielding@ics.uci.edu" title="Department of Information and Computer Science">Fielding, R.</a>, <a href="mailto:jg@w3.org" title="World Wide Web Consortium">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com" title="Compaq Computer Corporation">Mogul, J.</a>, <a href="mailto:frystyk@w3.org" title="World Wide Web Consortium">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com" title="Xerox Corporation">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com" title="Microsoft Corporation">Leach, P.</a> and <a href="mailto:timbl@w3.org" title="World Wide Web Consortium">T. Berners-Lee</a>, "<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>", RFC 2616, June 1999.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.authors">
+  <a href="#rfc.authors">Author's Address</a>
+</h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Nikos Mavrogiannopoulos</span> 
+	  <span class="n hidden">
+		<span class="family-name">Mavrogiannopoulos</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Red Hat</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality"></span> 
+		<span class="region"></span>
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline"></span>
+	</span>
+	
+  </address>
+</div>
+
+</body>
+</html>

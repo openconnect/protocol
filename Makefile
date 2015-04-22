@@ -11,7 +11,7 @@ $(draft)-$(ver).txt: $(draft).xml
 	xml2rfc $^ -f $@
 
 $(draft)-$(ver).html: $(draft).xml
-	xml2rfc $^ -f $@
+	xml2rfc --html $^ -f $@
 
 $(draft)-$(ver).pdf: $(draft)-$(ver).txt
 	enscript --margins 76::76: -B -q -p - $^ | ps2pdf - $@
