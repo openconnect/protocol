@@ -382,8 +382,8 @@
 <link href="#rfc.section.3.1.2" rel="Chapter" title="3.1.2 Exchange of Session Parameters"/>
 <link href="#rfc.section.3.1.3" rel="Chapter" title="3.1.3 Establishment of Primary TCP Channel (CSTP)"/>
 <link href="#rfc.section.3.1.4" rel="Chapter" title="3.1.4 Establishment of Secondary UDP Channel (DTLS)"/>
-<link href="#rfc.section.3.2" rel="Chapter" title="3.2 The Primary Channel Protocol"/>
-<link href="#rfc.section.3.3" rel="Chapter" title="3.3 The Secondary (UDP) Channel Protocol"/>
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 The CSTP Channel Protocol"/>
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 The DTLS Channel Protocol"/>
 <link href="#rfc.section.3.4" rel="Chapter" title="3.4 The Channel Re-Key Protocol"/>
 <link href="#rfc.section.3.5" rel="Chapter" title="3.5 The Keepalive and Dead Peer Detection Protocols"/>
 <link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations"/>
@@ -461,8 +461,8 @@
 <li>3.1.2.   <a href="#rfc.section.3.1.2">Exchange of Session Parameters</a></li>
 <li>3.1.3.   <a href="#rfc.section.3.1.3">Establishment of Primary TCP Channel (CSTP)</a></li>
 <li>3.1.4.   <a href="#rfc.section.3.1.4">Establishment of Secondary UDP Channel (DTLS)</a></li>
-<li>3.2.   <a href="#rfc.section.3.2">The Primary Channel Protocol</a></li>
-<li>3.3.   <a href="#rfc.section.3.3">The Secondary (UDP) Channel Protocol</a></li>
+<li>3.2.   <a href="#rfc.section.3.2">The CSTP Channel Protocol</a></li>
+<li>3.3.   <a href="#rfc.section.3.3">The DTLS Channel Protocol</a></li>
 <li>3.4.   <a href="#rfc.section.3.4">The Channel Re-Key Protocol</a></li>
 <li>3.5.   <a href="#rfc.section.3.5">The Keepalive and Dead Peer Detection Protocols</a></li>
 <li>4.   <a href="#rfc.section.4">Security Considerations</a></li>
@@ -646,7 +646,7 @@
   </tbody>
 </table>
 <p/>
-<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#primary-channel-protocol" id="primary-channel-protocol">The Primary Channel Protocol</a></h1>
+<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#primary-channel-protocol" id="primary-channel-protocol">The CSTP Channel Protocol</a></h1>
 <p id="rfc.section.3.2.p.1">The format of the packets sent over the primary channel consists of an 8-bytes header followed by data. The whole packet in encapsulated in a TLS record (see <a href="#RFC5246">[RFC5246]</a>). The bytes of the header indicate the type of data that follow, and are listed in <a href="#cstp_table">Table 2</a>.  </p>
 <div id="rfc.table.2"/>
 <div id="cstp_table"/>
@@ -733,7 +733,7 @@
   </tbody>
 </table>
 <p/>
-<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#secondary-channel-protocol" id="secondary-channel-protocol">The Secondary (UDP) Channel Protocol</a></h1>
+<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#secondary-channel-protocol" id="secondary-channel-protocol">The DTLS Channel Protocol</a></h1>
 <p id="rfc.section.3.3.p.1">The format of the packets sent over the UDP channel consists of an 1-byte header followed by data. The header byte indicates the type of data that follow as in <a href="#packet_table">Table 3</a>.  The header and the data are encapsulated in a DTLS record packet (see <a href="#RFC6347">[RFC6347]</a>).  </p>
 <h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> <a href="#rekey-protocol" id="rekey-protocol">The Channel Re-Key Protocol</a></h1>
 <p id="rfc.section.3.4.p.1">During the exchange of session parameters (<a href="#params-exchange">Section 3.1.2</a>), the server advertizes the methods available for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers. The available options for both the server and client are listed below.  </p>

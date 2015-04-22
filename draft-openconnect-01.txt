@@ -71,8 +71,8 @@ Table of Contents
        3.1.2.  Exchange of Session Parameters  . . . . . . . . . . .   5
        3.1.3.  Establishment of Primary TCP Channel (CSTP) . . . . .   6
        3.1.4.  Establishment of Secondary UDP Channel (DTLS) . . . .   7
-     3.2.  The Primary Channel Protocol  . . . . . . . . . . . . . .   7
-     3.3.  The Secondary (UDP) Channel Protocol  . . . . . . . . . .   9
+     3.2.  The CSTP Channel Protocol . . . . . . . . . . . . . . . .   7
+     3.3.  The DTLS Channel Protocol . . . . . . . . . . . . . . . .   9
      3.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .   9
      3.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  10
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
@@ -379,7 +379,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
                                   Table 1
 
-3.2.  The Primary Channel Protocol
+3.2.  The CSTP Channel Protocol
 
    The format of the packets sent over the primary channel consists of
    an 8-bytes header followed by data.  The whole packet in encapsulated
@@ -482,7 +482,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
                                   Table 3
 
-3.3.  The Secondary (UDP) Channel Protocol
+3.3.  The DTLS Channel Protocol
 
    The format of the packets sent over the UDP channel consists of an
    1-byte header followed by data.  The header byte indicates the type

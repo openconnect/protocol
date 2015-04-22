@@ -350,7 +350,7 @@ server without sending the "X-Support-HTTP-Auth: true" header.
 
 </section>
 
-<section anchor="primary-channel-protocol" title="The Primary Channel Protocol">
+<section anchor="primary-channel-protocol" title="The CSTP Channel Protocol">
 <t>
 The format of the packets sent over the primary channel consists of an
 8-bytes header followed by data. The whole packet
@@ -397,7 +397,7 @@ request.</c>
 	</texttable>
 </section>
 
-<section anchor="secondary-channel-protocol" title="The Secondary (UDP) Channel Protocol">
+<section anchor="secondary-channel-protocol" title="The DTLS Channel Protocol">
 <t>
 The format of the packets sent over the UDP channel consists of an
 1-byte header followed by data. The header byte 
