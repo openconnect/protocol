@@ -69,15 +69,15 @@ Table of Contents
      3.1.  VPN Session Establishment . . . . . . . . . . . . . . . .   3
        3.1.1.  Authentication  . . . . . . . . . . . . . . . . . . .   3
        3.1.2.  Exchange of Session Parameters  . . . . . . . . . . .   5
-       3.1.3.  Establishment of Primary (TCP) Channel  . . . . . . .   6
-       3.1.4.  Establishment of Secondary (UDP) Channel  . . . . . .   6
+       3.1.3.  Establishment of Primary TCP Channel (CSTP) . . . . .   6
+       3.1.4.  Establishment of Secondary UDP Channel (DTLS) . . . .   7
      3.2.  The Primary Channel Protocol  . . . . . . . . . . . . . .   7
      3.3.  The Secondary (UDP) Channel Protocol  . . . . . . . . . .   9
      3.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .   9
-     3.5.  The Dead Peer Detection Protocol  . . . . . . . . . . . .  10
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
-   6.  Normative References  . . . . . . . . . . . . . . . . . . . .  10
+     3.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  10
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
+   6.  Normative References  . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
 
@@ -272,7 +272,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
        User-Agent: Open AnyConnect VPN Agent v5.01
        X-CSTP-Base-MTU: 1280
-       X-CSTP-Address-Type: IPv6,IPv4
+       X-CSTP-Address-Type: IPv4,IPv6
        CONNECT /CSCOSSLC/tunnel HTTP/1.1
 
 
@@ -314,21 +314,21 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    [XXX: compression]
 
-3.1.3.  Establishment of Primary (TCP) Channel
+   It is important to note that any other headers allowed by the HTTP
+   protocol can be present.  In fact, a server may use cookies to allow
+   session resumption if needed.
+
+3.1.3.  Establishment of Primary TCP Channel (CSTP)
 
    The previous HTTP message is the last HTTP message sent by the
    server.  After that message, the established TCP channel is used to
    transport IP packets between the client and the server.  The
-   transferred packets encoding is discussed in Section 3.2.
+   transferred packets encoding is discussed in Section 3.2.  This
+   channel will be referred as CSTP in the rest of this document.
 
-3.1.4.  Establishment of Secondary (UDP) Channel
 
-   To establish the secondary UDP channel the client must advertise
-   support for it during the issue of the HTTP CONNECT request.  This is
-   done by appending the following headers.
 
-      X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
-      for the DTLS session.
+
 
 
 
@@ -337,6 +337,16 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+3.1.4.  Establishment of Secondary UDP Channel (DTLS)
+
+   To establish the secondary UDP-based channel, which will be referred
+   to as the DTLS channel, the client must advertise support for it
+   during the issue of the HTTP CONNECT request (see Section 3.1.2.
+   This is done by appending the following headers to the request.
+
+      X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
+      for the DTLS session.
 
       X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
       string AES256-SHA:AES128-SHA:DES-CBC3-SHA).
@@ -375,16 +385,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    an 8-bytes header followed by data.  The whole packet in encapsulated
    in a TLS record (see [RFC5246]).  The bytes of the header indicate
    the type of data that follow, and are listed in Table 2.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -466,9 +466,10 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    |                     |                                             |
    |         0x05        | Disconnect: sent by the client (or server)  |
    |                     | to terminate the session.  No data is       |
-   |                     | associated with this request.               |
+   |                     | associated with this request. The session   |
+   |                     | will be invalidated after such request.     |
    |                     |                                             |
-   |         0x07        | Keepalive: sent by any peer. No data is     |
+   |         0x07        | KeepAlive: sent by any peer. No data is     |
    |                     | associated with this request.               |
    |                     |                                             |
    |         0x08        | Compressed Data: a Data packet which is     |
@@ -491,13 +492,12 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 3.4.  The Channel Re-Key Protocol
 
    During the exchange of session parameters (Section 3.1.2), the server
-   advertises the methods available for session rekey using the "X-CSTP-
+   advertizes the methods available for session rekey using the "X-CSTP-
    Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers.  The available
    options for both the server and client are listed below.
 
    1.  none: no rekey; the session will go on until 2^48 DTLS records
        have been exchanged, or 2^64 TLS records.
-
 
 
 
@@ -521,9 +521,46 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    safe renegotiation is used ([RFC5746]), or that the identity of the
    peer remained the same.
 
-3.5.  The Dead Peer Detection Protocol
+3.5.  The Keepalive and Dead Peer Detection Protocols
 
-   xxx
+   In OpenConnect there are two packet types that can be used for keep-
+   alive or dead peer detection, as shown in Table 3.  These are the
+   DPD-REQ and KeepAlive packets.
+
+   The timings of the transmission of these packets are set by the
+   server, and they are advisory to a client.  However, any peer
+   receiving these packets MUST response with the appropriate packet.
+   For DPD-REQ packets, the response MUST be DPD-RESP, and for KeepAlive
+   packets the response must be another KeepAlive packet.  The main
+   difference between these two types of packets, is that the DPD
+   packets allow for arbitrary data to be attached, making them suitable
+   for Path MTU detection.
+
+   The server advertizes the suggested periods during the exchange of
+   session parameters (Section 3.1.2).  The available headers are listed
+   below.
+
+      X-CSTP-DPD: applicable to CSTP channel; contains a relative time
+      in seconds.
+
+      X-CSTP-Keepalive: applicable to CSTP channel; contains a relative
+      time in seconds.
+
+      X-DTLS-DPD: applicable to DTLS channel; contains a relative time
+      in seconds.
+
+      X-DTLS-Keepalive: applicable to DTLS channel; contains a relative
+      time in seconds.
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
 
 4.  Security Considerations
 
@@ -553,15 +590,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
               Kerberos and NTLM HTTP Authentication in Microsoft
               Windows", RFC 4559, June 2006.
 
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
@@ -569,34 +597,6 @@ Author's Address
 
    Nikos Mavrogiannopoulos
    Red Hat
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

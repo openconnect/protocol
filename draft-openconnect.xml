@@ -267,7 +267,7 @@ server without sending the "X-Support-HTTP-Auth: true" header.
   <figure><artwork><![CDATA[
     User-Agent: Open AnyConnect VPN Agent v5.01
     X-CSTP-Base-MTU: 1280
-    X-CSTP-Address-Type: IPv6,IPv4
+    X-CSTP-Address-Type: IPv4,IPv6
     CONNECT /CSCOSSLC/tunnel HTTP/1.1
   ]]></artwork></figure>
   </t>
@@ -298,20 +298,27 @@ server without sending the "X-Support-HTTP-Auth: true" header.
        </list>
   [XXX: compression]
   </t>
-  </section>
-
-  <section anchor="primary-channel" title="Establishment of Primary (TCP) Channel">
-  <t>The previous HTTP message is the last HTTP message sent by the server.
-  After that message, the established TCP channel is used to transport IP
-  packets between the client and the server. The transferred packets
-  encoding is discussed in <xref target="primary-channel-protocol"/>.
+  <t>
+  It is important to note that any other headers allowed by the HTTP
+  protocol can be present. In fact, a server may use cookies to allow
+  session resumption if needed.
   </t>
   </section>
 
-  <section anchor="secondary-channel-establishment" title="Establishment of Secondary (UDP) Channel">
-  <t>To establish the secondary UDP channel the client must advertise
-  support for it during the issue of the HTTP CONNECT request. This
-  is done by appending the following headers.
+  <section anchor="primary-channel" title="Establishment of Primary TCP Channel (CSTP)">
+  <t>The previous HTTP message is the last HTTP message sent by the server.
+  After that message, the established TCP channel is used to transport IP
+  packets between the client and the server. The transferred packets
+  encoding is discussed in <xref target="primary-channel-protocol"/>. This
+  channel will be referred as CSTP in the rest of this document.
+  </t>
+  </section>
+
+  <section anchor="secondary-channel-establishment" title="Establishment of Secondary UDP Channel (DTLS)">
+  <t>To establish the secondary UDP-based channel, which will be referred to as the DTLS channel,
+  the client must advertise support for it during the issue of the HTTP CONNECT request
+  (see <xref target="params-exchange"/>. This is done by appending the following headers
+  to the request.
        <list style="hanging">
 	<t>X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
 	for the DTLS session.</t>
@@ -379,8 +386,9 @@ should reply with a DPD-RESP packet, that has the same contents as the
 original request.</c>
 <c>0x04</c><c>DPD-RESP: used as a response to a previously received DPD-REQ.</c>
 <c>0x05</c><c>Disconnect: sent by the client (or server) to terminate the session.
-No data is associated with this request.</c>
-<c>0x07</c><c>Keepalive: sent by any peer. No data is associated with this
+No data is associated with this request. The session will be invalidated
+after such request.</c>
+<c>0x07</c><c>KeepAlive: sent by any peer. No data is associated with this
 request.</c>
 <c>0x08</c><c>Compressed Data: a Data packet which is compressed prior to encryption.</c>
 <c>0x09</c><c>Terminate: sent by the server to indicate that the server is shutting down. No data is associated with this
@@ -402,7 +410,7 @@ The header and the data are encapsulated in a DTLS record packet
 <section anchor="rekey-protocol" title="The Channel Re-Key Protocol">
 <t>
 During the exchange of session parameters (<xref
-target="params-exchange"/>), the server advertises the methods available
+target="params-exchange"/>), the server advertizes the methods available
 for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method"
 HTTP headers. The available options for both the server and client are
 listed below.
@@ -430,9 +438,33 @@ the peer remained the same.
 </t>
 </section>
 
-<section anchor="dead-peer-detection" title="The Dead Peer Detection Protocol">
+<section anchor="dead-peer-detection" title="The Keepalive and Dead Peer Detection
+Protocols">
 <t>
-xxx
+In OpenConnect there are two packet types that can be used for keep-alive or
+dead peer detection, as shown in <xref target="packet_table"/>. These are
+the DPD-REQ and KeepAlive packets.
+</t>
+<t>
+The timings of the transmission of these packets are set by the server, and
+they are advisory to a client. However, any peer receiving these packets
+MUST response with the appropriate packet. For DPD-REQ packets, the response
+MUST be DPD-RESP, and for KeepAlive packets the response must be another
+KeepAlive packet. The main difference between these two types of packets,
+is that the DPD packets allow for arbitrary data to be attached, making them
+suitable for Path MTU detection.
+</t>
+<t>
+The server advertizes the suggested periods during the exchange of session parameters (<xref
+target="params-exchange"/>). The available headers are listed below.
+</t>
+<t>
+	<list style="items">
+	<t>X-CSTP-DPD: applicable to CSTP channel; contains a relative time in seconds.</t>
+	<t>X-CSTP-Keepalive: applicable to CSTP channel; contains a relative time in seconds.</t>
+	<t>X-DTLS-DPD: applicable to DTLS channel; contains a relative time in seconds.</t>
+	<t>X-DTLS-Keepalive: applicable to DTLS channel; contains a relative time in seconds.</t>
+    </list>
 </t>
 </section>
 

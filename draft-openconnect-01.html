@@ -380,12 +380,12 @@
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 VPN Session Establishment"/>
 <link href="#rfc.section.3.1.1" rel="Chapter" title="3.1.1 Authentication"/>
 <link href="#rfc.section.3.1.2" rel="Chapter" title="3.1.2 Exchange of Session Parameters"/>
-<link href="#rfc.section.3.1.3" rel="Chapter" title="3.1.3 Establishment of Primary (TCP) Channel"/>
-<link href="#rfc.section.3.1.4" rel="Chapter" title="3.1.4 Establishment of Secondary (UDP) Channel"/>
+<link href="#rfc.section.3.1.3" rel="Chapter" title="3.1.3 Establishment of Primary TCP Channel (CSTP)"/>
+<link href="#rfc.section.3.1.4" rel="Chapter" title="3.1.4 Establishment of Secondary UDP Channel (DTLS)"/>
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 The Primary Channel Protocol"/>
 <link href="#rfc.section.3.3" rel="Chapter" title="3.3 The Secondary (UDP) Channel Protocol"/>
 <link href="#rfc.section.3.4" rel="Chapter" title="3.4 The Channel Re-Key Protocol"/>
-<link href="#rfc.section.3.5" rel="Chapter" title="3.5 The Dead Peer Detection Protocol"/>
+<link href="#rfc.section.3.5" rel="Chapter" title="3.5 The Keepalive and Dead Peer Detection Protocols"/>
 <link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations"/>
 <link href="#rfc.section.5" rel="Chapter" title="5 Acknowledgements"/>
 <link href="#rfc.references" rel="Chapter" title="6 Normative References"/>
@@ -459,12 +459,12 @@
 <li>3.1.   <a href="#rfc.section.3.1">VPN Session Establishment</a></li>
 <li>3.1.1.   <a href="#rfc.section.3.1.1">Authentication</a></li>
 <li>3.1.2.   <a href="#rfc.section.3.1.2">Exchange of Session Parameters</a></li>
-<li>3.1.3.   <a href="#rfc.section.3.1.3">Establishment of Primary (TCP) Channel</a></li>
-<li>3.1.4.   <a href="#rfc.section.3.1.4">Establishment of Secondary (UDP) Channel</a></li>
+<li>3.1.3.   <a href="#rfc.section.3.1.3">Establishment of Primary TCP Channel (CSTP)</a></li>
+<li>3.1.4.   <a href="#rfc.section.3.1.4">Establishment of Secondary UDP Channel (DTLS)</a></li>
 <li>3.2.   <a href="#rfc.section.3.2">The Primary Channel Protocol</a></li>
 <li>3.3.   <a href="#rfc.section.3.3">The Secondary (UDP) Channel Protocol</a></li>
 <li>3.4.   <a href="#rfc.section.3.4">The Channel Re-Key Protocol</a></li>
-<li>3.5.   <a href="#rfc.section.3.5">The Dead Peer Detection Protocol</a></li>
+<li>3.5.   <a href="#rfc.section.3.5">The Keepalive and Dead Peer Detection Protocols</a></li>
 <li>4.   <a href="#rfc.section.4">Security Considerations</a></li>
 <li>5.   <a href="#rfc.section.5">Acknowledgements</a></li>
 <li>6.   <a href="#rfc.references">Normative References</a></li>
@@ -556,7 +556,7 @@
 <pre>
     User-Agent: Open AnyConnect VPN Agent v5.01
     X-CSTP-Base-MTU: 1280
-    X-CSTP-Address-Type: IPv6,IPv4
+    X-CSTP-Address-Type: IPv4,IPv6
     CONNECT /CSCOSSLC/tunnel HTTP/1.1
   </pre>
 <p id="rfc.section.3.1.2.p.1">By the receipt of a success XML structure, the client should issue an HTTP CONNECT request. In addition it should provide the "X-CSTP-Address-Type" and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the following values.  </p>
@@ -595,10 +595,11 @@
 </dl>
 
 <p> [XXX: compression] </p>
-<h1 id="rfc.section.3.1.3"><a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary (TCP) Channel</a></h1>
-<p id="rfc.section.3.1.3.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 3.2</a>.  </p>
-<h1 id="rfc.section.3.1.4"><a href="#rfc.section.3.1.4">3.1.4.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary (UDP) Channel</a></h1>
-<p id="rfc.section.3.1.4.p.1">To establish the secondary UDP channel the client must advertise support for it during the issue of the HTTP CONNECT request. This is done by appending the following headers.  </p>
+<p id="rfc.section.3.1.2.p.3">It is important to note that any other headers allowed by the HTTP protocol can be present. In fact, a server may use cookies to allow session resumption if needed.  </p>
+<h1 id="rfc.section.3.1.3"><a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary TCP Channel (CSTP)</a></h1>
+<p id="rfc.section.3.1.3.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 3.2</a>. This channel will be referred as CSTP in the rest of this document.  </p>
+<h1 id="rfc.section.3.1.4"><a href="#rfc.section.3.1.4">3.1.4.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary UDP Channel (DTLS)</a></h1>
+<p id="rfc.section.3.1.4.p.1">To establish the secondary UDP-based channel, which will be referred to as the DTLS channel, the client must advertise support for it during the issue of the HTTP CONNECT request (see <a href="#params-exchange">Section 3.1.2</a>. This is done by appending the following headers to the request.  </p>
 
 <dl>
   <dt></dt>
@@ -715,11 +716,11 @@
     </tr>
     <tr>
       <td class="center">0x05</td>
-      <td class="left">Disconnect: sent by the client (or server) to terminate the session.  No data is associated with this request.</td>
+      <td class="left">Disconnect: sent by the client (or server) to terminate the session.  No data is associated with this request. The session will be invalidated after such request.</td>
     </tr>
     <tr>
       <td class="center">0x07</td>
-      <td class="left">Keepalive: sent by any peer. No data is associated with this request.</td>
+      <td class="left">KeepAlive: sent by any peer. No data is associated with this request.</td>
     </tr>
     <tr>
       <td class="center">0x08</td>
@@ -735,7 +736,7 @@
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#secondary-channel-protocol" id="secondary-channel-protocol">The Secondary (UDP) Channel Protocol</a></h1>
 <p id="rfc.section.3.3.p.1">The format of the packets sent over the UDP channel consists of an 1-byte header followed by data. The header byte indicates the type of data that follow as in <a href="#packet_table">Table 3</a>.  The header and the data are encapsulated in a DTLS record packet (see <a href="#RFC6347">[RFC6347]</a>).  </p>
 <h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> <a href="#rekey-protocol" id="rekey-protocol">The Channel Re-Key Protocol</a></h1>
-<p id="rfc.section.3.4.p.1">During the exchange of session parameters (<a href="#params-exchange">Section 3.1.2</a>), the server advertises the methods available for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers. The available options for both the server and client are listed below.  </p>
+<p id="rfc.section.3.4.p.1">During the exchange of session parameters (<a href="#params-exchange">Section 3.1.2</a>), the server advertizes the methods available for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers. The available options for both the server and client are listed below.  </p>
 <p/>
 
 <ol>
@@ -747,8 +748,20 @@
 <p> </p>
 <p id="rfc.section.3.4.p.3">When the value is other than "none" the rekey period is determinated by the "X-CSTP-Rekey-Time" and "X-DTLS-Rekey-Time" headers. These headers contain the time in seconds after which a session should rekey.  </p>
 <p id="rfc.section.3.4.p.4">It should be noted that when the "ssl" rekey option is used, care must be taken by both the client and the server to ensure that either safe renegotiation is used (<a href="#RFC5746">[RFC5746]</a>), or that the identity of the peer remained the same.  </p>
-<h1 id="rfc.section.3.5"><a href="#rfc.section.3.5">3.5.</a> <a href="#dead-peer-detection" id="dead-peer-detection">The Dead Peer Detection Protocol</a></h1>
-<p id="rfc.section.3.5.p.1">xxx </p>
+<h1 id="rfc.section.3.5"><a href="#rfc.section.3.5">3.5.</a> <a href="#dead-peer-detection" id="dead-peer-detection">The Keepalive and Dead Peer Detection Protocols</a></h1>
+<p id="rfc.section.3.5.p.1">In OpenConnect there are two packet types that can be used for keep-alive or dead peer detection, as shown in <a href="#packet_table">Table 3</a>. These are the DPD-REQ and KeepAlive packets.  </p>
+<p id="rfc.section.3.5.p.2">The timings of the transmission of these packets are set by the server, and they are advisory to a client. However, any peer receiving these packets MUST response with the appropriate packet. For DPD-REQ packets, the response MUST be DPD-RESP, and for KeepAlive packets the response must be another KeepAlive packet. The main difference between these two types of packets, is that the DPD packets allow for arbitrary data to be attached, making them suitable for Path MTU detection.  </p>
+<p id="rfc.section.3.5.p.3">The server advertizes the suggested periods during the exchange of session parameters (<a href="#params-exchange">Section 3.1.2</a>). The available headers are listed below.  </p>
+<p/>
+
+<ul class="empty">
+  <li>X-CSTP-DPD: applicable to CSTP channel; contains a relative time in seconds.</li>
+  <li>X-CSTP-Keepalive: applicable to CSTP channel; contains a relative time in seconds.</li>
+  <li>X-DTLS-DPD: applicable to DTLS channel; contains a relative time in seconds.</li>
+  <li>X-DTLS-Keepalive: applicable to DTLS channel; contains a relative time in seconds.</li>
+</ul>
+
+<p> </p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#security-analysis" id="security-analysis">Security Considerations</a></h1>
 <p id="rfc.section.4.p.1">None yet.  </p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Acknowledgements</h1>
