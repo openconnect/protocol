@@ -301,7 +301,10 @@
 <section anchor="primary-channel-protocol" title="The Primary Channel Protocol">
 <t>
 The format of the packets sent over the primary channel consists of an
-8-bytes header followed by the raw TLS record packet. The header is shown below.
+8-bytes header followed by data. The whole packet
+in encapsulated in a TLS record (see <xref
+ target="RFC5246"/>). The bytes of the header indicate the type of data
+that follow, and are listed in <xref target="cstp_table"/>.
 </t>
 
 	<texttable anchor='cstp_table'>
@@ -313,27 +316,30 @@ The format of the packets sent over the primary channel consists of an
 <c>2</c><c>fixed to 0x46 (F)</c>
 <c>3</c><c>fixed to 0x01</c>
 <c>4-5</c><c>The length of the packet in big endian order</c>
-<c>6</c><c>The type of the packet (see below for available types)</c>
+<c>6</c><c>The type of the data that follows (see <xref target="packet_table"/> for available types)</c>
 <c>7</c><c>fixed to 0x00</c>
 		<postamble></postamble>
 	</texttable>
 
 <t>
-The available packet types are listed in <xref target="packet_table"/>.
+The available data types are listed in <xref target="packet_table"/>.
 </t>
 	<texttable anchor='packet_table'>
 		<preamble></preamble>
 		<ttcol width="30%" align='center'>Value</ttcol>
 		<ttcol width="50%" align='left'>Description</ttcol>
-<c>0x00</c><c>Data: the TLS record packet contains an IP or IPv6 packet</c>
+<c>0x00</c><c>Data: the TLS record packet contains an IPv4 or IPv6 packet</c>
 <c>0x03</c><c>DPD-REQ: used for dead peer detection. Once sent the peer
-should reply with a DPD-RESP packet, that has the same contents as this
-one.</c>
+should reply with a DPD-RESP packet, that has the same contents as the
+original request.</c>
 <c>0x04</c><c>DPD-RESP: used as a response to a previously received DPD-REQ.</c>
-<c>0x05</c><c>Disconnect: sent by the server to ask the client to disconnect.</c>
-<c>0x07</c><c>Keepalive: sent by any peer.</c>
+<c>0x05</c><c>Disconnect: sent by the client (or server) to terminate the session.
+No data is associated with this request.</c>
+<c>0x07</c><c>Keepalive: sent by any peer. No data is associated with this
+request.</c>
 <c>0x08</c><c>Compressed Data: a Data packet which is compressed prior to encryption.</c>
-<c>0x09</c><c>Terminate: sent by the server to indicate that the server is shutting down.</c>
+<c>0x09</c><c>Terminate: sent by the server to indicate that the server is shutting down. No data is associated with this
+request.</c>
 		<postamble></postamble>
 	</texttable>
 </section>
@@ -341,8 +347,10 @@ one.</c>
 <section anchor="secondary-channel-protocol" title="The Secondary (UDP) Channel Protocol">
 <t>
 The format of the packets sent over the UDP channel consists of an
-1-byte header followed by the raw DTLS record packet. The header byte 
-contains the packet type as in <xref target="packet_table"/>.
+1-byte header followed by data. The header byte 
+indicates the type of data that follow as in <xref target="packet_table"/>.
+The header and the data are encapsulated in a DTLS record packet
+(see <xref target="RFC6347"/>).
 </t>
 </section>
 
