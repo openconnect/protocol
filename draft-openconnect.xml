@@ -14,6 +14,9 @@
 	<!ENTITY RFC6347 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6347.xml">
 
+	<!ENTITY RFC4559 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.4559.xml">
+
 	<!ENTITY RFC2616 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
 
@@ -115,9 +118,13 @@
 	<t>Password: a user can authenticate itself using a password.</t>
 	<t>Certificate: a user can authenticate itself using a PKIX certificate
 	it possesses.</t>
+	<t>GSSAPI: a user can authenticate itself using a Kerberos ticket, or any
+	other GSSAPI mechanism.</t>
     </list>
   The server is authenticated to the client using a PKIX certificate.
   </t>
+
+  <section anchor="authentication_cert" title="Authentication using certificates">
   <t>
   Once a client establishes a TCP connection to the server's well known
   port, it initiates the TLS protocol. The server may require
@@ -127,6 +134,9 @@
   verification of subsequent sessions. Thus, subsequent sessions will
   simply check whether the server's key match the initial.
   </t>
+  </section>
+
+  <section anchor="authentication_pass" title="Authentication using passwords">
   <t>
   [XXX: We need to define a DTD]
 
@@ -203,6 +213,38 @@
     </config-auth>
   ]]></artwork></figure>
   </t>
+  </section>
+  
+  <section anchor="authentication_gssapi" title="Authentication using GSSAPI">
+<t>
+The GSSAPI authentication is performed using the SPNEGO protocol <xref
+target="RFC4559"/> with the following exception. A client which
+supports the SPNEGO protocol, should indicate it using the following header
+on in its initial request to the server.
+</t>
+<t>
+<figure>
+<artwork><![CDATA[
+    X-Support-HTTP-Auth: true
+]]></artwork>
+</figure></t>
+<t>
+After that the server would report a "401 Unauthorized" status code
+as specified in the SPNEGO protocol. The server may utilize the following
+header, to indicate that alternative authentication methods are available
+(e.g., with plain password), if SPNEGO authentication fails.
+</t>
+<t>
+<figure><artwork><![CDATA[
+    X-Support-HTTP-Auth: fallback
+]]></artwork></figure>
+</t>
+<t>
+A client seeing the following header should retry authenticating to the
+server without sending the "X-Support-HTTP-Auth: true" header.
+</t>
+  </section>
+
   </section>
 
   <section anchor="params-exchange" title="Exchange of Session Parameters">
@@ -390,6 +432,8 @@ None yet.
 	&RFC6347;
 
 	&RFC2616;
+
+	&RFC4559;
 
 	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
 	&RFC2119;
