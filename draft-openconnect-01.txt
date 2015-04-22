@@ -74,7 +74,7 @@ Table of Contents
      3.2.  The Primary Channel Protocol  . . . . . . . . . . . . . .   7
      3.3.  The Secondary (UDP) Channel Protocol  . . . . . . . . . .   9
      3.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .   9
-     3.5.  The Dead Peer Detection Protocol  . . . . . . . . . . . .   9
+     3.5.  The Dead Peer Detection Protocol  . . . . . . . . . . . .  10
    4.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
    5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
    6.  Normative References  . . . . . . . . . . . . . . . . . . . .  10
@@ -243,10 +243,10 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
        X-Support-HTTP-Auth: true
 
    After that the server would report a "401 Unauthorized" status code
-   as specified in the SPNEGO protocol.  The server may utilize the
-   following header, to indicate that alternative authentication methods
-   are available (e.g., with plain password), if SPNEGO authentication
-   fails.
+   and authentication would proceed as specified in the SPNEGO protocol.
+   The server may utilize the following header, to indicate that
+   alternative authentication methods are available (e.g., with plain
+   password), if SPNEGO authentication fails.
 
        X-Support-HTTP-Auth: fallback
 
@@ -490,13 +490,13 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 3.4.  The Channel Re-Key Protocol
 
-   xxx
+   During the exchange of session parameters (Section 3.1.2), the server
+   advertises the methods available for session rekey using the "X-CSTP-
+   Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers.  The available
+   options for both the server and client are listed below.
 
-3.5.  The Dead Peer Detection Protocol
-
-   xxx
-
-
+   1.  none: no rekey; the session will go on until 2^48 DTLS records
+       have been exchanged, or 2^64 TLS records.
 
 
 
@@ -505,6 +505,25 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+   2.  ssl: a TLS or DTLS rehandshake will be performed periodically.
+
+   3.  new-tunnel: the session will tear down and the client will
+       reconnect periodically.
+
+   When the value is other than "none" the rekey period is determinated
+   by the "X-CSTP-Rekey-Time" and "X-DTLS-Rekey-Time" headers.  These
+   headers contain the time in seconds after which a session should
+   rekey.
+
+   It should be noted that when the "ssl" rekey option is used, care
+   must be taken by both the client and the server to ensure that either
+   safe renegotiation is used ([RFC5746]), or that the identity of the
+   peer remained the same.
+
+3.5.  The Dead Peer Detection Protocol
+
+   xxx
 
 4.  Security Considerations
 
@@ -519,6 +538,10 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
               (TLS) Protocol Version 1.2", RFC 5246, August 2008.
 
+   [RFC5746]  Rescorla, E., Ray, M., Dispensa, S., and N. Oskov,
+              "Transport Layer Security (TLS) Renegotiation Indication
+              Extension", RFC 5746, February 2010.
+
    [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
               Security Version 1.2", RFC 6347, January 2012.
 
@@ -529,6 +552,15 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    [RFC4559]  Jaganathan, K., Zhu, L., and J. Brezak, "SPNEGO-based
               Kerberos and NTLM HTTP Authentication in Microsoft
               Windows", RFC 4559, June 2006.
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -557,4 +589,28 @@ Author's Address
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]

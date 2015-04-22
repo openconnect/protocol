@@ -5,6 +5,9 @@
  	<!ENTITY RFC5246 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
 
+ 	<!ENTITY RFC5746 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
+
 	<!ENTITY RFC2119 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 
@@ -230,9 +233,10 @@ on in its initial request to the server.
 </figure></t>
 <t>
 After that the server would report a "401 Unauthorized" status code
-as specified in the SPNEGO protocol. The server may utilize the following
-header, to indicate that alternative authentication methods are available
-(e.g., with plain password), if SPNEGO authentication fails.
+and authentication would proceed as specified in the SPNEGO protocol.
+The server may utilize the following header, to indicate that alternative
+authentication methods are available (e.g., with plain password), if
+SPNEGO authentication fails.
 </t>
 <t>
 <figure><artwork><![CDATA[
@@ -246,7 +250,6 @@ server without sending the "X-Support-HTTP-Auth: true" header.
   </section>
 
   </section>
-
   <section anchor="params-exchange" title="Exchange of Session Parameters">
   <t>
   By the receipt of a success XML structure, the client should issue an HTTP
@@ -398,7 +401,32 @@ The header and the data are encapsulated in a DTLS record packet
 
 <section anchor="rekey-protocol" title="The Channel Re-Key Protocol">
 <t>
-xxx
+During the exchange of session parameters (<xref
+target="params-exchange"/>), the server advertises the methods available
+for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method"
+HTTP headers. The available options for both the server and client are
+listed below.
+</t>
+<t>
+	<list style="numbers">
+	<t>none: no rekey; the session will go on until 2^48 DTLS records
+	have been exchanged, or 2^64 TLS records.</t>
+	<t>ssl: a TLS or DTLS rehandshake will be performed
+	periodically.</t>
+	<t>new-tunnel: the session will tear down and the client will
+	reconnect periodically.</t>
+    </list>
+</t>
+<t>
+When the value is other than "none" the rekey period is determinated by the
+"X-CSTP-Rekey-Time" and "X-DTLS-Rekey-Time" headers. These headers contain
+the time in seconds after which a session should rekey.
+</t>
+<t>
+It should be noted that when the "ssl" rekey option is used, care must be
+taken by both the client and the server to ensure that either safe
+renegotiation is used (<xref target="RFC5746"/>), or that the identity of
+the peer remained the same.
 </t>
 </section>
 
@@ -428,6 +456,8 @@ None yet.
 
     <references title="Normative References"><!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml"?-->
 	&RFC5246;
+
+	&RFC5746;
 
 	&RFC6347;
 

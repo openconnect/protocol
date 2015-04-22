@@ -546,7 +546,7 @@
     X-Support-HTTP-Auth: true
 </pre>
 <p/>
-<p id="rfc.section.3.1.1.3.p.3">After that the server would report a "401 Unauthorized" status code as specified in the SPNEGO protocol. The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if SPNEGO authentication fails.  </p>
+<p id="rfc.section.3.1.1.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the SPNEGO protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if SPNEGO authentication fails.  </p>
 <pre>
     X-Support-HTTP-Auth: fallback
 </pre>
@@ -735,7 +735,18 @@
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#secondary-channel-protocol" id="secondary-channel-protocol">The Secondary (UDP) Channel Protocol</a></h1>
 <p id="rfc.section.3.3.p.1">The format of the packets sent over the UDP channel consists of an 1-byte header followed by data. The header byte indicates the type of data that follow as in <a href="#packet_table">Table 3</a>.  The header and the data are encapsulated in a DTLS record packet (see <a href="#RFC6347">[RFC6347]</a>).  </p>
 <h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> <a href="#rekey-protocol" id="rekey-protocol">The Channel Re-Key Protocol</a></h1>
-<p id="rfc.section.3.4.p.1">xxx </p>
+<p id="rfc.section.3.4.p.1">During the exchange of session parameters (<a href="#params-exchange">Section 3.1.2</a>), the server advertises the methods available for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers. The available options for both the server and client are listed below.  </p>
+<p/>
+
+<ol>
+  <li>none: no rekey; the session will go on until 2^48 DTLS records have been exchanged, or 2^64 TLS records.</li>
+  <li>ssl: a TLS or DTLS rehandshake will be performed periodically.</li>
+  <li>new-tunnel: the session will tear down and the client will reconnect periodically.</li>
+</ol>
+
+<p> </p>
+<p id="rfc.section.3.4.p.3">When the value is other than "none" the rekey period is determinated by the "X-CSTP-Rekey-Time" and "X-DTLS-Rekey-Time" headers. These headers contain the time in seconds after which a session should rekey.  </p>
+<p id="rfc.section.3.4.p.4">It should be noted that when the "ssl" rekey option is used, care must be taken by both the client and the server to ensure that either safe renegotiation is used (<a href="#RFC5746">[RFC5746]</a>), or that the identity of the peer remained the same.  </p>
 <h1 id="rfc.section.3.5"><a href="#rfc.section.3.5">3.5.</a> <a href="#dead-peer-detection" id="dead-peer-detection">The Dead Peer Detection Protocol</a></h1>
 <p id="rfc.section.3.5.p.1">xxx </p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#security-analysis" id="security-analysis">Security Considerations</a></h1>
@@ -750,6 +761,12 @@
         <b id="RFC5246">[RFC5246]</b>
       </td>
       <td class="top"><a>Dierks, T.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5246">The Transport Layer Security (TLS) Protocol Version 1.2</a>", RFC 5246, August 2008.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5746">[RFC5746]</b>
+      </td>
+      <td class="top"><a>Rescorla, E.</a>, <a>Ray, M.</a>, <a>Dispensa, S.</a> and <a>N. Oskov</a>, "<a href="http://tools.ietf.org/html/rfc5746">Transport Layer Security (TLS) Renegotiation Indication Extension</a>", RFC 5746, February 2010.</td>
     </tr>
     <tr>
       <td class="reference">
