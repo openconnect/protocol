@@ -293,10 +293,15 @@ server without sending the "X-Support-HTTP-Auth: true" header.
        provided by this server.</t>
        <t>X-CSTP-Base-MTU: The MTU of the link as estimated by this
        server.</t>
-       <t>X-CSTP-DynDNS: Set to "true" if the server is operating on a
-       dynamic DNS.</t>
+       <t>X-CSTP-DynDNS: Set to "true" if the server is operating with a
+       dynamic DNS address.</t>
        </list>
   [XXX: compression]
+  </t>
+  <t>
+The client is expected to treat the received parameters as his networking
+settings. If no "X-CSTP-Split-Include" headers are present, the client is
+expected to assign its default route through the VPN.
   </t>
   <t>
   It is important to note that any other headers allowed by the HTTP
@@ -340,8 +345,9 @@ server without sending the "X-Support-HTTP-Auth: true" header.
 		<ttcol width="30%" align='center'>OpenConnect cipher</ttcol>
 		<ttcol width="40%" align='center'>DTLS ciphersuite</ttcol>
 		<ttcol width="20%" align='center'>DTLS version</ttcol>
-<c>   DES-CBC3-SHA</c><c>TLS_RSA_WITH_AES_128_CBC_SHA1</c><c>DTLS 0.9 (pre-draft version)</c>
-<c>   AES128-SHA</c><c>TLS_RSA_WITH_3DES_EDE_CBC_SHA1s</c><c>DTLS 0.9 (pre-draft version)</c>
+<c>   DES-CBC3-SHA</c><c>TLS_RSA_WITH_3DES_EDE_CBC_SHA1</c><c>DTLS 0.9 (pre-draft version)</c>
+<c>   AES128-SHA</c><c>TLS_RSA_WITH_AES_128_CBC_SHA1s</c><c>DTLS 0.9 (pre-draft version)</c>
+<c>   AES256-SHA</c><c>TLS_RSA_WITH_AES_256_CBC_SHA1s</c><c>DTLS 0.9 (pre-draft version)</c>
 <c>   OC-DTLS1_2-AES128-GCM</c><c>TLS_RSA_WITH_AES_128_GCM_SHA256</c><c>DTLS 1.2</c>
 <c>   OC-DTLS1_2-AES256-GCM</c><c>TLS_RSA_WITH_AES_256_GCM_SHA256</c><c>DTLS 1.2</c>
 		<postamble></postamble>

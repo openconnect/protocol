@@ -591,11 +591,12 @@
   <dt></dt>
   <dd style="margin-left: 8">X-CSTP-Base-MTU: The MTU of the link as estimated by this server.</dd>
   <dt></dt>
-  <dd style="margin-left: 8">X-CSTP-DynDNS: Set to "true" if the server is operating on a dynamic DNS.</dd>
+  <dd style="margin-left: 8">X-CSTP-DynDNS: Set to "true" if the server is operating with a dynamic DNS address.</dd>
 </dl>
 
 <p> [XXX: compression] </p>
-<p id="rfc.section.3.1.2.p.3">It is important to note that any other headers allowed by the HTTP protocol can be present. In fact, a server may use cookies to allow session resumption if needed.  </p>
+<p id="rfc.section.3.1.2.p.3">The client is expected to treat the received parameters as his networking settings. If no "X-CSTP-Split-Include" headers are present, the client is expected to assign its default route through the VPN.  </p>
+<p id="rfc.section.3.1.2.p.4">It is important to note that any other headers allowed by the HTTP protocol can be present. In fact, a server may use cookies to allow session resumption if needed.  </p>
 <h1 id="rfc.section.3.1.3"><a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary TCP Channel (CSTP)</a></h1>
 <p id="rfc.section.3.1.3.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 3.2</a>. This channel will be referred as CSTP in the rest of this document.  </p>
 <h1 id="rfc.section.3.1.4"><a href="#rfc.section.3.1.4">3.1.4.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary UDP Channel (DTLS)</a></h1>
@@ -625,12 +626,17 @@
   <tbody>
     <tr>
       <td class="center">DES-CBC3-SHA</td>
-      <td class="center">TLS_RSA_WITH_AES_128_CBC_SHA1</td>
+      <td class="center">TLS_RSA_WITH_3DES_EDE_CBC_SHA1</td>
       <td class="center">DTLS 0.9 (pre-draft version)</td>
     </tr>
     <tr>
       <td class="center">AES128-SHA</td>
-      <td class="center">TLS_RSA_WITH_3DES_EDE_CBC_SHA1s</td>
+      <td class="center">TLS_RSA_WITH_AES_128_CBC_SHA1s</td>
+      <td class="center">DTLS 0.9 (pre-draft version)</td>
+    </tr>
+    <tr>
+      <td class="center">AES256-SHA</td>
+      <td class="center">TLS_RSA_WITH_AES_256_CBC_SHA1s</td>
       <td class="center">DTLS 0.9 (pre-draft version)</td>
     </tr>
     <tr>
