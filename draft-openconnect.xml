@@ -343,11 +343,11 @@ expected to assign its default route through the VPN.
 	<texttable anchor='cipher_table'>
 		<preamble></preamble>
 		<ttcol width="30%" align='center'>OpenConnect cipher</ttcol>
-		<ttcol width="40%" align='center'>DTLS ciphersuite</ttcol>
+		<ttcol width="50%" align='center'>DTLS ciphersuite</ttcol>
 		<ttcol width="20%" align='center'>DTLS version</ttcol>
 <c>   DES-CBC3-SHA</c><c>TLS_RSA_WITH_3DES_EDE_CBC_SHA1</c><c>DTLS 0.9 (pre-draft version)</c>
-<c>   AES128-SHA</c><c>TLS_RSA_WITH_AES_128_CBC_SHA1s</c><c>DTLS 0.9 (pre-draft version)</c>
-<c>   AES256-SHA</c><c>TLS_RSA_WITH_AES_256_CBC_SHA1s</c><c>DTLS 0.9 (pre-draft version)</c>
+<c>   AES128-SHA</c><c>TLS_RSA_WITH_AES_128_CBC_SHA1</c><c>DTLS 0.9 (pre-draft version)</c>
+<c>   AES256-SHA</c><c>TLS_RSA_WITH_AES_256_CBC_SHA1</c><c>DTLS 0.9 (pre-draft version)</c>
 <c>   OC-DTLS1_2-AES128-GCM</c><c>TLS_RSA_WITH_AES_128_GCM_SHA256</c><c>DTLS 1.2</c>
 <c>   OC-DTLS1_2-AES256-GCM</c><c>TLS_RSA_WITH_AES_256_GCM_SHA256</c><c>DTLS 1.2</c>
 		<postamble></postamble>
@@ -362,7 +362,7 @@ The format of the packets sent over the primary channel consists of an
 8-bytes header followed by data. The whole packet
 in encapsulated in a TLS record (see <xref
  target="RFC5246"/>). The bytes of the header indicate the type of data
-that follow, and are listed in <xref target="cstp_table"/>.
+that follow, and their contents are explained in <xref target="cstp_table"/>.
 </t>
 
 	<texttable anchor='cstp_table'>
@@ -373,7 +373,7 @@ that follow, and are listed in <xref target="cstp_table"/>.
 <c>1</c><c>fixed to 0x54 (T)</c>
 <c>2</c><c>fixed to 0x46 (F)</c>
 <c>3</c><c>fixed to 0x01</c>
-<c>4-5</c><c>The length of the packet in big endian order</c>
+<c>4-5</c><c>The length of the packet that follows this header in big endian order</c>
 <c>6</c><c>The type of the data that follows (see <xref target="packet_table"/> for available types)</c>
 <c>7</c><c>fixed to 0x00</c>
 		<postamble></postamble>
@@ -386,18 +386,18 @@ The available data types are listed in <xref target="packet_table"/>.
 		<preamble></preamble>
 		<ttcol width="30%" align='center'>Value</ttcol>
 		<ttcol width="50%" align='left'>Description</ttcol>
-<c>0x00</c><c>Data: the TLS record packet contains an IPv4 or IPv6 packet</c>
+<c>0x00</c><c>DATA: the TLS record packet contains an IPv4 or IPv6 packet</c>
 <c>0x03</c><c>DPD-REQ: used for dead peer detection. Once sent the peer
 should reply with a DPD-RESP packet, that has the same contents as the
 original request.</c>
 <c>0x04</c><c>DPD-RESP: used as a response to a previously received DPD-REQ.</c>
-<c>0x05</c><c>Disconnect: sent by the client (or server) to terminate the session.
+<c>0x05</c><c>DISCONNECT: sent by the client (or server) to terminate the session.
 No data is associated with this request. The session will be invalidated
 after such request.</c>
-<c>0x07</c><c>KeepAlive: sent by any peer. No data is associated with this
+<c>0x07</c><c>KEEPALIVE: sent by any peer. No data is associated with this
 request.</c>
-<c>0x08</c><c>Compressed Data: a Data packet which is compressed prior to encryption.</c>
-<c>0x09</c><c>Terminate: sent by the server to indicate that the server is shutting down. No data is associated with this
+<c>0x08</c><c>COMPRESSED DATA: a Data packet which is compressed prior to encryption.</c>
+<c>0x09</c><c>TERMINATE: sent by the server to indicate that the server is shutting down. No data is associated with this
 request.</c>
 		<postamble></postamble>
 	</texttable>

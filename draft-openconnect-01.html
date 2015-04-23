@@ -631,12 +631,12 @@
     </tr>
     <tr>
       <td class="center">AES128-SHA</td>
-      <td class="center">TLS_RSA_WITH_AES_128_CBC_SHA1s</td>
+      <td class="center">TLS_RSA_WITH_AES_128_CBC_SHA1</td>
       <td class="center">DTLS 0.9 (pre-draft version)</td>
     </tr>
     <tr>
       <td class="center">AES256-SHA</td>
-      <td class="center">TLS_RSA_WITH_AES_256_CBC_SHA1s</td>
+      <td class="center">TLS_RSA_WITH_AES_256_CBC_SHA1</td>
       <td class="center">DTLS 0.9 (pre-draft version)</td>
     </tr>
     <tr>
@@ -710,7 +710,7 @@
   <tbody>
     <tr>
       <td class="center">0x00</td>
-      <td class="left">Data: the TLS record packet contains an IPv4 or IPv6 packet</td>
+      <td class="left">DATA: the TLS record packet contains an IPv4 or IPv6 packet</td>
     </tr>
     <tr>
       <td class="center">0x03</td>
@@ -722,19 +722,19 @@
     </tr>
     <tr>
       <td class="center">0x05</td>
-      <td class="left">Disconnect: sent by the client (or server) to terminate the session.  No data is associated with this request. The session will be invalidated after such request.</td>
+      <td class="left">DISCONNECT: sent by the client (or server) to terminate the session.  No data is associated with this request. The session will be invalidated after such request.</td>
     </tr>
     <tr>
       <td class="center">0x07</td>
-      <td class="left">KeepAlive: sent by any peer. No data is associated with this request.</td>
+      <td class="left">KEEPALIVE: sent by any peer. No data is associated with this request.</td>
     </tr>
     <tr>
       <td class="center">0x08</td>
-      <td class="left">Compressed Data: a Data packet which is compressed prior to encryption.</td>
+      <td class="left">COMPRESSED DATA: a Data packet which is compressed prior to encryption.</td>
     </tr>
     <tr>
       <td class="center">0x09</td>
-      <td class="left">Terminate: sent by the server to indicate that the server is shutting down. No data is associated with this request.</td>
+      <td class="left">TERMINATE: sent by the server to indicate that the server is shutting down. No data is associated with this request.</td>
     </tr>
   </tbody>
 </table>
