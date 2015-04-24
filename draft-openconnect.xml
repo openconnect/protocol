@@ -220,7 +220,7 @@
   
   <section anchor="authentication_gssapi" title="Authentication using GSSAPI">
 <t>
-The GSSAPI authentication is performed using the SPNEGO protocol <xref
+The GSSAPI authentication is performed using the SPNEGO HTTP protocol <xref
 target="RFC4559"/> with the following exception. A client which
 supports the SPNEGO protocol, should indicate it using the following header
 on in its initial request to the server.
@@ -233,10 +233,10 @@ on in its initial request to the server.
 </figure></t>
 <t>
 After that the server would report a "401 Unauthorized" status code
-and authentication would proceed as specified in the SPNEGO protocol.
+and authentication would proceed as specified in the SPNEGO HTTP protocol.
 The server may utilize the following header, to indicate that alternative
 authentication methods are available (e.g., with plain password), if
-SPNEGO authentication fails.
+authentication fails.
 </t>
 <t>
 <figure><artwork><![CDATA[

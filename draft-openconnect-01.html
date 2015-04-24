@@ -541,12 +541,12 @@
   </pre>
 <p id="rfc.section.3.1.1.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise the server should reply using the following XML structure.  </p>
 <h1 id="rfc.section.3.1.1.3"><a href="#rfc.section.3.1.1.3">3.1.1.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">Authentication using GSSAPI</a></h1>
-<p id="rfc.section.3.1.1.3.p.1">The GSSAPI authentication is performed using the SPNEGO protocol <a href="#RFC4559">[RFC4559]</a> with the following exception. A client which supports the SPNEGO protocol, should indicate it using the following header on in its initial request to the server.  </p>
+<p id="rfc.section.3.1.1.3.p.1">The GSSAPI authentication is performed using the SPNEGO HTTP protocol <a href="#RFC4559">[RFC4559]</a> with the following exception. A client which supports the SPNEGO protocol, should indicate it using the following header on in its initial request to the server.  </p>
 <pre>
     X-Support-HTTP-Auth: true
 </pre>
 <p/>
-<p id="rfc.section.3.1.1.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the SPNEGO protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if SPNEGO authentication fails.  </p>
+<p id="rfc.section.3.1.1.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the SPNEGO HTTP protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if authentication fails.  </p>
 <pre>
     X-Support-HTTP-Auth: fallback
 </pre>
@@ -653,7 +653,7 @@
 </table>
 <p/>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#primary-channel-protocol" id="primary-channel-protocol">The CSTP Channel Protocol</a></h1>
-<p id="rfc.section.3.2.p.1">The format of the packets sent over the primary channel consists of an 8-bytes header followed by data. The whole packet in encapsulated in a TLS record (see <a href="#RFC5246">[RFC5246]</a>). The bytes of the header indicate the type of data that follow, and are listed in <a href="#cstp_table">Table 2</a>.  </p>
+<p id="rfc.section.3.2.p.1">The format of the packets sent over the primary channel consists of an 8-bytes header followed by data. The whole packet in encapsulated in a TLS record (see <a href="#RFC5246">[RFC5246]</a>). The bytes of the header indicate the type of data that follow, and their contents are explained in <a href="#cstp_table">Table 2</a>.  </p>
 <div id="rfc.table.2"/>
 <div id="cstp_table"/>
 <p/>
@@ -683,7 +683,7 @@
     </tr>
     <tr>
       <td class="center">4-5</td>
-      <td class="left">The length of the packet in big endian order</td>
+      <td class="left">The length of the packet that follows this header in big endian order</td>
     </tr>
     <tr>
       <td class="center">6</td>
