@@ -11,6 +11,9 @@
 	<!ENTITY RFC2119 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 
+	<!ENTITY RFC2743 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2743.xml">
+
 	<!ENTITY RFC6066 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6066.xml">
 
@@ -148,8 +151,8 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 	<t>Password: a user can authenticate itself using a password.</t>
 	<t>Certificate: a user can authenticate itself using a PKIX certificate
 	it possesses.</t>
-	<t>GSSAPI: a user can authenticate itself using a Kerberos ticket, or any
-	other GSSAPI mechanism.</t>
+	<t>HTTP SPNEGO: a user can authenticate itself using a Kerberos ticket, or any
+	other mechanism supported by SPNEGO (i.e., GSSAPI).</t>
     </list>
   The server is authenticated to the client using a PKIX certificate.
   </t>
@@ -248,12 +251,14 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   </t>
   </section>
   
-  <section anchor="authentication_gssapi" title="Authentication using GSSAPI">
+  <section anchor="authentication_gssapi" title="HTTP Authentication using SPNEGO">
 <t>
-The GSSAPI authentication is performed using the SPNEGO HTTP protocol <xref
-target="RFC4559"/> with the following exception. A client which
-supports the SPNEGO protocol, should indicate it using the following header
-on in its initial request to the server.
+That type of authentication is performed using the HTTP SPNEGO protocol <xref
+target="RFC4559"/>, a method which is available using the Generic Security
+Service API <xref target="RFC2743"/>. The following approach is used
+to advertise the availability of the HTTP SPNEGO protocol by the client.
+A client which supports the HTTP SPNEGO protocol, SHOULD indicate it using the
+following header on in its initial request to the server.
 </t>
 <t>
 <figure>
@@ -263,7 +268,7 @@ on in its initial request to the server.
 </figure></t>
 <t>
 After that the server would report a "401 Unauthorized" status code
-and authentication would proceed as specified in the SPNEGO HTTP protocol.
+and authentication would proceed as specified in the HTTP SPNEGO protocol.
 The server may utilize the following header, to indicate that alternative
 authentication methods are available (e.g., with plain password), if
 authentication fails.
@@ -533,9 +538,11 @@ None yet.
 
 	&RFC4559;
 
-	&RFC2119;
+	&RFC2743;
 	
 	&RFC4519;
+
+	&RFC2119;
 
     </references>
 

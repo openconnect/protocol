@@ -156,11 +156,11 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    2.  Certificate: a user can authenticate itself using a PKIX
        certificate it possesses.
 
-   3.  GSSAPI: a user can authenticate itself using a Kerberos ticket,
-       or any other GSSAPI mechanism.
+   3.  HTTP SPNEGO: a user can authenticate itself using a Kerberos
+       ticket, or any other mechanism supported by SPNEGO (i.e.,
+       GSSAPI).
 
    The server is authenticated to the client using a PKIX certificate.
-
 
 
 
@@ -254,25 +254,25 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
            </auth>
        </config-auth>
 
-2.1.2.3.  Authentication using GSSAPI
+2.1.2.3.  HTTP Authentication using SPNEGO
 
-   The GSSAPI authentication is performed using the SPNEGO HTTP protocol
-   [RFC4559] with the following exception.  A client which supports the
-   SPNEGO protocol, should indicate it using the following header on in
-   its initial request to the server.
+   That type of authentication is performed using the HTTP SPNEGO
+   protocol [RFC4559], a method which is available using the Generic
+   Security Service API [RFC2743].  The following approach is used to
+   advertise the availability of the HTTP SPNEGO protocol by the client.
+   A client which supports the HTTP SPNEGO protocol, SHOULD indicate it
+   using the following header on in its initial request to the server.
 
        X-Support-HTTP-Auth: true
 
    After that the server would report a "401 Unauthorized" status code
-   and authentication would proceed as specified in the SPNEGO HTTP
+   and authentication would proceed as specified in the HTTP SPNEGO
    protocol.  The server may utilize the following header, to indicate
    that alternative authentication methods are available (e.g., with
    plain password), if authentication fails.
 
        X-Support-HTTP-Auth: fallback
 
-   A client seeing the following header should retry authenticating to
-   the server without sending the "X-Support-HTTP-Auth: true" header.
 
 
 
@@ -281,6 +281,9 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+   A client seeing the following header should retry authenticating to
+   the server without sending the "X-Support-HTTP-Auth: true" header.
 
 2.1.3.  Exchange of Session Parameters
 
@@ -326,10 +329,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       X-CSTP-Split-Include: The network address of a route which is
       provided by this server.
 
-      X-CSTP-Split-Exclude: The network address of a route that is not
-      provided by this server.
 
-      X-CSTP-Base-MTU: The MTU of the link as estimated by this server.
 
 
 
@@ -337,6 +337,11 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+      X-CSTP-Split-Exclude: The network address of a route that is not
+      provided by this server.
+
+      X-CSTP-Base-MTU: The MTU of the link as estimated by this server.
 
       X-CSTP-DynDNS: Set to "true" if the server is operating with a
       dynamic DNS address.
@@ -379,11 +384,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The following table lists the ciphers negotiated via the X-DTLS-
    CipherSuite header, and the corresponding DTLS ciphersuite.
-
-
-
-
-
 
 
 
@@ -646,20 +646,20 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
               Kerberos and NTLM HTTP Authentication in Microsoft
               Windows", RFC 4559, June 2006.
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119, March 1997.
+   [RFC2743]  Linn, J., "Generic Security Service Application Program
+              Interface Version 2, Update 1", RFC 2743, January 2000.
 
    [RFC4519]  Sciberras, A., "Lightweight Directory Access Protocol
               (LDAP): Schema for User Applications", RFC 4519, June
               2006.
 
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
 Author's Address
 
    Nikos Mavrogiannopoulos
    Red Hat
-
-
-
 
 
 

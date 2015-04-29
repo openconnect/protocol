@@ -496,7 +496,7 @@
 <ol>
   <li>Password: a user can authenticate itself using a password.</li>
   <li>Certificate: a user can authenticate itself using a PKIX certificate it possesses.</li>
-  <li>GSSAPI: a user can authenticate itself using a Kerberos ticket, or any other GSSAPI mechanism.</li>
+  <li>HTTP SPNEGO: a user can authenticate itself using a Kerberos ticket, or any other mechanism supported by SPNEGO (i.e., GSSAPI).</li>
 </ol>
 
 <p> The server is authenticated to the client using a PKIX certificate.  </p>
@@ -550,13 +550,13 @@
     &lt;/config-auth&gt;
   </pre>
 <p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise the server should reply using the following XML structure.  </p>
-<h1 id="rfc.section.2.1.2.3"><a href="#rfc.section.2.1.2.3">2.1.2.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">Authentication using GSSAPI</a></h1>
-<p id="rfc.section.2.1.2.3.p.1">The GSSAPI authentication is performed using the SPNEGO HTTP protocol <a href="#RFC4559">[RFC4559]</a> with the following exception. A client which supports the SPNEGO protocol, should indicate it using the following header on in its initial request to the server.  </p>
+<h1 id="rfc.section.2.1.2.3"><a href="#rfc.section.2.1.2.3">2.1.2.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">HTTP Authentication using SPNEGO</a></h1>
+<p id="rfc.section.2.1.2.3.p.1">That type of authentication is performed using the HTTP SPNEGO protocol <a href="#RFC4559">[RFC4559]</a>, a method which is available using the Generic Security Service API <a href="#RFC2743">[RFC2743]</a>. The following approach is used to advertise the availability of the HTTP SPNEGO protocol by the client.  A client which supports the HTTP SPNEGO protocol, SHOULD indicate it using the following header on in its initial request to the server.  </p>
 <pre>
     X-Support-HTTP-Auth: true
 </pre>
 <p/>
-<p id="rfc.section.2.1.2.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the SPNEGO HTTP protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if authentication fails.  </p>
+<p id="rfc.section.2.1.2.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the HTTP SPNEGO protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if authentication fails.  </p>
 <pre>
     X-Support-HTTP-Auth: fallback
 </pre>
@@ -817,15 +817,21 @@
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC2119">[RFC2119]</b>
+        <b id="RFC2743">[RFC2743]</b>
       </td>
-      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+      <td class="top"><a href="mailto:jlinn@rsasecurity.com" title="RSA Laboratories">Linn, J.</a>, "<a href="http://tools.ietf.org/html/rfc2743">Generic Security Service Application Program Interface Version 2, Update 1</a>", RFC 2743, January 2000.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC4519">[RFC4519]</b>
       </td>
       <td class="top"><a>Sciberras, A.</a>, "<a href="http://tools.ietf.org/html/rfc4519">Lightweight Directory Access Protocol (LDAP): Schema for User Applications</a>", RFC 4519, June 2006.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
     </tr>
   </tbody>
 </table>
