@@ -64,20 +64,22 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Goals of This Document  . . . . . . . . . . . . . . . . . . .   2
-   3.  The OpenConnect Protocol  . . . . . . . . . . . . . . . . . .   2
-     3.1.  VPN Session Establishment . . . . . . . . . . . . . . . .   3
-       3.1.1.  Authentication  . . . . . . . . . . . . . . . . . . .   3
-       3.1.2.  Exchange of Session Parameters  . . . . . . . . . . .   5
-       3.1.3.  Establishment of Primary TCP Channel (CSTP) . . . . .   6
-       3.1.4.  Establishment of Secondary UDP Channel (DTLS) . . . .   7
-     3.2.  The CSTP Channel Protocol . . . . . . . . . . . . . . . .   8
-     3.3.  The DTLS Channel Protocol . . . . . . . . . . . . . . . .   9
-     3.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .   9
-     3.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  10
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
-   5.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
-   6.  Normative References  . . . . . . . . . . . . . . . . . . . .  11
+     1.1.  Requirements Terminology  . . . . . . . . . . . . . . . .   2
+     1.2.  Goals of This Document  . . . . . . . . . . . . . . . . .   2
+   2.  The OpenConnect Protocol  . . . . . . . . . . . . . . . . . .   3
+     2.1.  VPN Session Establishment . . . . . . . . . . . . . . . .   3
+       2.1.1.  Server Authentication . . . . . . . . . . . . . . . .   3
+       2.1.2.  Client Authentication . . . . . . . . . . . . . . . .   3
+       2.1.3.  Exchange of Session Parameters  . . . . . . . . . . .   6
+       2.1.4.  Establishment of Primary TCP Channel (CSTP) . . . . .   7
+       2.1.5.  Establishment of Secondary UDP Channel (DTLS) . . . .   7
+     2.2.  The CSTP Channel Protocol . . . . . . . . . . . . . . . .   8
+     2.3.  The DTLS Channel Protocol . . . . . . . . . . . . . . . .  10
+     2.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .  10
+     2.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  11
+   3.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
+   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  12
+   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  12
 
 1.  Introduction
 
@@ -93,19 +95,17 @@ Table of Contents
    protocol's properties and weaknesses, and that is one of the points
    addressed by this document.
 
-2.  Goals of This Document
+1.1.  Requirements Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+1.2.  Goals of This Document
 
    The OpenConnect protocol version 1.0 specification is intended
    primarily for readers who will be implementing the protocol and those
    doing cryptographic analysis of it.
-
-3.  The OpenConnect Protocol
-
-   The OpenConnect protocol combines the TLS protocol [RFC5246],
-   datagram TLS protocol [RFC6347] and HTTP protocols [RFC2616] to
-   provide an Internet-Layer VPN channel.  The channel is designed to
-   operate using UDP packets, and fallback on TCP if that's not
-   possible.
 
 
 
@@ -113,6 +113,14 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 2]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+2.  The OpenConnect Protocol
+
+   The OpenConnect protocol combines the TLS protocol [RFC5246],
+   datagram TLS protocol [RFC6347] and HTTP protocols [RFC2616] to
+   provide an Internet-Layer VPN channel.  The channel is designed to
+   operate using UDP packets, and fallback on TCP if that's not
+   possible.
 
    In brief the protocol initiates an HTTP over TLS connection on a
    known port, where client authentication is performed.  After this
@@ -122,9 +130,23 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    headers.  At that point the raw IP packets flow, over the VPN
    channels.
 
-3.1.  VPN Session Establishment
+2.1.  VPN Session Establishment
 
-3.1.1.  Authentication
+2.1.1.  Server Authentication
+
+   In the OpenConnect VPN protocol, the server is always authenticated
+   using its certificate.  Once a client establishes a TCP connection to
+   the server's well known port, it initiates the TLS protocol.  In the
+   first connection to the server, the client SHOULD verify the provided
+   by the server certificate, and SHOULD store its public key for
+   verification of subsequent sessions.  Thus, subsequent sessions
+   SHOULD check whether the server's key match the initial.
+
+   The server's identity in the certificate SHOULD be placed in the
+   certificate's SubjectAlternativeName field, and unless a special
+   profile is assumed, it will be of type DNSName.
+
+2.1.2.  Client Authentication
 
    The OpenConnect VPN protocol allows for the following types of client
    authentication, or combinations of them.
@@ -139,17 +161,27 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The server is authenticated to the client using a PKIX certificate.
 
-3.1.1.1.  Authentication using certificates
 
-   Once a client establishes a TCP connection to the server's well known
-   port, it initiates the TLS protocol.  The server may require a client
-   certificate to be presented, depending on its configuration.  In the
-   first connection to the server, the client SHOULD verify the provided
-   by the server certificate, and SHOULD store its public key for
-   verification of subsequent sessions.  Thus, subsequent sessions will
-   simply check whether the server's key match the initial.
 
-3.1.1.2.  Authentication using passwords
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 3]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
+2.1.2.1.  Authentication using certificates
+
+   During the initial TLS protocol handshake the server may require a
+   client certificate to be presented, depending on its configuration.
+
+   Because the client certificate is sent in the clear during the
+   handshake it SHOULD NOT contain other identifying information other
+   than a username, or a pseudonymus identifier.  It is RECOMMENDED to
+   place the user identifier in the DN field of the certificate, using
+   the UID object identifier (0.9.2342.19200300.100.1.1) [RFC4519].
+
+2.1.2.2.  Authentication using passwords
 
    [XXX: We need to define a DTD] After the TLS session is established
    the client sends an HTTP POST request on "/" with the following
@@ -159,16 +191,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
        <config-auth client="vpn" type="init">
            <version who="vpn">v5.01</version>
        </config-auth>
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 3]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
 
    Note that all Content-Types specified in this section are 'text/xml'.
    At this point the server will reply using forms the client software
@@ -196,6 +218,14 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The client software will then fill in the provided form and sent it
    back to the server using an HTTP POST on the location specified by
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 4]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
    the server (in the above examples it was "/auth").  The reply could
    then be the following.
 
@@ -217,15 +247,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    401 unauthorized status code.  Otherwise the server should reply
    using the following XML structure.
 
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 4]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
        <?xml version="1.0" encoding="UTF-8"?>
        <config-auth client="vpn" type="complete">
            <version who="sg">0.1(1)</version>
@@ -233,7 +254,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
            </auth>
        </config-auth>
 
-3.1.1.3.  Authentication using GSSAPI
+2.1.2.3.  Authentication using GSSAPI
 
    The GSSAPI authentication is performed using the SPNEGO HTTP protocol
    [RFC4559] with the following exception.  A client which supports the
@@ -253,7 +274,15 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    A client seeing the following header should retry authenticating to
    the server without sending the "X-Support-HTTP-Auth: true" header.
 
-3.1.2.  Exchange of Session Parameters
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
+2.1.3.  Exchange of Session Parameters
 
    By the receipt of a success XML structure, the client should issue an
    HTTP CONNECT request.  In addition it should provide the "X-CSTP-
@@ -274,13 +303,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
        X-CSTP-Base-MTU: 1280
        X-CSTP-Address-Type: IPv4,IPv6
        CONNECT /CSCOSSLC/tunnel HTTP/1.1
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
 
    After a successful receipt of an HTTP CONNECT request, the server
    should reply and provide the client with configuration parameters.
@@ -309,6 +331,13 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
       X-CSTP-Base-MTU: The MTU of the link as estimated by this server.
 
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
       X-CSTP-DynDNS: Set to "true" if the server is operating with a
       dynamic DNS address.
 
@@ -323,26 +352,19 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    protocol can be present.  In fact, a server may use cookies to allow
    session resumption if needed.
 
-3.1.3.  Establishment of Primary TCP Channel (CSTP)
+2.1.4.  Establishment of Primary TCP Channel (CSTP)
 
    The previous HTTP message is the last HTTP message sent by the
    server.  After that message, the established TCP channel is used to
    transport IP packets between the client and the server.  The
-   transferred packets encoding is discussed in Section 3.2.  This
+   transferred packets encoding is discussed in Section 2.2.  This
    channel will be referred as CSTP in the rest of this document.
 
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-3.1.4.  Establishment of Secondary UDP Channel (DTLS)
+2.1.5.  Establishment of Secondary UDP Channel (DTLS)
 
    To establish the secondary UDP-based channel, which will be referred
    to as the DTLS channel, the client must advertise support for it
-   during the issue of the HTTP CONNECT request (see Section 3.1.2.
+   during the issue of the HTTP CONNECT request (see Section 2.1.3.
    This is done by appending the following headers to the request.
 
       X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
@@ -357,6 +379,20 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The following table lists the ciphers negotiated via the X-DTLS-
    CipherSuite header, and the corresponding DTLS ciphersuite.
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
 
    +--------------------+---------------------------------+------------+
    | OpenConnect cipher |         DTLS ciphersuite        |    DTLS    |
@@ -383,24 +419,36 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
                                   Table 1
 
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-3.2.  The CSTP Channel Protocol
+2.2.  The CSTP Channel Protocol
 
    The format of the packets sent over the primary channel consists of
    an 8-bytes header followed by data.  The whole packet in encapsulated
    in a TLS record (see [RFC5246]).  The bytes of the header indicate
    the type of data that follow, and their contents are explained in
    Table 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
 
    +---------------------+---------------------------------------------+
    |         byte        | value                                       |
@@ -445,7 +493,15 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -482,16 +538,16 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
                                   Table 3
 
-3.3.  The DTLS Channel Protocol
+2.3.  The DTLS Channel Protocol
 
    The format of the packets sent over the UDP channel consists of an
    1-byte header followed by data.  The header byte indicates the type
    of data that follow as in Table 3.  The header and the data are
    encapsulated in a DTLS record packet (see [RFC6347]).
 
-3.4.  The Channel Re-Key Protocol
+2.4.  The Channel Re-Key Protocol
 
-   During the exchange of session parameters (Section 3.1.2), the server
+   During the exchange of session parameters (Section 2.1.3), the server
    advertizes the methods available for session rekey using the "X-CSTP-
    Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers.  The available
    options for both the server and client are listed below.
@@ -501,7 +557,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -521,7 +577,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    safe renegotiation is used ([RFC5746]), or that the identity of the
    peer remained the same.
 
-3.5.  The Keepalive and Dead Peer Detection Protocols
+2.5.  The Keepalive and Dead Peer Detection Protocols
 
    In OpenConnect there are two packet types that can be used for keep-
    alive or dead peer detection, as shown in Table 3.  These are the
@@ -537,7 +593,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    for Path MTU detection.
 
    The server advertizes the suggested periods during the exchange of
-   session parameters (Section 3.1.2).  The available headers are listed
+   session parameters (Section 2.1.3).  The available headers are listed
    below.
 
       X-CSTP-DPD: applicable to CSTP channel; contains a relative time
@@ -557,20 +613,20 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
-4.  Security Considerations
+3.  Security Considerations
 
    None yet.
 
-5.  Acknowledgements
+4.  Acknowledgements
 
    None yet.
 
-6.  Normative References
+5.  Normative References
 
    [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
               (TLS) Protocol Version 1.2", RFC 5246, August 2008.
@@ -593,6 +649,10 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
+   [RFC4519]  Sciberras, A., "Lightweight Directory Access Protocol
+              (LDAP): Schema for User Applications", RFC 4519, June
+              2006.
+
 Author's Address
 
    Nikos Mavrogiannopoulos
@@ -609,8 +669,4 @@ Author's Address
 
 
 
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 12]

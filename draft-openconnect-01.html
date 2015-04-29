@@ -375,20 +375,22 @@
 
   <link href="#rfc.toc" rel="Contents"/>
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 Goals of This Document"/>
-<link href="#rfc.section.3" rel="Chapter" title="3 The OpenConnect Protocol"/>
-<link href="#rfc.section.3.1" rel="Chapter" title="3.1 VPN Session Establishment"/>
-<link href="#rfc.section.3.1.1" rel="Chapter" title="3.1.1 Authentication"/>
-<link href="#rfc.section.3.1.2" rel="Chapter" title="3.1.2 Exchange of Session Parameters"/>
-<link href="#rfc.section.3.1.3" rel="Chapter" title="3.1.3 Establishment of Primary TCP Channel (CSTP)"/>
-<link href="#rfc.section.3.1.4" rel="Chapter" title="3.1.4 Establishment of Secondary UDP Channel (DTLS)"/>
-<link href="#rfc.section.3.2" rel="Chapter" title="3.2 The CSTP Channel Protocol"/>
-<link href="#rfc.section.3.3" rel="Chapter" title="3.3 The DTLS Channel Protocol"/>
-<link href="#rfc.section.3.4" rel="Chapter" title="3.4 The Channel Re-Key Protocol"/>
-<link href="#rfc.section.3.5" rel="Chapter" title="3.5 The Keepalive and Dead Peer Detection Protocols"/>
-<link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations"/>
-<link href="#rfc.section.5" rel="Chapter" title="5 Acknowledgements"/>
-<link href="#rfc.references" rel="Chapter" title="6 Normative References"/>
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Terminology"/>
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 Goals of This Document"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 The OpenConnect Protocol"/>
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 VPN Session Establishment"/>
+<link href="#rfc.section.2.1.1" rel="Chapter" title="2.1.1 Server Authentication"/>
+<link href="#rfc.section.2.1.2" rel="Chapter" title="2.1.2 Client Authentication"/>
+<link href="#rfc.section.2.1.3" rel="Chapter" title="2.1.3 Exchange of Session Parameters"/>
+<link href="#rfc.section.2.1.4" rel="Chapter" title="2.1.4 Establishment of Primary TCP Channel (CSTP)"/>
+<link href="#rfc.section.2.1.5" rel="Chapter" title="2.1.5 Establishment of Secondary UDP Channel (DTLS)"/>
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 The CSTP Channel Protocol"/>
+<link href="#rfc.section.2.3" rel="Chapter" title="2.3 The DTLS Channel Protocol"/>
+<link href="#rfc.section.2.4" rel="Chapter" title="2.4 The Channel Re-Key Protocol"/>
+<link href="#rfc.section.2.5" rel="Chapter" title="2.5 The Keepalive and Dead Peer Detection Protocols"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Security Considerations"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Acknowledgements"/>
+<link href="#rfc.references" rel="Chapter" title="5 Normative References"/>
 
 
   <meta name="generator" content="xml2rfc version 2.4.8 - http://tools.ietf.org/tools/xml2rfc" />
@@ -454,20 +456,22 @@
   <ul class="toc">
 
   	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
-<li>2.   <a href="#rfc.section.2">Goals of This Document</a></li>
-<li>3.   <a href="#rfc.section.3">The OpenConnect Protocol</a></li>
-<li>3.1.   <a href="#rfc.section.3.1">VPN Session Establishment</a></li>
-<li>3.1.1.   <a href="#rfc.section.3.1.1">Authentication</a></li>
-<li>3.1.2.   <a href="#rfc.section.3.1.2">Exchange of Session Parameters</a></li>
-<li>3.1.3.   <a href="#rfc.section.3.1.3">Establishment of Primary TCP Channel (CSTP)</a></li>
-<li>3.1.4.   <a href="#rfc.section.3.1.4">Establishment of Secondary UDP Channel (DTLS)</a></li>
-<li>3.2.   <a href="#rfc.section.3.2">The CSTP Channel Protocol</a></li>
-<li>3.3.   <a href="#rfc.section.3.3">The DTLS Channel Protocol</a></li>
-<li>3.4.   <a href="#rfc.section.3.4">The Channel Re-Key Protocol</a></li>
-<li>3.5.   <a href="#rfc.section.3.5">The Keepalive and Dead Peer Detection Protocols</a></li>
-<li>4.   <a href="#rfc.section.4">Security Considerations</a></li>
-<li>5.   <a href="#rfc.section.5">Acknowledgements</a></li>
-<li>6.   <a href="#rfc.references">Normative References</a></li>
+<li>1.1.   <a href="#rfc.section.1.1">Requirements Terminology</a></li>
+<li>1.2.   <a href="#rfc.section.1.2">Goals of This Document</a></li>
+<li>2.   <a href="#rfc.section.2">The OpenConnect Protocol</a></li>
+<li>2.1.   <a href="#rfc.section.2.1">VPN Session Establishment</a></li>
+<li>2.1.1.   <a href="#rfc.section.2.1.1">Server Authentication</a></li>
+<li>2.1.2.   <a href="#rfc.section.2.1.2">Client Authentication</a></li>
+<li>2.1.3.   <a href="#rfc.section.2.1.3">Exchange of Session Parameters</a></li>
+<li>2.1.4.   <a href="#rfc.section.2.1.4">Establishment of Primary TCP Channel (CSTP)</a></li>
+<li>2.1.5.   <a href="#rfc.section.2.1.5">Establishment of Secondary UDP Channel (DTLS)</a></li>
+<li>2.2.   <a href="#rfc.section.2.2">The CSTP Channel Protocol</a></li>
+<li>2.3.   <a href="#rfc.section.2.3">The DTLS Channel Protocol</a></li>
+<li>2.4.   <a href="#rfc.section.2.4">The Channel Re-Key Protocol</a></li>
+<li>2.5.   <a href="#rfc.section.2.5">The Keepalive and Dead Peer Detection Protocols</a></li>
+<li>3.   <a href="#rfc.section.3">Security Considerations</a></li>
+<li>4.   <a href="#rfc.section.4">Acknowledgements</a></li>
+<li>5.   <a href="#rfc.references">Normative References</a></li>
 
 
   </ul>
@@ -475,14 +479,19 @@
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
 <p id="rfc.section.1.p.1">The purpose of this document is to specify the OpenConnect VPN protocol in a detail in order to allow for multiple interoperable implementations.  That is a protocol that is believed to be compatible with CISCO's AnyConnect protocol.  </p>
 <p id="rfc.section.1.p.2">While there are many competing VPN protocol solutions, none of them was ever described in a publicly available document. Even open source VPN solutions have their source code as the primary description of their protocol. That allowed no easy study of each protocol's properties and weaknesses, and that is one of the points addressed by this document.  </p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#goals-document" id="goals-document">Goals of This Document</a></h1>
-<p id="rfc.section.2.p.1">The OpenConnect protocol version 1.0 specification is intended primarily for readers who will be implementing the protocol and those doing cryptographic analysis of it.  </p>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#oc-protocol" id="oc-protocol">The OpenConnect Protocol</a></h1>
-<p id="rfc.section.3.p.1">The OpenConnect protocol combines the TLS protocol <a href="#RFC5246">[RFC5246]</a>, datagram TLS protocol <a href="#RFC6347">[RFC6347]</a> and HTTP protocols <a href="#RFC2616">[RFC2616]</a> to provide an Internet-Layer VPN channel.  The channel is designed to operate using UDP packets, and fallback on TCP if that's not possible.  </p>
-<p id="rfc.section.3.p.2">In brief the protocol initiates an HTTP over TLS connection on a known port, where client authentication is performed. After this step, the client initiates an HTTP CONNECT command to establish a VPN channel over TCP. A secondary VPN channel over UDP will be established using information provided by the server using HTTP headers. At that point the raw IP packets flow, over the VPN channels.  </p>
-<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#session-establishment" id="session-establishment">VPN Session Establishment</a></h1>
-<h1 id="rfc.section.3.1.1"><a href="#rfc.section.3.1.1">3.1.1.</a> <a href="#authentication" id="authentication">Authentication</a></h1>
-<p id="rfc.section.3.1.1.p.1">The OpenConnect VPN protocol allows for the following types of client authentication, or combinations of them.  </p>
+<h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> <a href="#terminology" id="terminology">Requirements Terminology</a></h1>
+<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.  </p>
+<h1 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2.</a> <a href="#goals-document" id="goals-document">Goals of This Document</a></h1>
+<p id="rfc.section.1.2.p.1">The OpenConnect protocol version 1.0 specification is intended primarily for readers who will be implementing the protocol and those doing cryptographic analysis of it.  </p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#oc-protocol" id="oc-protocol">The OpenConnect Protocol</a></h1>
+<p id="rfc.section.2.p.1">The OpenConnect protocol combines the TLS protocol <a href="#RFC5246">[RFC5246]</a>, datagram TLS protocol <a href="#RFC6347">[RFC6347]</a> and HTTP protocols <a href="#RFC2616">[RFC2616]</a> to provide an Internet-Layer VPN channel.  The channel is designed to operate using UDP packets, and fallback on TCP if that's not possible.  </p>
+<p id="rfc.section.2.p.2">In brief the protocol initiates an HTTP over TLS connection on a known port, where client authentication is performed. After this step, the client initiates an HTTP CONNECT command to establish a VPN channel over TCP. A secondary VPN channel over UDP will be established using information provided by the server using HTTP headers. At that point the raw IP packets flow, over the VPN channels.  </p>
+<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#session-establishment" id="session-establishment">VPN Session Establishment</a></h1>
+<h1 id="rfc.section.2.1.1"><a href="#rfc.section.2.1.1">2.1.1.</a> <a href="#server-authentication" id="server-authentication">Server Authentication</a></h1>
+<p id="rfc.section.2.1.1.p.1">In the OpenConnect VPN protocol, the server is always authenticated using its certificate. Once a client establishes a TCP connection to the server's well known port, it initiates the TLS protocol.  In the first connection to the server, the client SHOULD verify the provided by the server certificate, and SHOULD store its public key for verification of subsequent sessions. Thus, subsequent sessions SHOULD check whether the server's key match the initial.  </p>
+<p id="rfc.section.2.1.1.p.2">The server's identity in the certificate SHOULD be placed in the certificate's SubjectAlternativeName field, and unless a special profile is assumed, it will be of type DNSName.  </p>
+<h1 id="rfc.section.2.1.2"><a href="#rfc.section.2.1.2">2.1.2.</a> <a href="#authentication" id="authentication">Client Authentication</a></h1>
+<p id="rfc.section.2.1.2.p.1">The OpenConnect VPN protocol allows for the following types of client authentication, or combinations of them.  </p>
 
 <ol>
   <li>Password: a user can authenticate itself using a password.</li>
@@ -491,16 +500,17 @@
 </ol>
 
 <p> The server is authenticated to the client using a PKIX certificate.  </p>
-<h1 id="rfc.section.3.1.1.1"><a href="#rfc.section.3.1.1.1">3.1.1.1.</a> <a href="#authentication_cert" id="authentication_cert">Authentication using certificates</a></h1>
-<p id="rfc.section.3.1.1.1.p.1">Once a client establishes a TCP connection to the server's well known port, it initiates the TLS protocol. The server may require a client certificate to be presented, depending on its configuration.  In the first connection to the server, the client SHOULD verify the provided by the server certificate, and SHOULD store its public key for verification of subsequent sessions. Thus, subsequent sessions will simply check whether the server's key match the initial.  </p>
-<h1 id="rfc.section.3.1.1.2"><a href="#rfc.section.3.1.1.2">3.1.1.2.</a> <a href="#authentication_pass" id="authentication_pass">Authentication using passwords</a></h1>
+<h1 id="rfc.section.2.1.2.1"><a href="#rfc.section.2.1.2.1">2.1.2.1.</a> <a href="#authentication_cert" id="authentication_cert">Authentication using certificates</a></h1>
+<p id="rfc.section.2.1.2.1.p.1">During the initial TLS protocol handshake the server may require a client certificate to be presented, depending on its configuration.  </p>
+<p id="rfc.section.2.1.2.1.p.2">Because the client certificate is sent in the clear during the handshake it SHOULD NOT contain other identifying information other than a username, or a pseudonymus identifier. It is RECOMMENDED to place the user identifier in the DN field of the certificate, using the UID object identifier (0.9.2342.19200300.100.1.1) <a href="#RFC4519">[RFC4519]</a>.  </p>
+<h1 id="rfc.section.2.1.2.2"><a href="#rfc.section.2.1.2.2">2.1.2.2.</a> <a href="#authentication_pass" id="authentication_pass">Authentication using passwords</a></h1>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;config-auth client="vpn" type="init"&gt;
         &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
     &lt;/config-auth&gt;
   </pre>
-<p id="rfc.section.3.1.1.2.p.1">[XXX: We need to define a DTD] After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
+<p id="rfc.section.2.1.2.2.p.1">[XXX: We need to define a DTD] After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;auth id="main"&gt;
@@ -520,7 +530,7 @@
         &lt;/form&gt;
     &lt;/auth&gt;
   </pre>
-<p id="rfc.section.3.1.1.2.p.2">Note that all Content-Types specified in this section are 'text/xml'. At this point the server will reply using forms the client software should prompt the user to fill in.  </p>
+<p id="rfc.section.2.1.2.2.p.2">Note that all Content-Types specified in this section are 'text/xml'. At this point the server will reply using forms the client software should prompt the user to fill in.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;config-auth client="vpn" type="auth-reply"&gt;
@@ -529,8 +539,8 @@
         &lt;/auth&gt;
     &lt;/config-auth&gt;  
   </pre>
-<p id="rfc.section.3.1.1.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply could then be the following.  </p>
-<p id="rfc.section.3.1.1.2.p.4">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
+<p id="rfc.section.2.1.2.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply could then be the following.  </p>
+<p id="rfc.section.2.1.2.2.p.4">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;config-auth client="vpn" type="complete"&gt;
@@ -539,27 +549,27 @@
         &lt;/auth&gt;
     &lt;/config-auth&gt;
   </pre>
-<p id="rfc.section.3.1.1.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise the server should reply using the following XML structure.  </p>
-<h1 id="rfc.section.3.1.1.3"><a href="#rfc.section.3.1.1.3">3.1.1.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">Authentication using GSSAPI</a></h1>
-<p id="rfc.section.3.1.1.3.p.1">The GSSAPI authentication is performed using the SPNEGO HTTP protocol <a href="#RFC4559">[RFC4559]</a> with the following exception. A client which supports the SPNEGO protocol, should indicate it using the following header on in its initial request to the server.  </p>
+<p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise the server should reply using the following XML structure.  </p>
+<h1 id="rfc.section.2.1.2.3"><a href="#rfc.section.2.1.2.3">2.1.2.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">Authentication using GSSAPI</a></h1>
+<p id="rfc.section.2.1.2.3.p.1">The GSSAPI authentication is performed using the SPNEGO HTTP protocol <a href="#RFC4559">[RFC4559]</a> with the following exception. A client which supports the SPNEGO protocol, should indicate it using the following header on in its initial request to the server.  </p>
 <pre>
     X-Support-HTTP-Auth: true
 </pre>
 <p/>
-<p id="rfc.section.3.1.1.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the SPNEGO HTTP protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if authentication fails.  </p>
+<p id="rfc.section.2.1.2.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the SPNEGO HTTP protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if authentication fails.  </p>
 <pre>
     X-Support-HTTP-Auth: fallback
 </pre>
 <p/>
-<p id="rfc.section.3.1.1.3.p.5">A client seeing the following header should retry authenticating to the server without sending the "X-Support-HTTP-Auth: true" header.  </p>
-<h1 id="rfc.section.3.1.2"><a href="#rfc.section.3.1.2">3.1.2.</a> <a href="#params-exchange" id="params-exchange">Exchange of Session Parameters</a></h1>
+<p id="rfc.section.2.1.2.3.p.5">A client seeing the following header should retry authenticating to the server without sending the "X-Support-HTTP-Auth: true" header.  </p>
+<h1 id="rfc.section.2.1.3"><a href="#rfc.section.2.1.3">2.1.3.</a> <a href="#params-exchange" id="params-exchange">Exchange of Session Parameters</a></h1>
 <pre>
     User-Agent: Open AnyConnect VPN Agent v5.01
     X-CSTP-Base-MTU: 1280
     X-CSTP-Address-Type: IPv4,IPv6
     CONNECT /CSCOSSLC/tunnel HTTP/1.1
   </pre>
-<p id="rfc.section.3.1.2.p.1">By the receipt of a success XML structure, the client should issue an HTTP CONNECT request. In addition it should provide the "X-CSTP-Address-Type" and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the following values.  </p>
+<p id="rfc.section.2.1.3.p.1">By the receipt of a success XML structure, the client should issue an HTTP CONNECT request. In addition it should provide the "X-CSTP-Address-Type" and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the following values.  </p>
 
 <dl>
   <dt></dt>
@@ -571,7 +581,7 @@
 </dl>
 
 <p> The X-CSTP-Base-MTU contains the MTU of the link between the client and the server as estimated by the client. An example CONNECT request is shown below.  </p>
-<p id="rfc.section.3.1.2.p.2">After a successful receipt of an HTTP CONNECT request, the server should reply and provide the client with configuration parameters. The available options follow.  </p>
+<p id="rfc.section.2.1.3.p.2">After a successful receipt of an HTTP CONNECT request, the server should reply and provide the client with configuration parameters. The available options follow.  </p>
 
 <dl>
   <dt></dt>
@@ -595,12 +605,12 @@
 </dl>
 
 <p> [XXX: compression] </p>
-<p id="rfc.section.3.1.2.p.3">The client is expected to treat the received parameters as his networking settings. If no "X-CSTP-Split-Include" headers are present, the client is expected to assign its default route through the VPN.  </p>
-<p id="rfc.section.3.1.2.p.4">It is important to note that any other headers allowed by the HTTP protocol can be present. In fact, a server may use cookies to allow session resumption if needed.  </p>
-<h1 id="rfc.section.3.1.3"><a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary TCP Channel (CSTP)</a></h1>
-<p id="rfc.section.3.1.3.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 3.2</a>. This channel will be referred as CSTP in the rest of this document.  </p>
-<h1 id="rfc.section.3.1.4"><a href="#rfc.section.3.1.4">3.1.4.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary UDP Channel (DTLS)</a></h1>
-<p id="rfc.section.3.1.4.p.1">To establish the secondary UDP-based channel, which will be referred to as the DTLS channel, the client must advertise support for it during the issue of the HTTP CONNECT request (see <a href="#params-exchange">Section 3.1.2</a>. This is done by appending the following headers to the request.  </p>
+<p id="rfc.section.2.1.3.p.3">The client is expected to treat the received parameters as his networking settings. If no "X-CSTP-Split-Include" headers are present, the client is expected to assign its default route through the VPN.  </p>
+<p id="rfc.section.2.1.3.p.4">It is important to note that any other headers allowed by the HTTP protocol can be present. In fact, a server may use cookies to allow session resumption if needed.  </p>
+<h1 id="rfc.section.2.1.4"><a href="#rfc.section.2.1.4">2.1.4.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary TCP Channel (CSTP)</a></h1>
+<p id="rfc.section.2.1.4.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 2.2</a>. This channel will be referred as CSTP in the rest of this document.  </p>
+<h1 id="rfc.section.2.1.5"><a href="#rfc.section.2.1.5">2.1.5.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary UDP Channel (DTLS)</a></h1>
+<p id="rfc.section.2.1.5.p.1">To establish the secondary UDP-based channel, which will be referred to as the DTLS channel, the client must advertise support for it during the issue of the HTTP CONNECT request (see <a href="#params-exchange">Section 2.1.3</a>. This is done by appending the following headers to the request.  </p>
 
 <dl>
   <dt></dt>
@@ -610,8 +620,8 @@
 </dl>
 
 <p> </p>
-<p id="rfc.section.3.1.4.p.2">The DTLS established DTLS channel utilizes session resumption as a method for preshared-key authentication. That is the value presented in X-DTLS-Master-Secret is set as a master secret to be resumed.  </p>
-<p id="rfc.section.3.1.4.p.3">The following table lists the ciphers negotiated via the X-DTLS-CipherSuite header, and the corresponding DTLS ciphersuite.  </p>
+<p id="rfc.section.2.1.5.p.2">The DTLS established DTLS channel utilizes session resumption as a method for preshared-key authentication. That is the value presented in X-DTLS-Master-Secret is set as a master secret to be resumed.  </p>
+<p id="rfc.section.2.1.5.p.3">The following table lists the ciphers negotiated via the X-DTLS-CipherSuite header, and the corresponding DTLS ciphersuite.  </p>
 <div id="rfc.table.1"/>
 <div id="cipher_table"/>
 <p/>
@@ -652,8 +662,8 @@
   </tbody>
 </table>
 <p/>
-<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#primary-channel-protocol" id="primary-channel-protocol">The CSTP Channel Protocol</a></h1>
-<p id="rfc.section.3.2.p.1">The format of the packets sent over the primary channel consists of an 8-bytes header followed by data. The whole packet in encapsulated in a TLS record (see <a href="#RFC5246">[RFC5246]</a>). The bytes of the header indicate the type of data that follow, and their contents are explained in <a href="#cstp_table">Table 2</a>.  </p>
+<h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#primary-channel-protocol" id="primary-channel-protocol">The CSTP Channel Protocol</a></h1>
+<p id="rfc.section.2.2.p.1">The format of the packets sent over the primary channel consists of an 8-bytes header followed by data. The whole packet in encapsulated in a TLS record (see <a href="#RFC5246">[RFC5246]</a>). The bytes of the header indicate the type of data that follow, and their contents are explained in <a href="#cstp_table">Table 2</a>.  </p>
 <div id="rfc.table.2"/>
 <div id="cstp_table"/>
 <p/>
@@ -696,7 +706,7 @@
   </tbody>
 </table>
 <p/>
-<p id="rfc.section.3.2.p.2">The available data types are listed in <a href="#packet_table">Table 3</a>.  </p>
+<p id="rfc.section.2.2.p.2">The available data types are listed in <a href="#packet_table">Table 3</a>.  </p>
 <div id="rfc.table.3"/>
 <div id="packet_table"/>
 <p/>
@@ -739,10 +749,10 @@
   </tbody>
 </table>
 <p/>
-<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#secondary-channel-protocol" id="secondary-channel-protocol">The DTLS Channel Protocol</a></h1>
-<p id="rfc.section.3.3.p.1">The format of the packets sent over the UDP channel consists of an 1-byte header followed by data. The header byte indicates the type of data that follow as in <a href="#packet_table">Table 3</a>.  The header and the data are encapsulated in a DTLS record packet (see <a href="#RFC6347">[RFC6347]</a>).  </p>
-<h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> <a href="#rekey-protocol" id="rekey-protocol">The Channel Re-Key Protocol</a></h1>
-<p id="rfc.section.3.4.p.1">During the exchange of session parameters (<a href="#params-exchange">Section 3.1.2</a>), the server advertizes the methods available for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers. The available options for both the server and client are listed below.  </p>
+<h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#secondary-channel-protocol" id="secondary-channel-protocol">The DTLS Channel Protocol</a></h1>
+<p id="rfc.section.2.3.p.1">The format of the packets sent over the UDP channel consists of an 1-byte header followed by data. The header byte indicates the type of data that follow as in <a href="#packet_table">Table 3</a>.  The header and the data are encapsulated in a DTLS record packet (see <a href="#RFC6347">[RFC6347]</a>).  </p>
+<h1 id="rfc.section.2.4"><a href="#rfc.section.2.4">2.4.</a> <a href="#rekey-protocol" id="rekey-protocol">The Channel Re-Key Protocol</a></h1>
+<p id="rfc.section.2.4.p.1">During the exchange of session parameters (<a href="#params-exchange">Section 2.1.3</a>), the server advertizes the methods available for session rekey using the "X-CSTP-Rekey-Method" and "X-DTLS-Rekey-Method" HTTP headers. The available options for both the server and client are listed below.  </p>
 <p/>
 
 <ol>
@@ -752,12 +762,12 @@
 </ol>
 
 <p> </p>
-<p id="rfc.section.3.4.p.3">When the value is other than "none" the rekey period is determinated by the "X-CSTP-Rekey-Time" and "X-DTLS-Rekey-Time" headers. These headers contain the time in seconds after which a session should rekey.  </p>
-<p id="rfc.section.3.4.p.4">It should be noted that when the "ssl" rekey option is used, care must be taken by both the client and the server to ensure that either safe renegotiation is used (<a href="#RFC5746">[RFC5746]</a>), or that the identity of the peer remained the same.  </p>
-<h1 id="rfc.section.3.5"><a href="#rfc.section.3.5">3.5.</a> <a href="#dead-peer-detection" id="dead-peer-detection">The Keepalive and Dead Peer Detection Protocols</a></h1>
-<p id="rfc.section.3.5.p.1">In OpenConnect there are two packet types that can be used for keep-alive or dead peer detection, as shown in <a href="#packet_table">Table 3</a>. These are the DPD-REQ and KeepAlive packets.  </p>
-<p id="rfc.section.3.5.p.2">The timings of the transmission of these packets are set by the server, and they are advisory to a client. However, any peer receiving these packets MUST response with the appropriate packet. For DPD-REQ packets, the response MUST be DPD-RESP, and for KeepAlive packets the response must be another KeepAlive packet. The main difference between these two types of packets, is that the DPD packets allow for arbitrary data to be attached, making them suitable for Path MTU detection.  </p>
-<p id="rfc.section.3.5.p.3">The server advertizes the suggested periods during the exchange of session parameters (<a href="#params-exchange">Section 3.1.2</a>). The available headers are listed below.  </p>
+<p id="rfc.section.2.4.p.3">When the value is other than "none" the rekey period is determinated by the "X-CSTP-Rekey-Time" and "X-DTLS-Rekey-Time" headers. These headers contain the time in seconds after which a session should rekey.  </p>
+<p id="rfc.section.2.4.p.4">It should be noted that when the "ssl" rekey option is used, care must be taken by both the client and the server to ensure that either safe renegotiation is used (<a href="#RFC5746">[RFC5746]</a>), or that the identity of the peer remained the same.  </p>
+<h1 id="rfc.section.2.5"><a href="#rfc.section.2.5">2.5.</a> <a href="#dead-peer-detection" id="dead-peer-detection">The Keepalive and Dead Peer Detection Protocols</a></h1>
+<p id="rfc.section.2.5.p.1">In OpenConnect there are two packet types that can be used for keep-alive or dead peer detection, as shown in <a href="#packet_table">Table 3</a>. These are the DPD-REQ and KeepAlive packets.  </p>
+<p id="rfc.section.2.5.p.2">The timings of the transmission of these packets are set by the server, and they are advisory to a client. However, any peer receiving these packets MUST response with the appropriate packet. For DPD-REQ packets, the response MUST be DPD-RESP, and for KeepAlive packets the response must be another KeepAlive packet. The main difference between these two types of packets, is that the DPD packets allow for arbitrary data to be attached, making them suitable for Path MTU detection.  </p>
+<p id="rfc.section.2.5.p.3">The server advertizes the suggested periods during the exchange of session parameters (<a href="#params-exchange">Section 2.1.3</a>). The available headers are listed below.  </p>
 <p/>
 
 <ul class="empty">
@@ -768,11 +778,11 @@
 </ul>
 
 <p> </p>
-<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#security-analysis" id="security-analysis">Security Considerations</a></h1>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#security-analysis" id="security-analysis">Security Considerations</a></h1>
+<p id="rfc.section.3.p.1">None yet.  </p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Acknowledgements</h1>
 <p id="rfc.section.4.p.1">None yet.  </p>
-<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> Acknowledgements</h1>
-<p id="rfc.section.5.p.1">None yet.  </p>
-<h1 id="rfc.references"><a href="#rfc.references">6.</a> Normative References</h1>
+<h1 id="rfc.references"><a href="#rfc.references">5.</a> Normative References</h1>
 <table>
   <tbody>
     <tr>
@@ -810,6 +820,12 @@
         <b id="RFC2119">[RFC2119]</b>
       </td>
       <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC4519">[RFC4519]</b>
+      </td>
+      <td class="top"><a>Sciberras, A.</a>, "<a href="http://tools.ietf.org/html/rfc4519">Lightweight Directory Access Protocol (LDAP): Schema for User Applications</a>", RFC 4519, June 2006.</td>
     </tr>
   </tbody>
 </table>

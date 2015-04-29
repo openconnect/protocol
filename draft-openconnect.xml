@@ -23,6 +23,9 @@
 	<!ENTITY RFC2616 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
 
+	<!ENTITY RFC4519 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.4519.xml">
+
 ]>
 
 
@@ -82,14 +85,21 @@
    properties and weaknesses, and that is one of the points addressed
    by this document.
    </t>
-</section>
 
+<section anchor="terminology" title="Requirements Terminology">
+<t>
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in <xref target="RFC2119"/>.
+</t>
+</section>
 <section anchor="goals-document" title="Goals of This Document">
 <t>
    The OpenConnect protocol version 1.0 specification is intended primarily
    for readers who will be implementing the protocol and those doing
    cryptographic analysis of it.
 </t>
+</section>
 </section>
 
 <section anchor="oc-protocol" title="The OpenConnect Protocol">
@@ -113,7 +123,24 @@
 
 <section anchor="session-establishment" title="VPN Session Establishment">
 
-  <section anchor="authentication" title="Authentication">
+  <section anchor="server-authentication" title="Server Authentication">
+  <t>
+  In the OpenConnect VPN protocol, the server is always authenticated using its
+  certificate. Once a client establishes a TCP connection to the server's well known
+  port, it initiates the TLS protocol. 
+  In the first connection to the server, the client SHOULD verify the 
+  provided by the server certificate, and SHOULD store its public key for 
+  verification of subsequent sessions. Thus, subsequent sessions SHOULD
+  check whether the server's key match the initial.
+  </t>
+  <t>
+  The server's identity in the certificate SHOULD be placed in the
+  certificate's SubjectAlternativeName field, and unless a special
+  profile is assumed, it will be of type DNSName.
+  </t>
+   </section>
+
+  <section anchor="authentication" title="Client Authentication">
   <t>
   The OpenConnect VPN protocol allows for the following types of
   client authentication, or combinations of them.
@@ -129,13 +156,16 @@
 
   <section anchor="authentication_cert" title="Authentication using certificates">
   <t>
-  Once a client establishes a TCP connection to the server's well known
-  port, it initiates the TLS protocol. The server may require
+  During the initial TLS protocol handshake the server may require
   a client certificate to be presented, depending on its configuration.
-  In the first connection to the server, the client SHOULD verify the 
-  provided by the server certificate, and SHOULD store its public key for 
-  verification of subsequent sessions. Thus, subsequent sessions will
-  simply check whether the server's key match the initial.
+  </t>
+  <t>
+  Because the client certificate is sent in the clear during the handshake
+  it SHOULD NOT contain other identifying information other than a username,
+  or a pseudonymus identifier. It is RECOMMENDED to place the user identifier
+  in the DN field of the certificate, using the UID object identifier
+  (0.9.2342.19200300.100.1.1) <xref target="RFC4519"/>.
+  
   </t>
   </section>
 
@@ -503,9 +533,10 @@ None yet.
 
 	&RFC4559;
 
-	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
 	&RFC2119;
 	
+	&RFC4519;
+
     </references>
 
   </back>
