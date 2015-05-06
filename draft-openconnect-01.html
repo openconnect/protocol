@@ -499,10 +499,29 @@
   <li>HTTP SPNEGO: a user can authenticate itself using a Kerberos ticket, or any other mechanism supported by SPNEGO (i.e., GSSAPI).</li>
 </ol>
 
-<p> The server is authenticated to the client using a PKIX certificate.  </p>
+<p> The server is authenticated to the client using a PKIX certificate presented during the TLS negotiation.  </p>
+<p id="rfc.section.2.1.2.p.2">It is important to note that during the password and HTTP SPNEGO authentication methods, any headers allowed by the HTTP protocol can be present. In fact, a there are legacy clients which assume that the server will keep a state using cookies, and send their username and password in different TLS and HTTP connections. This practice prevents the server from binding the TLS channel with the VPN session <a href="#RFC5056">[RFC5056]</a>, and is discouraged.  It is RECOMMENDED for clients to complete authentication in the same TLS session, and rely on TLS session resumption if reconnections to the server are needed.  </p>
 <h1 id="rfc.section.2.1.2.1"><a href="#rfc.section.2.1.2.1">2.1.2.1.</a> <a href="#authentication_cert" id="authentication_cert">Authentication using certificates</a></h1>
 <p id="rfc.section.2.1.2.1.p.1">During the initial TLS protocol handshake the server may require a client certificate to be presented, depending on its configuration.  </p>
 <p id="rfc.section.2.1.2.1.p.2">Because the client certificate is sent in the clear during the handshake it SHOULD NOT contain other identifying information other than a username, or a pseudonymus identifier. It is RECOMMENDED to place the user identifier in the DN field of the certificate, using the UID object identifier (0.9.2342.19200300.100.1.1) <a href="#RFC4519">[RFC4519]</a>.  </p>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;config-auth client="vpn" type="init"&gt;
+        &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
+    &lt;/config-auth&gt;
+  </pre>
+<p id="rfc.section.2.1.2.1.p.3">[XXX: We need to define a DTD] After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
+<p id="rfc.section.2.1.2.1.p.4">If the HTTP response code is 200, and contains the following indication of a complete authentication, the client should proceed to the establishment of the primary channel as in <a href="#primary-channel">Section 2.1.4</a>.  </p>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;config-auth client="vpn" type="complete"&gt;
+      &lt;version who="sg"&gt;0.1(1)&lt;/version&gt;
+      &lt;auth id="success"&gt;
+        &lt;title&gt;SSL VPN Service&lt;/title&gt;
+      &lt;/auth&gt;
+    &lt;/config-auth&gt;
+  </pre>
+<p/>
 <h1 id="rfc.section.2.1.2.2"><a href="#rfc.section.2.1.2.2">2.1.2.2.</a> <a href="#authentication_pass" id="authentication_pass">Authentication using passwords</a></h1>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -510,7 +529,7 @@
         &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
     &lt;/config-auth&gt;
   </pre>
-<p id="rfc.section.2.1.2.2.p.1">[XXX: We need to define a DTD] After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
+<p id="rfc.section.2.1.2.2.p.1">After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;auth id="main"&gt;
@@ -541,15 +560,7 @@
   </pre>
 <p id="rfc.section.2.1.2.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply could then be the following.  </p>
 <p id="rfc.section.2.1.2.2.p.4">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
-<pre>
-    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-    &lt;config-auth client="vpn" type="complete"&gt;
-        &lt;version who="sg"&gt;0.1(1)&lt;/version&gt;
-        &lt;auth id="success"&gt;
-        &lt;/auth&gt;
-    &lt;/config-auth&gt;
-  </pre>
-<p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise the server should reply using the following XML structure.  </p>
+<p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the authentication complete structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
 <h1 id="rfc.section.2.1.2.3"><a href="#rfc.section.2.1.2.3">2.1.2.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">HTTP Authentication using SPNEGO</a></h1>
 <p id="rfc.section.2.1.2.3.p.1">That type of authentication is performed using the HTTP SPNEGO protocol <a href="#RFC4559">[RFC4559]</a>, a method which is available using the Generic Security Service API <a href="#RFC2743">[RFC2743]</a>. The following approach is used to advertise the availability of the HTTP SPNEGO protocol by the client.  A client which supports the HTTP SPNEGO protocol, SHOULD indicate it using the following header on in its initial request to the server.  </p>
 <pre>
@@ -561,7 +572,8 @@
     X-Support-HTTP-Auth: fallback
 </pre>
 <p/>
-<p id="rfc.section.2.1.2.3.p.5">A client seeing the following header should retry authenticating to the server without sending the "X-Support-HTTP-Auth: true" header.  </p>
+<p id="rfc.section.2.1.2.3.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. In that case, a client which received the previous header should retry authenticating to the server without sending the "X-Support-HTTP-Auth: true" header.  </p>
+<p id="rfc.section.2.1.2.3.p.6">Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the authentication complete structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
 <h1 id="rfc.section.2.1.3"><a href="#rfc.section.2.1.3">2.1.3.</a> <a href="#params-exchange" id="params-exchange">Exchange of Session Parameters</a></h1>
 <pre>
     User-Agent: Open AnyConnect VPN Agent v5.01
@@ -569,7 +581,7 @@
     X-CSTP-Address-Type: IPv4,IPv6
     CONNECT /CSCOSSLC/tunnel HTTP/1.1
   </pre>
-<p id="rfc.section.2.1.3.p.1">By the receipt of a success XML structure, the client should issue an HTTP CONNECT request. In addition it should provide the "X-CSTP-Address-Type" and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the following values.  </p>
+<p id="rfc.section.2.1.3.p.1">By the receipt of a success XML structure, the client MUST issue an HTTP CONNECT request. In addition it should provide the "X-CSTP-Address-Type" and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the following values.  </p>
 
 <dl>
   <dt></dt>
@@ -606,7 +618,6 @@
 
 <p> [XXX: compression] </p>
 <p id="rfc.section.2.1.3.p.3">The client is expected to treat the received parameters as his networking settings. If no "X-CSTP-Split-Include" headers are present, the client is expected to assign its default route through the VPN.  </p>
-<p id="rfc.section.2.1.3.p.4">It is important to note that any other headers allowed by the HTTP protocol can be present. In fact, a server may use cookies to allow session resumption if needed.  </p>
 <h1 id="rfc.section.2.1.4"><a href="#rfc.section.2.1.4">2.1.4.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary TCP Channel (CSTP)</a></h1>
 <p id="rfc.section.2.1.4.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 2.2</a>. This channel will be referred as CSTP in the rest of this document.  </p>
 <h1 id="rfc.section.2.1.5"><a href="#rfc.section.2.1.5">2.1.5.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary UDP Channel (DTLS)</a></h1>
@@ -820,6 +831,12 @@
         <b id="RFC2743">[RFC2743]</b>
       </td>
       <td class="top"><a href="mailto:jlinn@rsasecurity.com" title="RSA Laboratories">Linn, J.</a>, "<a href="http://tools.ietf.org/html/rfc2743">Generic Security Service Application Program Interface Version 2, Update 1</a>", RFC 2743, January 2000.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5056">[RFC5056]</b>
+      </td>
+      <td class="top"><a>Williams, N.</a>, "<a href="http://tools.ietf.org/html/rfc5056">On the Use of Channel Bindings to Secure Channels</a>", RFC 5056, November 2007.</td>
     </tr>
     <tr>
       <td class="reference">
