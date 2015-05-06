@@ -409,7 +409,22 @@ expected to assign its default route through the VPN.
   X-DTLS-Master-Secret is set as a master secret to be resumed. The session
   ID value is sent by the server on the response to CONNECT using the
   'X-DTLS-Session-ID' header. That header provides a hex-encoded value of
-  the DTLS session ID to be used by the client.
+  the DTLS session ID to be used by the client. The following headers
+  are used by the server's response to CONNECT, and are related to the DTLS
+  channel establishment.
+       <list style="hanging">
+	<t>X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
+	session ID by the client. It also serves as an identifier for the server to associate the
+	incoming DTLS session with the TLS session.</t>
+	<t>X-DTLS-Port: The port number to which the client should send UDP
+	packets for DTLS.</t>
+	<t>X-DTLS-CipherSuite: The ciphersuite selected by the server. It
+	should be one of the options present in the client's
+	X-DTLS-CipherSuite header.</t>
+	<t>X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
+	session should rekey, see <xref target="rekey-protocol"/>.</t>
+	<t>X-DTLS-Rekey-Method: The method used in DTLS rekey, see <xref target="rekey-protocol"/>.</t>
+       </list>
   </t>
   <t>
   The following table lists the ciphers negotiated via the

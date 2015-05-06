@@ -420,27 +420,27 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    in X-DTLS-Master-Secret is set as a master secret to be resumed.  The
    session ID value is sent by the server on the response to CONNECT
    using the 'X-DTLS-Session-ID' header.  That header provides a hex-
-   encoded value of the DTLS session ID to be used by the client.
+   encoded value of the DTLS session ID to be used by the client.  The
+   following headers are used by the server's response to CONNECT, and
+   are related to the DTLS channel establishment.
 
-   The following table lists the ciphers negotiated via the X-DTLS-
-   CipherSuite header, and the corresponding DTLS ciphersuite.
+      X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
+      session ID by the client.  It also serves as an identifier for the
+      server to associate the incoming DTLS session with the TLS
+      session.
 
+      X-DTLS-Port: The port number to which the client should send UDP
+      packets for DTLS.
 
+      X-DTLS-CipherSuite: The ciphersuite selected by the server.  It
+      should be one of the options present in the client's X-DTLS-
+      CipherSuite header.
 
+      X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
+      session should rekey, see Section 2.4.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+      X-DTLS-Rekey-Method: The method used in DTLS rekey, see
+      Section 2.4.
 
 
 
@@ -449,6 +449,9 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+   The following table lists the ciphers negotiated via the X-DTLS-
+   CipherSuite header, and the corresponding DTLS ciphersuite.
 
    +--------------------+---------------------------------+------------+
    | OpenConnect cipher |         DTLS ciphersuite        |    DTLS    |
@@ -482,9 +485,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    in a TLS record (see [RFC5246]).  The bytes of the header indicate
    the type of data that follow, and their contents are explained in
    Table 2.
-
-
-
 
 
 

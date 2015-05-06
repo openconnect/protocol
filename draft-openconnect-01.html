@@ -631,7 +631,22 @@
 </dl>
 
 <p> </p>
-<p id="rfc.section.2.1.5.p.2">The DTLS established DTLS channel utilizes session resumption as a method for preshared-key authentication. That is the value presented in X-DTLS-Master-Secret is set as a master secret to be resumed. The session ID value is sent by the server on the response to CONNECT using the 'X-DTLS-Session-ID' header. That header provides a hex-encoded value of the DTLS session ID to be used by the client.  </p>
+<p id="rfc.section.2.1.5.p.2">The DTLS established DTLS channel utilizes session resumption as a method for preshared-key authentication. That is the value presented in X-DTLS-Master-Secret is set as a master secret to be resumed. The session ID value is sent by the server on the response to CONNECT using the 'X-DTLS-Session-ID' header. That header provides a hex-encoded value of the DTLS session ID to be used by the client. The following headers are used by the server's response to CONNECT, and are related to the DTLS channel establishment.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Session-ID: A hex encoded value to be used as a DTLS session ID by the client. It also serves as an identifier for the server to associate the incoming DTLS session with the TLS session.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Port: The port number to which the client should send UDP packets for DTLS.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-CipherSuite: The ciphersuite selected by the server. It should be one of the options present in the client's X-DTLS-CipherSuite header.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS session should rekey, see <a href="#rekey-protocol">Section 2.4</a>.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Rekey-Method: The method used in DTLS rekey, see <a href="#rekey-protocol">Section 2.4</a>.</dd>
+</dl>
+
+<p> </p>
 <p id="rfc.section.2.1.5.p.3">The following table lists the ciphers negotiated via the X-DTLS-CipherSuite header, and the corresponding DTLS ciphersuite.  </p>
 <div id="rfc.table.1"/>
 <div id="cipher_table"/>
