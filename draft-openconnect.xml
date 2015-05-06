@@ -406,7 +406,10 @@ expected to assign its default route through the VPN.
   <t>
   The DTLS established DTLS channel utilizes session resumption as a method
   for preshared-key authentication. That is the value presented in
-  X-DTLS-Master-Secret is set as a master secret to be resumed.
+  X-DTLS-Master-Secret is set as a master secret to be resumed. The session
+  ID value is sent by the server on the response to CONNECT using the
+  'X-DTLS-Session-ID' header. That header provides a hex-encoded value of
+  the DTLS session ID to be used by the client.
   </t>
   <t>
   The following table lists the ciphers negotiated via the
