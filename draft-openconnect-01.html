@@ -391,6 +391,7 @@
 <link href="#rfc.section.3" rel="Chapter" title="3 Security Considerations"/>
 <link href="#rfc.section.4" rel="Chapter" title="4 Acknowledgements"/>
 <link href="#rfc.references" rel="Chapter" title="5 Normative References"/>
+<link href="#rfc.appendix.A" rel="Chapter" title="A Name for Application-Layer Protocol Negotiation"/>
 
 
   <meta name="generator" content="xml2rfc version 2.4.8 - http://tools.ietf.org/tools/xml2rfc" />
@@ -472,6 +473,7 @@
 <li>3.   <a href="#rfc.section.3">Security Considerations</a></li>
 <li>4.   <a href="#rfc.section.4">Acknowledgements</a></li>
 <li>5.   <a href="#rfc.references">Normative References</a></li>
+<li>Appendix A.   <a href="#rfc.appendix.A">Name for Application-Layer Protocol Negotiation</a></li>
 
 
   </ul>
@@ -487,6 +489,16 @@
 <p id="rfc.section.2.p.1">The OpenConnect protocol combines the TLS protocol <a href="#RFC5246">[RFC5246]</a>, datagram TLS protocol <a href="#RFC6347">[RFC6347]</a> and HTTP protocols <a href="#RFC2616">[RFC2616]</a> to provide an Internet-Layer VPN channel.  The channel is designed to operate using UDP packets, and fallback on TCP if that's not possible.  </p>
 <p id="rfc.section.2.p.2">In brief the protocol initiates an HTTP over TLS connection on a known port, where client authentication is performed. After this step, the client initiates an HTTP CONNECT command to establish a VPN channel over TCP. A secondary VPN channel over UDP will be established using information provided by the server using HTTP headers. At that point the raw IP packets flow, over the VPN channels.  </p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#session-establishment" id="session-establishment">VPN Session Establishment</a></h1>
+<p id="rfc.section.2.1.p.1">The client and server establish a TLS connection over a known port, typically over 443, the port used for HTTPS. The client is expected to support the following TLS protocol extensions.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">Server Name Indication <a href="#RFC6066">[RFC6066]</a>: the client SHOULD provide the DNS name of the server in the TLS handshake.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">Application-Layer Protocol Negotiation <a href="#RFC7301">[RFC7301]</a>: the client MAY provide this protocol name. The protocol name is defined in <a href="#alpn-name">Appendix A</a>.</dd>
+</dl>
+
+<p> </p>
 <h1 id="rfc.section.2.1.1"><a href="#rfc.section.2.1.1">2.1.1.</a> <a href="#server-authentication" id="server-authentication">Server Authentication</a></h1>
 <p id="rfc.section.2.1.1.p.1">In the OpenConnect VPN protocol, the server is always authenticated using its certificate. Once a client establishes a TCP connection to the server's well known port, it initiates the TLS protocol.  In the first connection to the server, the client SHOULD verify the provided by the server certificate, and SHOULD store its public key for verification of subsequent sessions. Thus, subsequent sessions SHOULD check whether the server's key match the initial.  </p>
 <p id="rfc.section.2.1.1.p.2">The server's identity in the certificate SHOULD be placed in the certificate's SubjectAlternativeName field, and unless a special profile is assumed, it will be of type DNSName.  </p>
@@ -861,12 +873,32 @@
     </tr>
     <tr>
       <td class="reference">
+        <b id="RFC6066">[RFC6066]</b>
+      </td>
+      <td class="top"><a>Eastlake, D.</a>, "<a href="http://tools.ietf.org/html/rfc6066">Transport Layer Security (TLS) Extensions: Extension Definitions</a>", RFC 6066, January 2011.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7301">[RFC7301]</b>
+      </td>
+      <td class="top"><a>Friedl, S.</a>, <a>Popov, A.</a>, <a>Langley, A.</a> and <a>E. Stephan</a>, "<a href="http://tools.ietf.org/html/rfc7301">Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension</a>", RFC 7301, July 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="RFC2119">[RFC2119]</b>
       </td>
       <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
     </tr>
   </tbody>
 </table>
+<h1 id="rfc.appendix.A"><a href="#rfc.appendix.A">Appendix A.</a> <a href="#alpn-name" id="alpn-name">Name for Application-Layer Protocol Negotiation</a></h1>
+<pre>
+   Protocol:  openconnect-vpn/1.0
+   Identification Sequence:
+           0x6f 0x70 0x65 0x6e 0x63 0x6f 0x6e 0x6e 0x65 0x63
+           0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
+</pre>
+<p/>
 <h1 id="rfc.authors">
   <a href="#rfc.authors">Author's Address</a>
 </h1>

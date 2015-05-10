@@ -17,6 +17,9 @@
 	<!ENTITY RFC6066 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6066.xml">
 
+	<!ENTITY RFC7301 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
+
 	<!ENTITY RFC6347 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6347.xml">
 
@@ -128,6 +131,20 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 </t>
 
 <section anchor="session-establishment" title="VPN Session Establishment">
+<t>
+   The client and server establish a TLS connection over a known port,
+   typically over 443, the port used for HTTPS. The client is expected
+   to support the following TLS protocol extensions.
+
+       <list style="hanging">
+       <t>Server Name Indication <xref target="RFC6066"/>: the client SHOULD provide the DNS name of
+       the server in the TLS handshake.</t>
+       <t>Application-Layer Protocol Negotiation <xref target="RFC7301"/>: the client MAY provide
+       this protocol name. The protocol name is defined in <xref
+       target="alpn-name"/>.</t>
+       </list>
+
+</t>
 
   <section anchor="server-authentication" title="Server Authentication">
   <t>
@@ -582,6 +599,7 @@ None yet.
 
   <back>
 
+
     <references title="Normative References"><!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml"?-->
 	&RFC5246;
 
@@ -599,9 +617,25 @@ None yet.
 
 	&RFC4519;
 
+	&RFC6066;
+
+	&RFC7301;
+
 	&RFC2119;
 
     </references>
 
+<section anchor="alpn-name" title="Name for Application-Layer Protocol Negotiation">
+<t>
+
+<figure>
+<artwork><![CDATA[
+   Protocol:  openconnect-vpn/1.0
+   Identification Sequence:
+           0x6f 0x70 0x65 0x6e 0x63 0x6f 0x6e 0x6e 0x65 0x63
+           0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
+]]></artwork>
+</figure></t>
+</section>
   </back>
 </rfc>
