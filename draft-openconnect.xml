@@ -133,8 +133,8 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 <section anchor="session-establishment" title="VPN Session Establishment">
 <t>
    The client and server establish a TLS connection over a known port,
-   typically over 443, the port used for HTTPS. The client is expected
-   to support the following TLS protocol extensions.
+   typically over 443, the port used for HTTPS. The client SHOULD
+   negotiate TLS 1.1 or later, and support the following TLS protocol extensions.
 
        <list style="hanging">
        <t>Server Name Indication <xref target="RFC6066"/>: the client SHOULD provide the DNS name of

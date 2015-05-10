@@ -74,13 +74,13 @@ Table of Contents
        2.1.4.  Establishment of Primary TCP Channel (CSTP) . . . . .   8
        2.1.5.  Establishment of Secondary UDP Channel (DTLS) . . . .   8
      2.2.  The CSTP Channel Protocol . . . . . . . . . . . . . . . .  10
-     2.3.  The DTLS Channel Protocol . . . . . . . . . . . . . . . .  11
-     2.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .  11
-     2.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  12
-   3.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
-   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  13
-   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  13
-   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  14
+     2.3.  The DTLS Channel Protocol . . . . . . . . . . . . . . . .  12
+     2.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .  12
+     2.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  13
+   3.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
+   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
+   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
+   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  15
 
 1.  Introduction
 
@@ -139,8 +139,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 2.1.  VPN Session Establishment
 
    The client and server establish a TLS connection over a known port,
-   typically over 443, the port used for HTTPS.  The client is expected
-   to support the following TLS protocol extensions.
+   typically over 443, the port used for HTTPS.  The client SHOULD
+   negotiate TLS 1.1 or later, and support the following TLS protocol
+   extensions.
 
       Server Name Indication [RFC6066]: the client SHOULD provide the
       DNS name of the server in the TLS handshake.
@@ -159,9 +160,8 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    verification of subsequent sessions.  Thus, subsequent sessions
    SHOULD check whether the server's key match the initial.
 
-   The server's identity in the certificate SHOULD be placed in the
-   certificate's SubjectAlternativeName field, and unless a special
-   profile is assumed, it will be of type DNSName.
+
+
 
 
 
@@ -169,6 +169,10 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 3]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+   The server's identity in the certificate SHOULD be placed in the
+   certificate's SubjectAlternativeName field, and unless a special
+   profile is assumed, it will be of type DNSName.
 
 2.1.2.  Client Authentication
 
@@ -212,10 +216,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    the client sends an HTTP POST request on "/" with the following
    contents.
 
-       <?xml version="1.0" encoding="UTF-8"?>
-       <config-auth client="vpn" type="init">
-           <version who="vpn">v5.01</version>
-       </config-auth>
 
 
 
@@ -225,6 +225,11 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 4]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+       <?xml version="1.0" encoding="UTF-8"?>
+       <config-auth client="vpn" type="init">
+           <version who="vpn">v5.01</version>
+       </config-auth>
 
    If the HTTP response code is 200, and contains the following
    indication of a complete authentication, the client should proceed to
@@ -263,6 +268,20 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    [XXX: groups?]  The client may be asked to provide the information in
    separate forms as above, or may be asked combined as below.
 
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
      <?xml version="1.0" encoding="UTF-8"?>
      <auth id="main">
          <message>Please enter your username</message>
@@ -274,14 +293,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The client software will then fill in the provided form and sent it
    back to the server using an HTTP POST on the location specified by
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
    the server (in the above examples it was "/auth").  The reply could
    then be the following.
 
@@ -318,6 +329,15 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    After that the server would report a "401 Unauthorized" status code
    and authentication would proceed as specified in the HTTP SPNEGO
    protocol.  The server may utilize the following header, to indicate
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
    that alternative authentication methods are available (e.g., with
    plain password), if authentication fails.
 
@@ -327,16 +347,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    401 unauthorized status code.  In that case, a client which received
    the previous header should retry authenticating to the server without
    sending the "X-Support-HTTP-Auth: true" header.
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
 
    Otherwise, on successful authentication the server should reply with
    a 200 HTTP code and use the authentication complete structure as in
@@ -377,6 +387,13 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
       notation, if IPv6 has been requested.
 
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
       X-CSTP-DNS: The IP address of a DNS server that can be used for
       that session.
 
@@ -385,14 +402,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
       X-CSTP-Split-Include: The network address of a route which is
       provided by this server.
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
 
       X-CSTP-Split-Exclude: The network address of a route that is not
       provided by this server.
@@ -433,15 +442,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    The DTLS established DTLS channel utilizes session resumption as a
    method for preshared-key authentication.  That is the value presented
    in X-DTLS-Master-Secret is set as a master secret to be resumed.  The
-   session ID value is sent by the server on the response to CONNECT
-   using the 'X-DTLS-Session-ID' header.  That header provides a hex-
-   encoded value of the DTLS session ID to be used by the client.  The
-   following headers are used by the server's response to CONNECT, and
-   are related to the DTLS channel establishment.
-
-      X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
-      session ID by the client.  It also serves as an identifier for the
-
 
 
 
@@ -450,6 +450,14 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
+   session ID value is sent by the server on the response to CONNECT
+   using the 'X-DTLS-Session-ID' header.  That header provides a hex-
+   encoded value of the DTLS session ID to be used by the client.  The
+   following headers are used by the server's response to CONNECT, and
+   are related to the DTLS channel establishment.
+
+      X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
+      session ID by the client.  It also serves as an identifier for the
       server to associate the incoming DTLS session with the TLS
       session.
 
@@ -468,6 +476,35 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The following table lists the ciphers negotiated via the X-DTLS-
    CipherSuite header, and the corresponding DTLS ciphersuite.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
 
    +--------------------+---------------------------------+------------+
    | OpenConnect cipher |         DTLS ciphersuite        |    DTLS    |
@@ -494,18 +531,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
                                   Table 1
 
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
 2.2.  The CSTP Channel Protocol
 
    The format of the packets sent over the primary channel consists of
@@ -513,6 +538,29 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    in a TLS record (see [RFC5246]).  The bytes of the header indicate
    the type of data that follow, and their contents are explained in
    Table 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
 
    +---------------------+---------------------------------------------+
    |         byte        | value                                       |
@@ -557,7 +605,15 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -613,7 +669,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 12]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -669,7 +725,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 12]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 13]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -725,7 +781,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 13]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -781,4 +837,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
