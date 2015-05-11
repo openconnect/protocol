@@ -79,9 +79,7 @@ Table of Contents
      2.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  13
    3.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
    4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
-   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  14
-     5.1.  Normative References  . . . . . . . . . . . . . . . . . .  14
-     5.2.  Informative References  . . . . . . . . . . . . . . . . .  15
+   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
    Appendix A.  Name for Application-Layer Protocol Negotiation  . .  16
 
 1.  Introduction
@@ -103,6 +101,8 @@ Table of Contents
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
+
+
 
 
 
@@ -395,8 +395,8 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
       X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
-      notation, if IPv6 has been requested.  The prefix length assigned
-      to client is RECOMMENDED to be set to 128-bits.
+      notation, if IPv6 has been requested.  The prefix length is
+      RECOMMENDED to be set to 127-bits according to [RFC6164].
 
       X-CSTP-DNS: The IP address of a DNS server that can be used for
       that session.
@@ -738,9 +738,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    None yet.
 
-5.  References
-
-5.1.  Normative References
+5.  Normative References
 
    [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
               (TLS) Protocol Version 1.2", RFC 5246, August 2008.
@@ -777,7 +775,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
               "Transport Layer Security (TLS) Application-Layer Protocol
               Negotiation Extension", RFC 7301, July 2014.
 
-
+   [RFC6164]  Kohno, M., Nitzan, B., Bush, R., Matsuzaki, Y., Colitti,
+              L., and T. Narten, "Using 127-Bit IPv6 Prefixes on Inter-
+              Router Links", RFC 6164, April 2011.
 
 
 
@@ -789,11 +789,11 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
-5.2.  Informative References
 
-   [RFC6164]  Kohno, M., Nitzan, B., Bush, R., Matsuzaki, Y., Colitti,
-              L., and T. Narten, "Using 127-Bit IPv6 Prefixes on Inter-
-              Router Links", RFC 6164, April 2011.
+
+
+
+
 
 
 

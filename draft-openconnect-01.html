@@ -390,9 +390,7 @@
 <link href="#rfc.section.2.5" rel="Chapter" title="2.5 The Keepalive and Dead Peer Detection Protocols"/>
 <link href="#rfc.section.3" rel="Chapter" title="3 Security Considerations"/>
 <link href="#rfc.section.4" rel="Chapter" title="4 Acknowledgements"/>
-<link href="#rfc.references" rel="Chapter" title="5 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="5.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="5.2 Informative References"/>
+<link href="#rfc.references" rel="Chapter" title="5 Normative References"/>
 <link href="#rfc.appendix.A" rel="Chapter" title="A Name for Application-Layer Protocol Negotiation"/>
 
 
@@ -474,9 +472,7 @@
 <li>2.5.   <a href="#rfc.section.2.5">The Keepalive and Dead Peer Detection Protocols</a></li>
 <li>3.   <a href="#rfc.section.3">Security Considerations</a></li>
 <li>4.   <a href="#rfc.section.4">Acknowledgements</a></li>
-<li>5.   <a href="#rfc.references">References</a></li>
-<li>5.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>5.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li>5.   <a href="#rfc.references">Normative References</a></li>
 <li>Appendix A.   <a href="#rfc.appendix.A">Name for Application-Layer Protocol Negotiation</a></li>
 
 
@@ -617,7 +613,7 @@
   <dt></dt>
   <dd style="margin-left: 8">X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if IPv4 has been requested. This should be set to 255.255.255.0 for compatibility.</dd>
   <dt></dt>
-  <dd style="margin-left: 8">X-CSTP-Address-IP6: The IPv6 address of the client in CIDR notation, if IPv6 has been requested. The prefix length assigned to client is RECOMMENDED to be set to 128-bits.</dd>
+  <dd style="margin-left: 8">X-CSTP-Address-IP6: The IPv6 address of the client in CIDR notation, if IPv6 has been requested. The prefix length is RECOMMENDED to be set to 127-bits according to <a href="#RFC6164">[RFC6164]</a>.</dd>
   <dt></dt>
   <dd style="margin-left: 8">X-CSTP-DNS: The IP address of a DNS server that can be used for that session.</dd>
   <dt></dt>
@@ -824,8 +820,7 @@
 <p id="rfc.section.3.p.1">None yet.  </p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Acknowledgements</h1>
 <p id="rfc.section.4.p.1">None yet.  </p>
-<h1 id="rfc.references"><a href="#rfc.references">5.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">5.1.</a> Normative References</h1>
+<h1 id="rfc.references"><a href="#rfc.references">5.</a> Normative References</h1>
 <table>
   <tbody>
     <tr>
@@ -890,20 +885,15 @@
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC2119">[RFC2119]</b>
-      </td>
-      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">5.2.</a> Informative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
         <b id="RFC6164">[RFC6164]</b>
       </td>
       <td class="top"><a>Kohno, M.</a>, <a>Nitzan, B.</a>, <a>Bush, R.</a>, <a>Matsuzaki, Y.</a>, <a>Colitti, L.</a> and <a>T. Narten</a>, "<a href="http://tools.ietf.org/html/rfc6164">Using 127-Bit IPv6 Prefixes on Inter-Router Links</a>", RFC 6164, April 2011.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
     </tr>
   </tbody>
 </table>
