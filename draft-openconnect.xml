@@ -379,8 +379,8 @@ authentication fails.
        <t>X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if IPv4 has been
        requested. This should be set to 255.255.255.0 for compatibility.</t>
        <t>X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
-       notation, if IPv6 has been requested. The prefix length is
-       RECOMMENDED to be set to 127-bits according to <xref target="RFC6164"/>.</t>
+       notation, if IPv6 has been requested. The prefix length assigned to
+       client is RECOMMENDED to be set to 128-bits.</t>
        <t>X-CSTP-DNS: The IP address of a DNS server that can be used for
        that session.</t>
        <t>X-CSTP-Default-Domain: The DNS domains the provided DNS servers
@@ -625,9 +625,13 @@ None yet.
 
 	&RFC7301;
 
-	&RFC6164;
-
 	&RFC2119;
+
+    </references>
+
+    <references title="Informative References">
+
+	&RFC6164;
 
     </references>
 
