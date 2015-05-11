@@ -382,9 +382,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       requested.
 
       X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if
-      IPv4 has been requested.  This should be set to 255.255.255.0 for
-      compatibility.
-
+      IPv4 has been requested.  This should contain the mask on the
+      P-t-P link and is RECOMMENDED the server address to be the first
+      in defined network.
 
 
 

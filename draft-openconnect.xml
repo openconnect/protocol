@@ -377,7 +377,9 @@ authentication fails.
        <t>X-CSTP-Address: The IPv4 address of the client, if IPv4 has been
        requested.</t>
        <t>X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if IPv4 has been
-       requested. This should be set to 255.255.255.0 for compatibility.</t>
+       requested. This should contain the mask on the P-t-P link and is
+       RECOMMENDED the server address to be the first in defined network.
+       </t>
        <t>X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
        notation, if IPv6 has been requested. The prefix length is
        RECOMMENDED to be set to 127-bits according to <xref target="RFC6164"/>.</t>
