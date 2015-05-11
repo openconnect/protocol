@@ -611,9 +611,9 @@
   <dt></dt>
   <dd style="margin-left: 8">X-CSTP-Address: The IPv4 address of the client, if IPv4 has been requested.</dd>
   <dt></dt>
-  <dd style="margin-left: 8">X-CSTP-Netmask: The IPv4 netmask of the client, if IPv4 has been requested.</dd>
+  <dd style="margin-left: 8">X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if IPv4 has been requested. This should be set to 255.255.255.0 for compatibility.</dd>
   <dt></dt>
-  <dd style="margin-left: 8">X-CSTP-Address-IP6: The IPv6 address of the client in CIDR notation, if IPv6 has been requested.</dd>
+  <dd style="margin-left: 8">X-CSTP-Address-IP6: The IPv6 address of the client in CIDR notation, if IPv6 has been requested. The prefix length is RECOMMENDED to be set to 127-bits according to <a href="#RFC6164">[RFC6164]</a>.</dd>
   <dt></dt>
   <dd style="margin-left: 8">X-CSTP-DNS: The IP address of a DNS server that can be used for that session.</dd>
   <dt></dt>
@@ -882,6 +882,12 @@
         <b id="RFC7301">[RFC7301]</b>
       </td>
       <td class="top"><a>Friedl, S.</a>, <a>Popov, A.</a>, <a>Langley, A.</a> and <a>E. Stephan</a>, "<a href="http://tools.ietf.org/html/rfc7301">Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension</a>", RFC 7301, July 2014.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC6164">[RFC6164]</b>
+      </td>
+      <td class="top"><a>Kohno, M.</a>, <a>Nitzan, B.</a>, <a>Bush, R.</a>, <a>Matsuzaki, Y.</a>, <a>Colitti, L.</a> and <a>T. Narten</a>, "<a href="http://tools.ietf.org/html/rfc6164">Using 127-Bit IPv6 Prefixes on Inter-Router Links</a>", RFC 6164, April 2011.</td>
     </tr>
     <tr>
       <td class="reference">

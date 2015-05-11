@@ -32,6 +32,9 @@
 	<!ENTITY RFC4519 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.4519.xml">
 
+	<!ENTITY RFC6164 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6164.xml">
+
 	<!ENTITY RFC5056 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5056.xml">
 
@@ -373,10 +376,11 @@ authentication fails.
        <list style="hanging">
        <t>X-CSTP-Address: The IPv4 address of the client, if IPv4 has been
        requested.</t>
-       <t>X-CSTP-Netmask: The IPv4 netmask of the client, if IPv4 has been
-       requested.</t>
+       <t>X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if IPv4 has been
+       requested. This should be set to 255.255.255.0 for compatibility.</t>
        <t>X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
-       notation, if IPv6 has been requested.</t>
+       notation, if IPv6 has been requested. The prefix length is
+       RECOMMENDED to be set to 127-bits according to <xref target="RFC6164"/>.</t>
        <t>X-CSTP-DNS: The IP address of a DNS server that can be used for
        that session.</t>
        <t>X-CSTP-Default-Domain: The DNS domains the provided DNS servers
@@ -620,6 +624,8 @@ None yet.
 	&RFC6066;
 
 	&RFC7301;
+
+	&RFC6164;
 
 	&RFC2119;
 

@@ -80,7 +80,7 @@ Table of Contents
    3.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
    4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
    5.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
-   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  15
+   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  16
 
 1.  Introduction
 
@@ -381,11 +381,11 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       X-CSTP-Address: The IPv4 address of the client, if IPv4 has been
       requested.
 
-      X-CSTP-Netmask: The IPv4 netmask of the client, if IPv4 has been
-      requested.
+      X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if
+      IPv4 has been requested.  This should be set to 255.255.255.0 for
+      compatibility.
 
-      X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
-      notation, if IPv6 has been requested.
+
 
 
 
@@ -393,6 +393,10 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+      X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
+      notation, if IPv6 has been requested.  The prefix length is
+      RECOMMENDED to be set to 127-bits according to [RFC6164].
 
       X-CSTP-DNS: The IP address of a DNS server that can be used for
       that session.
@@ -439,10 +443,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
       string AES256-SHA:AES128-SHA:DES-CBC3-SHA).
 
-   The DTLS established DTLS channel utilizes session resumption as a
-   method for preshared-key authentication.  That is the value presented
-   in X-DTLS-Master-Secret is set as a master secret to be resumed.  The
-
 
 
 Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
@@ -450,6 +450,9 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
+   The DTLS established DTLS channel utilizes session resumption as a
+   method for preshared-key authentication.  That is the value presented
+   in X-DTLS-Master-Secret is set as a master secret to be resumed.  The
    session ID value is sent by the server on the response to CONNECT
    using the 'X-DTLS-Session-ID' header.  That header provides a hex-
    encoded value of the DTLS session ID to be used by the client.  The
@@ -476,9 +479,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The following table lists the ciphers negotiated via the X-DTLS-
    CipherSuite header, and the corresponding DTLS ciphersuite.
-
-
-
 
 
 
@@ -775,13 +775,69 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
               "Transport Layer Security (TLS) Application-Layer Protocol
               Negotiation Extension", RFC 7301, July 2014.
 
+   [RFC6164]  Kohno, M., Nitzan, B., Bush, R., Matsuzaki, Y., Colitti,
+              L., and T. Narten, "Using 127-Bit IPv6 Prefixes on Inter-
+              Router Links", RFC 6164, April 2011.
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -837,4 +893,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 16]
