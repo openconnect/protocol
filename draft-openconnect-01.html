@@ -392,6 +392,8 @@
 <link href="#rfc.section.4" rel="Chapter" title="4 Acknowledgements"/>
 <link href="#rfc.references" rel="Chapter" title="5 Normative References"/>
 <link href="#rfc.appendix.A" rel="Chapter" title="A Name for Application-Layer Protocol Negotiation"/>
+<link href="#rfc.appendix.B" rel="Chapter" title="B DTD declarations"/>
+<link href="#rfc.appendix.B.1" rel="Chapter" title="B.1 config-auth.dtd"/>
 
 
   <meta name="generator" content="xml2rfc version 2.4.8 - http://tools.ietf.org/tools/xml2rfc" />
@@ -474,6 +476,8 @@
 <li>4.   <a href="#rfc.section.4">Acknowledgements</a></li>
 <li>5.   <a href="#rfc.references">Normative References</a></li>
 <li>Appendix A.   <a href="#rfc.appendix.A">Name for Application-Layer Protocol Negotiation</a></li>
+<li>Appendix B.   <a href="#rfc.appendix.B">DTD declarations</a></li>
+<li>B.1.   <a href="#rfc.appendix.B.1">config-auth.dtd</a></li>
 
 
   </ul>
@@ -518,14 +522,17 @@
 <p id="rfc.section.2.1.2.1.p.2">Because the client certificate is sent in the clear during the handshake it SHOULD NOT contain other identifying information other than a username, or a pseudonymus identifier. It is RECOMMENDED to place the user identifier in the DN field of the certificate, using the UID object identifier (0.9.2342.19200300.100.1.1) <a href="#RFC4519">[RFC4519]</a>.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
     &lt;config-auth client="vpn" type="init"&gt;
         &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
     &lt;/config-auth&gt;
   </pre>
-<p id="rfc.section.2.1.2.1.p.3">[XXX: We need to define a DTD] After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
-<p id="rfc.section.2.1.2.1.p.4">If the HTTP response code is 200, and contains the following indication of a complete authentication, the client should proceed to the establishment of the primary channel as in <a href="#primary-channel">Section 2.1.4</a>.  </p>
+<p id="rfc.section.2.1.2.1.p.3">After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
+<p id="rfc.section.2.1.2.1.p.4">Note that precise DTD declarations for the contents of XML messages defined in this document are listed in <a href="#dtd-decl">Appendix B</a>.  </p>
+<p id="rfc.section.2.1.2.1.p.5">If the HTTP response code is 200, and contains the following indication of a complete authentication, the client should proceed to the establishment of the primary channel as in <a href="#primary-channel">Section 2.1.4</a>.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
     &lt;config-auth client="vpn" type="complete"&gt;
       &lt;version who="sg"&gt;0.1(1)&lt;/version&gt;
       &lt;auth id="success"&gt;
@@ -537,6 +544,7 @@
 <h1 id="rfc.section.2.1.2.2"><a href="#rfc.section.2.1.2.2">2.1.2.2.</a> <a href="#authentication_pass" id="authentication_pass">Authentication using passwords</a></h1>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
     &lt;config-auth client="vpn" type="init"&gt;
         &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
     &lt;/config-auth&gt;
@@ -544,26 +552,33 @@
 <p id="rfc.section.2.1.2.2.p.1">After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-    &lt;auth id="main"&gt;
-        &lt;message&gt;Please enter your username&lt;/message&gt;
-        &lt;form action="/auth" method="post"&gt;
-            &lt;input label="Username:" name="username" type="text" /&gt;
-        &lt;/form&gt;
-    &lt;/auth&gt;
+    &lt;!DOCTYPE auth SYSTEM "config-auth.dtd"&gt;
+    &lt;config-auth client="vpn" type="auth-request"&gt;
+        &lt;auth id="main"&gt;
+            &lt;message&gt;Please enter your username&lt;/message&gt;
+            &lt;form action="/auth" method="post"&gt;
+                &lt;input label="Username:" name="username" type="text" /&gt;
+            &lt;/form&gt;
+        &lt;/auth&gt;
+    &lt;/config-auth&gt;
   </pre>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-    &lt;auth id="main"&gt;
+    &lt;!DOCTYPE auth SYSTEM "auth.dtd"&gt;
+    &lt;config-auth client="vpn" type="auth-request"&gt;
+      &lt;auth id="main"&gt;
         &lt;message&gt;Please enter your username&lt;/message&gt;
         &lt;form action="/auth" method="post"&gt;
-            &lt;input label="Username:" name="username" type="text" /&gt;
-            &lt;input label="Password:" name="password" type="password" /&gt;
+            &lt;input label="Username:" name="username" type="text"/&gt;
+            &lt;input label="Password:" name="password" type="password"/&gt;
         &lt;/form&gt;
-    &lt;/auth&gt;
+      &lt;/auth&gt;
+    &lt;/config-auth&gt;
   </pre>
 <p id="rfc.section.2.1.2.2.p.2">Note that all Content-Types specified in this section are 'text/xml'. At this point the server will reply using forms the client software should prompt the user to fill in.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
     &lt;config-auth client="vpn" type="auth-reply"&gt;
         &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
         &lt;auth&gt;&lt;username&gt;test&lt;/username&gt;
@@ -903,6 +918,33 @@
    Identification Sequence:
            0x6f 0x70 0x65 0x6e 0x63 0x6f 0x6e 0x6e 0x65 0x63
            0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
+</pre>
+<p/>
+<h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#dtd-decl" id="dtd-decl">DTD declarations</a></h1>
+<h1 id="rfc.appendix.B.1"><a href="#rfc.appendix.B.1">B.1.</a> <a href="#dtd-decl1" id="dtd-decl1">config-auth.dtd</a></h1>
+<pre>
+&lt;!ELEMENT config-auth (version*,auth*)&gt;
+  &lt;!ATTLIST config-auth client CDATA #FIXED "vpn"&gt;
+  &lt;!ATTLIST config-auth type (init|auth-reply|auth-request|complete) "init"&gt;
+&lt;!ELEMENT version (#PCDATA)&gt;
+  &lt;!ATTLIST version who (sg|vpn) "sg"&gt;
+&lt;!ELEMENT auth (title*,username*,password*,message*,form*)&gt;
+  &lt;!ATTLIST auth id (success|main|failure) "failure"&gt;
+  &lt;!ELEMENT title (#PCDATA)&gt;
+  &lt;!ELEMENT username (#PCDATA)&gt;
+  &lt;!ELEMENT password (#PCDATA)&gt;
+  &lt;!ELEMENT message (#PCDATA)&gt;
+  &lt;!ELEMENT form (input)&gt;
+    &lt;!ATTLIST form action CDATA #FIXED "/auth"&gt;
+    &lt;!ATTLIST form method CDATA #FIXED "post"&gt;
+    &lt;!ELEMENT input (EMPTY)&gt;
+       &lt;!ATTLIST input label CDATA ""&gt;
+       &lt;!ATTLIST input name (username|password) "username"&gt;
+       &lt;!ATTLIST input type (text|password) "text"&gt;
+    &lt;!ELEMENT select (option)&gt;
+       &lt;!ATTLIST select label CDATA ""&gt;
+       &lt;!ATTLIST select name (group_list) "group_list"&gt;
+    &lt;!ELEMENT option (#PCDATA)&gt;
 </pre>
 <p/>
 <h1 id="rfc.authors">

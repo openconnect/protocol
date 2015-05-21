@@ -205,16 +205,19 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   (0.9.2342.19200300.100.1.1) <xref target="RFC4519"/>.
   </t>
   <t>
-  [XXX: We need to define a DTD]
-
   After the TLS session is established the client sends an HTTP POST request
   on "/" with the following contents.
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
     <config-auth client="vpn" type="init">
         <version who="vpn">v5.01</version>
     </config-auth>
   ]]></artwork></figure>
+  </t>
+  <t>
+  Note that precise DTD declarations for the contents of XML messages defined in
+  this document are listed in <xref target="dtd-decl"/>.
   </t>
   <t>
   If the HTTP response code is 200, and contains the following indication
@@ -224,6 +227,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   <t>
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
     <config-auth client="vpn" type="complete">
       <version who="sg">0.1(1)</version>
       <auth id="success">
@@ -241,6 +245,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   on "/" with the following contents.
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
     <config-auth client="vpn" type="init">
         <version who="vpn">v5.01</version>
     </config-auth>
@@ -253,26 +258,31 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
-    <auth id="main">
-        <message>Please enter your username</message>
-        <form action="/auth" method="post">
-            <input label="Username:" name="username" type="text" />
-        </form>
-    </auth>
+    <!DOCTYPE auth SYSTEM "config-auth.dtd">
+    <config-auth client="vpn" type="auth-request">
+        <auth id="main">
+            <message>Please enter your username</message>
+            <form action="/auth" method="post">
+                <input label="Username:" name="username" type="text" />
+            </form>
+        </auth>
+    </config-auth>
   ]]></artwork></figure>
 
-  [XXX: groups?]
   The client may be asked to provide the information in separate forms as
   above, or may be asked combined as below.
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
-    <auth id="main">
+    <!DOCTYPE auth SYSTEM "auth.dtd">
+    <config-auth client="vpn" type="auth-request">
+      <auth id="main">
         <message>Please enter your username</message>
         <form action="/auth" method="post">
-            <input label="Username:" name="username" type="text" />
-            <input label="Password:" name="password" type="password" />
+            <input label="Username:" name="username" type="text"/>
+            <input label="Password:" name="password" type="password"/>
         </form>
-    </auth>
+      </auth>
+    </config-auth>
   ]]></artwork></figure>
   </t>
   <t>
@@ -282,6 +292,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   following.
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
     <config-auth client="vpn" type="auth-reply">
         <version who="vpn">v5.01</version>
         <auth><username>test</username>
@@ -644,6 +655,40 @@ None yet.
            0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
 ]]></artwork>
 </figure></t>
+</section>
+<section anchor="dtd-decl" title="DTD declarations">
+
+<section anchor="dtd-decl1" title="config-auth.dtd">
+<t>
+
+<figure>
+<artwork><![CDATA[
+<!ELEMENT config-auth (version*,auth*)>
+  <!ATTLIST config-auth client CDATA #FIXED "vpn">
+  <!ATTLIST config-auth type (init|auth-reply|auth-request|complete) "init">
+<!ELEMENT version (#PCDATA)>
+  <!ATTLIST version who (sg|vpn) "sg">
+<!ELEMENT auth (title*,username*,password*,message*,form*)>
+  <!ATTLIST auth id (success|main|failure) "failure">
+  <!ELEMENT title (#PCDATA)>
+  <!ELEMENT username (#PCDATA)>
+  <!ELEMENT password (#PCDATA)>
+  <!ELEMENT message (#PCDATA)>
+  <!ELEMENT form (input)>
+    <!ATTLIST form action CDATA #FIXED "/auth">
+    <!ATTLIST form method CDATA #FIXED "post">
+    <!ELEMENT input (EMPTY)>
+       <!ATTLIST input label CDATA "">
+       <!ATTLIST input name (username|password) "username">
+       <!ATTLIST input type (text|password) "text">
+    <!ELEMENT select (option)>
+       <!ATTLIST select label CDATA "">
+       <!ATTLIST select name (group_list) "group_list">
+    <!ELEMENT option (#PCDATA)>
+]]></artwork>
+</figure></t>
+</section>
+
 </section>
   </back>
 </rfc>

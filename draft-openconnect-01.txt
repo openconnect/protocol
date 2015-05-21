@@ -81,6 +81,8 @@ Table of Contents
    4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
    5.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
    Appendix A.  Name for Application-Layer Protocol Negotiation  . .  16
+   Appendix B.  DTD declarations . . . . . . . . . . . . . . . . . .  16
+     B.1.  config-auth.dtd . . . . . . . . . . . . . . . . . . . . .  16
 
 1.  Introduction
 
@@ -101,8 +103,6 @@ Table of Contents
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
-
-
 
 
 
@@ -212,9 +212,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    place the user identifier in the DN field of the certificate, using
    the UID object identifier (0.9.2342.19200300.100.1.1) [RFC4519].
 
-   [XXX: We need to define a DTD] After the TLS session is established
-   the client sends an HTTP POST request on "/" with the following
-   contents.
+   After the TLS session is established the client sends an HTTP POST
+   request on "/" with the following contents.
+
 
 
 
@@ -227,15 +227,20 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
        <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
        <config-auth client="vpn" type="init">
            <version who="vpn">v5.01</version>
        </config-auth>
+
+   Note that precise DTD declarations for the contents of XML messages
+   defined in this document are listed in Appendix B.
 
    If the HTTP response code is 200, and contains the following
    indication of a complete authentication, the client should proceed to
    the establishment of the primary channel as in Section 2.1.4.
 
        <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
        <config-auth client="vpn" type="complete">
          <version who="sg">0.1(1)</version>
          <auth id="success">
@@ -249,6 +254,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    request on "/" with the following contents.
 
        <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
        <config-auth client="vpn" type="init">
            <version who="vpn">v5.01</version>
        </config-auth>
@@ -257,22 +263,16 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    At this point the server will reply using forms the client software
    should prompt the user to fill in.
 
-       <?xml version="1.0" encoding="UTF-8"?>
-       <auth id="main">
-           <message>Please enter your username</message>
-           <form action="/auth" method="post">
-               <input label="Username:" name="username" type="text" />
-           </form>
-       </auth>
-
-   [XXX: groups?]  The client may be asked to provide the information in
-   separate forms as above, or may be asked combined as below.
-
-
-
-
-
-
+     <?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE auth SYSTEM "config-auth.dtd">
+     <config-auth client="vpn" type="auth-request">
+         <auth id="main">
+             <message>Please enter your username</message>
+             <form action="/auth" method="post">
+                 <input label="Username:" name="username" type="text" />
+             </form>
+         </auth>
+     </config-auth>
 
 
 
@@ -282,14 +282,20 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
-     <?xml version="1.0" encoding="UTF-8"?>
-     <auth id="main">
-         <message>Please enter your username</message>
-         <form action="/auth" method="post">
-             <input label="Username:" name="username" type="text" />
-             <input label="Password:" name="password" type="password" />
-         </form>
-     </auth>
+   The client may be asked to provide the information in separate forms
+   as above, or may be asked combined as below.
+
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE auth SYSTEM "auth.dtd">
+      <config-auth client="vpn" type="auth-request">
+        <auth id="main">
+          <message>Please enter your username</message>
+          <form action="/auth" method="post">
+              <input label="Username:" name="username" type="text"/>
+              <input label="Password:" name="password" type="password"/>
+          </form>
+        </auth>
+      </config-auth>
 
    The client software will then fill in the provided form and sent it
    back to the server using an HTTP POST on the location specified by
@@ -297,6 +303,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    then be the following.
 
        <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
        <config-auth client="vpn" type="auth-reply">
            <version who="vpn">v5.01</version>
            <auth><username>test</username>
@@ -324,13 +331,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    A client which supports the HTTP SPNEGO protocol, SHOULD indicate it
    using the following header on in its initial request to the server.
 
-       X-Support-HTTP-Auth: true
-
-   After that the server would report a "401 Unauthorized" status code
-   and authentication would proceed as specified in the HTTP SPNEGO
-   protocol.  The server may utilize the following header, to indicate
-
-
 
 
 Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
@@ -338,6 +338,11 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
+       X-Support-HTTP-Auth: true
+
+   After that the server would report a "401 Unauthorized" status code
+   and authentication would proceed as specified in the HTTP SPNEGO
+   protocol.  The server may utilize the following header, to indicate
    that alternative authentication methods are available (e.g., with
    plain password), if authentication fails.
 
@@ -381,11 +386,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       X-CSTP-Address: The IPv4 address of the client, if IPv4 has been
       requested.
 
-      X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if
-      IPv4 has been requested.  This should contain the mask on the
-      P-t-P link and is RECOMMENDED the server address to be the first
-      in defined network.
-
 
 
 
@@ -393,6 +393,11 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+      X-CSTP-Netmask: An IPv4 netmask to be pushed to the client, if
+      IPv4 has been requested.  This should contain the mask on the
+      P-t-P link and is RECOMMENDED the server address to be the first
+      in defined network.
 
       X-CSTP-Address-IP6: The IPv6 address of the client in CIDR
       notation, if IPv6 has been requested.  The prefix length is
@@ -437,11 +442,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    during the issue of the HTTP CONNECT request (see Section 2.1.3.
    This is done by appending the following headers to the request.
 
-      X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
-      for the DTLS session.
-
-      X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
-      string AES256-SHA:AES128-SHA:DES-CBC3-SHA).
 
 
 
@@ -449,6 +449,12 @@ Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+      X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
+      for the DTLS session.
+
+      X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
+      string AES256-SHA:AES128-SHA:DES-CBC3-SHA).
 
    The DTLS established DTLS channel utilizes session resumption as a
    method for preshared-key authentication.  That is the value presented
@@ -479,12 +485,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The following table lists the ciphers negotiated via the X-DTLS-
    CipherSuite header, and the corresponding DTLS ciphersuite.
-
-
-
-
-
-
 
 
 
@@ -849,37 +849,37 @@ Appendix A.  Name for Application-Layer Protocol Negotiation
               0x6f 0x70 0x65 0x6e 0x63 0x6f 0x6e 0x6e 0x65 0x63
               0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
 
+Appendix B.  DTD declarations
+
+B.1.  config-auth.dtd
+
+<!ELEMENT config-auth (version*,auth*)>
+  <!ATTLIST config-auth client CDATA #FIXED "vpn">
+  <!ATTLIST config-auth type (init|auth-reply|auth-request|complete) "init">
+<!ELEMENT version (#PCDATA)>
+  <!ATTLIST version who (sg|vpn) "sg">
+<!ELEMENT auth (title*,username*,password*,message*,form*)>
+  <!ATTLIST auth id (success|main|failure) "failure">
+  <!ELEMENT title (#PCDATA)>
+  <!ELEMENT username (#PCDATA)>
+  <!ELEMENT password (#PCDATA)>
+  <!ELEMENT message (#PCDATA)>
+  <!ELEMENT form (input)>
+    <!ATTLIST form action CDATA #FIXED "/auth">
+    <!ATTLIST form method CDATA #FIXED "post">
+    <!ELEMENT input (EMPTY)>
+       <!ATTLIST input label CDATA "">
+       <!ATTLIST input name (username|password) "username">
+       <!ATTLIST input type (text|password) "text">
+    <!ELEMENT select (option)>
+       <!ATTLIST select label CDATA "">
+       <!ATTLIST select name (group_list) "group_list">
+    <!ELEMENT option (#PCDATA)>
+
 Author's Address
 
    Nikos Mavrogiannopoulos
    Red Hat
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
