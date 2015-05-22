@@ -485,8 +485,8 @@
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
-<p id="rfc.section.1.p.1">The purpose of this document is to specify the OpenConnect VPN protocol in a detail in order to allow for multiple interoperable implementations.  That is a protocol that is believed to be compatible with CISCO's AnyConnect protocol.  </p>
-<p id="rfc.section.1.p.2">While there are many competing VPN protocol solutions, none of them was ever described in a publicly available document. Even open source VPN solutions have their source code as the primary description of their protocol. That allowed no easy study of each protocol's properties and weaknesses, and that is one of the points addressed by this document.  </p>
+<p id="rfc.section.1.p.1">The purpose of this document is to specify the OpenConnect VPN protocol in a detail in order to allow for multiple interoperable implementations.  This is the protocol used by the OpenConnect client and server <a href="#OPENCONNECT">[OPENCONNECT]</a>, and is believed to be compatible with CISCO's AnyConnect protocol.  </p>
+<p id="rfc.section.1.p.2">While there are many competing VPN protocol solutions, none of them was ever described in a publicly available document. Even open source VPN solutions have their source code as the primary description of their protocol. That allowed no easy study of each protocol's properties and weaknesses, and that is the secondary goal of this document, to describe a deployed TLS based <a href="#RFC5246">[RFC5246]</a> VPN protocol.  </p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> <a href="#terminology" id="terminology">Requirements Terminology</a></h1>
 <p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.  </p>
 <h1 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2.</a> <a href="#goals-document" id="goals-document">Goals of This Document</a></h1>
@@ -501,7 +501,7 @@
   <dt></dt>
   <dd style="margin-left: 8">Server Name Indication <a href="#RFC6066">[RFC6066]</a>: the client SHOULD provide the DNS name of the server in the TLS handshake.</dd>
   <dt></dt>
-  <dd style="margin-left: 8">Application-Layer Protocol Negotiation <a href="#RFC7301">[RFC7301]</a>: the client MAY provide this protocol name. The protocol name is defined in <a href="#alpn-name">Appendix A</a>.</dd>
+  <dd style="margin-left: 8">Application-Layer Protocol Negotiation <a href="#RFC7301">[RFC7301]</a>: the client MAY provide this protocol name. The protocol name to be used is defined in <a href="#alpn-name">Appendix A</a>.</dd>
 </dl>
 
 <p> </p>
@@ -937,6 +937,12 @@
         <b id="COMP-ISSUES2">[COMP-ISSUES2]</b>
       </td>
       <td class="top"><a>Kelsey, J.</a>, "<a>Compression  and  information  leakage  of plaintex</a>", International Workshop on Fast Software Encryption , 2002.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="OPENCONNECT">[OPENCONNECT]</b>
+      </td>
+      <td class="top"><a>Woodhouse, D.</a> and <a>N. Mavrogiannopoulos</a>, "<a>http://www.infradead.org/openconnect/</a>", 2015.</td>
     </tr>
   </tbody>
 </table>

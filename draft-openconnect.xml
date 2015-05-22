@@ -86,16 +86,18 @@
     <t>
    The purpose of this document is to specify the OpenConnect VPN protocol
    in a detail in order to allow for multiple interoperable implementations.
-   That is a protocol that is believed to be compatible with CISCO's
-   AnyConnect protocol.
+   This is the protocol used by the OpenConnect client and server
+   <xref target="OPENCONNECT"/>, and is believed to be compatible with
+   CISCO's AnyConnect protocol.
    </t>
    <t>
    While there are many competing VPN protocol solutions, none of
    them was ever described in a publicly available document. Even open
    source VPN solutions have their source code as the primary description
    of their protocol. That allowed no easy study of each protocol's
-   properties and weaknesses, and that is one of the points addressed
-   by this document.
+   properties and weaknesses, and that is the secondary goal of this
+   document, to describe a deployed TLS based <xref target="RFC5246"/>
+   VPN protocol.
    </t>
 
 <section anchor="terminology" title="Requirements Terminology">
@@ -143,7 +145,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
        <t>Server Name Indication <xref target="RFC6066"/>: the client SHOULD provide the DNS name of
        the server in the TLS handshake.</t>
        <t>Application-Layer Protocol Negotiation <xref target="RFC7301"/>: the client MAY provide
-       this protocol name. The protocol name is defined in <xref
+       this protocol name. The protocol name to be used is defined in <xref
        target="alpn-name"/>.</t>
        </list>
 
@@ -723,6 +725,17 @@ None yet.
 	  <date year="2002" />
 	</front>
 	<seriesInfo name="International Workshop on Fast Software Encryption" value=""/>
+      </reference>
+
+      <reference anchor="OPENCONNECT">
+	<front>
+	  <title>http://www.infradead.org/openconnect/</title>
+	  <author initials="D." surname="Woodhouse"
+		  fullname="David Woodhouse"/>
+	  <author initials="N." surname="Mavrogiannopoulos"
+		  fullname="Nikos Mavrogiannopoulos"/>
+	  <date year="2015" />
+	</front>
       </reference>
 
     </references>

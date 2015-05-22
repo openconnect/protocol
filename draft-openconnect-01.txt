@@ -89,23 +89,23 @@ Table of Contents
 
    The purpose of this document is to specify the OpenConnect VPN
    protocol in a detail in order to allow for multiple interoperable
-   implementations.  That is a protocol that is believed to be
-   compatible with CISCO's AnyConnect protocol.
+   implementations.  This is the protocol used by the OpenConnect client
+   and server [OPENCONNECT], and is believed to be compatible with
+   CISCO's AnyConnect protocol.
 
    While there are many competing VPN protocol solutions, none of them
    was ever described in a publicly available document.  Even open
    source VPN solutions have their source code as the primary
    description of their protocol.  That allowed no easy study of each
-   protocol's properties and weaknesses, and that is one of the points
-   addressed by this document.
+   protocol's properties and weaknesses, and that is the secondary goal
+   of this document, to describe a deployed TLS based [RFC5246] VPN
+   protocol.
 
 1.1.  Requirements Terminology
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in [RFC2119].
-
-
 
 
 
@@ -147,8 +147,8 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       DNS name of the server in the TLS handshake.
 
       Application-Layer Protocol Negotiation [RFC7301]: the client MAY
-      provide this protocol name.  The protocol name is defined in
-      Appendix A.
+      provide this protocol name.  The protocol name to be used is
+      defined in Appendix A.
 
 2.1.1.  Server Authentication
 
@@ -828,9 +828,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
               plaintex", International Workshop on Fast Software
               Encryption , 2002.
 
-
-
-
+   [OPENCONNECT]
+              Woodhouse, D. and N. Mavrogiannopoulos,
+              "http://www.infradead.org/openconnect/", 2015.
 
 
 
