@@ -13,12 +13,12 @@ Expires: July 5, 2015
 
 Abstract
 
-   This document specifies version 1.0 of the OpenConnect VPN protocol,
-   a secure VPN protocol that provides communications privacy over the
-   Internet.  That protocol is believed to be compatible with CISCO's
-   AnyConnect VPN protocol.  The protocol allows the establishment of
-   VPN tunnels in a way that is designed to prevent eavesdropping,
-   tampering, or message forgery.
+   This document specifies version 1.0 of the OpenConnect Virtual
+   Private Network (VPN) protocol, a secure VPN protocol that provides
+   communications privacy over the Internet.  That protocol is believed
+   to be compatible with CISCO's AnyConnect VPN protocol.  The protocol
+   allows the establishment of VPN tunnels in a way that is designed to
+   prevent eavesdropping, tampering, or message forgery.
 
 Status of This Memo
 
@@ -732,7 +732,19 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 3.  Security Considerations
 
-   None yet.
+   This document provides a description of a protocol to establish a VPN
+   over a TLS channel.  All security considerations of the referenced
+   documents in particular [RFC5246] and [RFC6347] are applicable, in
+   addition the following considerations.
+
+   The protocol provides a VPN channel which carries payload hidden from
+   eavesdroppers.  However, the payload's length remain visible and in
+   certain scenarios that may be sufficient to determine the transferred
+   payload.  Furthermore, there are scenarios where compressed payload
+   lengths may reveal more information than the uncompressed data
+   [comp-fingerprinting].  For that we RECOMMEND that implementations
+   don't enable compression by default, and only allow it after
+   notifying the users and administrators about the consequences.
 
 4.  Acknowledgements
 
@@ -764,6 +776,16 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    [RFC5056]  Williams, N., "On the Use of Channel Bindings to Secure
               Channels", RFC 5056, November 2007.
 
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
    [RFC4519]  Sciberras, A., "Lightweight Directory Access Protocol
               (LDAP): Schema for User Applications", RFC 4519, June
               2006.
@@ -779,35 +801,13 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
               L., and T. Narten, "Using 127-Bit IPv6 Prefixes on Inter-
               Router Links", RFC 6164, April 2011.
 
-
-
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   [comp-fingerprinting]
+              Bhargavan, K., Fournet, C., Kohlweiss, M., Pironti, A.,
+              and P-Y. Strub, "TLS Compression Fingerprinting and a
+              Privacy-aware API for TLS", 2012.
 
 
 

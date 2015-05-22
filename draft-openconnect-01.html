@@ -403,8 +403,8 @@
   <meta name="dct.creator" content="Mavrogiannopoulos, N." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-openconnect-01" />
   <meta name="dct.issued" scheme="ISO8601" content="2015-1" />
-  <meta name="dct.abstract" content="This document specifies version 1.0 of the OpenConnect VPN protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
-  <meta name="description" content="This document specifies version 1.0 of the OpenConnect VPN protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
+  <meta name="dct.abstract" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
+  <meta name="description" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
 
 </head>
 
@@ -440,7 +440,7 @@
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>This document specifies version 1.0 of the OpenConnect VPN protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  </p>
+<p>This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  </p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
@@ -845,7 +845,8 @@
 
 <p> </p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#security-analysis" id="security-analysis">Security Considerations</a></h1>
-<p id="rfc.section.3.p.1">None yet.  </p>
+<p id="rfc.section.3.p.1">This document provides a description of a protocol to establish a VPN over a TLS channel. All security considerations of the referenced documents in particular <a href="#RFC5246">[RFC5246]</a> and <a href="#RFC6347">[RFC6347]</a> are applicable, in addition the following considerations.  </p>
+<p id="rfc.section.3.p.2">The protocol provides a VPN channel which carries payload hidden from eavesdroppers. However, the payload's length remain visible and in certain scenarios that may be sufficient to determine the transferred payload. Furthermore, there are scenarios where compressed payload lengths may reveal more information than the uncompressed data <a href="#comp-fingerprinting">[comp-fingerprinting]</a>.  For that we RECOMMEND that implementations don't enable compression by default, and only allow it after notifying the users and administrators about the consequences.  </p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Acknowledgements</h1>
 <p id="rfc.section.4.p.1">None yet.  </p>
 <h1 id="rfc.references"><a href="#rfc.references">5.</a> Normative References</h1>
@@ -922,6 +923,12 @@
         <b id="RFC2119">[RFC2119]</b>
       </td>
       <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="comp-fingerprinting">[comp-fingerprinting]</b>
+      </td>
+      <td class="top"><a>Bhargavan, K.</a>, <a>Fournet, C.</a>, <a>Kohlweiss, M.</a>, <a>Pironti, A.</a> and <a>P-Y. Strub</a>, "<a>TLS Compression Fingerprinting and a Privacy-aware API for TLS</a>", 2012.</td>
     </tr>
   </tbody>
 </table>
