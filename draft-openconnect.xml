@@ -184,7 +184,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   </t>
   <t>
   It is important to note that during the password and HTTP SPNEGO authentication
-  methods, any headers allowed by the HTTP protocol can be present. In fact, a
+  methods, any headers allowed by the HTTP protocol can be present. In fact, 
   there are legacy clients which assume that the server will keep a state using
   cookies, and send their username and password in different TLS and HTTP
   connections. This practice prevents the server from binding the TLS
