@@ -361,17 +361,31 @@ authentication fails.
   <section anchor="params-exchange" title="Exchange of Session Parameters">
   <t>
   By the receipt of a success XML structure, the client SHOULD issue an HTTP
-  CONNECT request. In addition it should provide the "X-CSTP-Address-Type"
-  and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the
-  following values.
+  CONNECT request. In addition it may provide the following headers.
+  
        <list style="hanging">
-       <t>IPv4: when the client only supports IPv4 addresses.</t>
-       <t>IPv6: when the client only supports IPv6 addresses.</t>
-       <t>IPv4,IPv6: when the client supports both types of IP addresses.</t>
+       <t>X-CSTP-Address-Type: A comma separated list of the requested address types.
+	       <list style="hanging">
+	       <t>IPv4: when the client only supports IPv4 addresses.</t>
+	       <t>IPv6: when the client only supports IPv6 addresses.</t>
+	       <t>IPv4,IPv6: when the client supports both types of IP addresses.</t>
+	       </list>
+	       </t>
+       <t>X-CSTP-Base-MTU: The MTU of the link as estimated by the
+	       client.
+       </t>
+       <t>X-CSTP-Accept-Encoding: A comma separated list of accepted
+       compression algorithms for the CSTP channel.
+       </t>
+       <t>User-Agent: A string identifying the client software.</t>
        </list>
-  The X-CSTP-Base-MTU contains the MTU of the link between the client and the
-  server as estimated by the client. An example CONNECT request is shown
-  below.
+       </t>
+  <t>
+  For the options related to compression see <xref target="compression"/> for more information.  </t>
+  <t>
+  An example CONNECT request is shown below.
+  </t>
+  <t>
   <figure><artwork><![CDATA[
     User-Agent: Open AnyConnect VPN Agent v5.01
     X-CSTP-Base-MTU: 1280
@@ -406,8 +420,13 @@ authentication fails.
        server.</t>
        <t>X-CSTP-DynDNS: Set to "true" if the server is operating with a
        dynamic DNS address.</t>
+       <t>X-CSTP-Content-Encoding: if present is it set to one of the values
+       presented by the client in 'X-CSTP-Accept-Encoding' header. It will
+       be the compression algorithm used in the CSTP channel.</t>
+       <t>X-DTLS-Content-Encoding: if present is it set to one of the values
+       presented by the client in 'X-DTLS-Accept-Encoding' header. It will
+       be the compression algorithm used in the DTLS channel.</t>
        </list>
-  [XXX: compression]
   </t>
   <t>
 The client is expected to treat the received parameters as his networking
@@ -431,6 +450,9 @@ expected to assign its default route through the VPN.
   (see <xref target="params-exchange"/>. This is done by appending the following headers
   to the request.
        <list style="hanging">
+        <t>X-DTLS-Accept-Encoding: A comma separated list of accepted
+        compression algorithms for the DTLS channel.
+        </t>
 	<t>X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
 	for the DTLS session.</t>
 	<t>X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
@@ -498,13 +520,13 @@ that follow, and their contents are explained in <xref target="cstp_table"/>.
 <c>2</c><c>fixed to 0x46 (F)</c>
 <c>3</c><c>fixed to 0x01</c>
 <c>4-5</c><c>The length of the packet that follows this header in big endian order</c>
-<c>6</c><c>The type of the data that follows (see <xref target="packet_table"/> for available types)</c>
+<c>6</c><c>The type of the payload that follows (see <xref target="packet_table"/> for available types)</c>
 <c>7</c><c>fixed to 0x00</c>
 		<postamble></postamble>
 	</texttable>
 
 <t>
-The available data types are listed in <xref target="packet_table"/>.
+The available payload types are listed in <xref target="packet_table"/>.
 </t>
 	<texttable anchor='packet_table'>
 		<preamble></preamble>
@@ -656,6 +678,32 @@ None yet.
 ]]></artwork>
 </figure></t>
 </section>
+<section anchor="compression" title="Compression">
+<t>
+The available compression algorithms for the CSTP and DTLS channels are
+shown in <xref target="compression_table"/>. Note, that all algorithms are
+intentionally stateless to prevent the influence of independent packets 
+(e.g., from different sources) on each others compression. That does not
+eliminate all known attacks on compression before encryption, and for
+that reason an implentation MUST NOT enable compression by default.
+</t>
+<t>
+After compression is negotiated each side may choose to compress the
+payload and use the 'COMPRESSED DATA' header from <xref
+target="packet_table"/>, or may send uncompressed data with the 'DATA'
+payload. Each side MUST be able to process both payloads.
+</t>
+	<texttable anchor='compression_table'>
+		<preamble></preamble>
+		<ttcol width="30%" align='center'>Algorithm</ttcol>
+		<ttcol width="50%" align='center'>Description</ttcol>
+<c>   oc-lz4</c><c>The stateless LZ4 compression algorithm.</c>
+<c>   lzs</c><c>The stateless LZS (stacker) compression algorithm.</c>
+		<postamble></postamble>
+	</texttable>
+
+</section>
+
 <section anchor="dtd-decl" title="DTD declarations">
 
 <section anchor="dtd-decl1" title="config-auth.dtd">

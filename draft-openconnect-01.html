@@ -392,8 +392,9 @@
 <link href="#rfc.section.4" rel="Chapter" title="4 Acknowledgements"/>
 <link href="#rfc.references" rel="Chapter" title="5 Normative References"/>
 <link href="#rfc.appendix.A" rel="Chapter" title="A Name for Application-Layer Protocol Negotiation"/>
-<link href="#rfc.appendix.B" rel="Chapter" title="B DTD declarations"/>
-<link href="#rfc.appendix.B.1" rel="Chapter" title="B.1 config-auth.dtd"/>
+<link href="#rfc.appendix.B" rel="Chapter" title="B Compression"/>
+<link href="#rfc.appendix.C" rel="Chapter" title="C DTD declarations"/>
+<link href="#rfc.appendix.C.1" rel="Chapter" title="C.1 config-auth.dtd"/>
 
 
   <meta name="generator" content="xml2rfc version 2.4.8 - http://tools.ietf.org/tools/xml2rfc" />
@@ -476,8 +477,9 @@
 <li>4.   <a href="#rfc.section.4">Acknowledgements</a></li>
 <li>5.   <a href="#rfc.references">Normative References</a></li>
 <li>Appendix A.   <a href="#rfc.appendix.A">Name for Application-Layer Protocol Negotiation</a></li>
-<li>Appendix B.   <a href="#rfc.appendix.B">DTD declarations</a></li>
-<li>B.1.   <a href="#rfc.appendix.B.1">config-auth.dtd</a></li>
+<li>Appendix B.   <a href="#rfc.appendix.B">Compression</a></li>
+<li>Appendix C.   <a href="#rfc.appendix.C">DTD declarations</a></li>
+<li>C.1.   <a href="#rfc.appendix.C.1">config-auth.dtd</a></li>
 
 
   </ul>
@@ -528,7 +530,7 @@
     &lt;/config-auth&gt;
   </pre>
 <p id="rfc.section.2.1.2.1.p.3">After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
-<p id="rfc.section.2.1.2.1.p.4">Note that precise DTD declarations for the contents of XML messages defined in this document are listed in <a href="#dtd-decl">Appendix B</a>.  </p>
+<p id="rfc.section.2.1.2.1.p.4">Note that precise DTD declarations for the contents of XML messages defined in this document are listed in <a href="#dtd-decl">Appendix C</a>.  </p>
 <p id="rfc.section.2.1.2.1.p.5">If the HTTP response code is 200, and contains the following indication of a complete authentication, the client should proceed to the establishment of the primary channel as in <a href="#primary-channel">Section 2.1.4</a>.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -602,25 +604,30 @@
 <p id="rfc.section.2.1.2.3.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. In that case, a client which received the previous header should retry authenticating to the server without sending the "X-Support-HTTP-Auth: true" header.  </p>
 <p id="rfc.section.2.1.2.3.p.6">Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the authentication complete structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
 <h1 id="rfc.section.2.1.3"><a href="#rfc.section.2.1.3">2.1.3.</a> <a href="#params-exchange" id="params-exchange">Exchange of Session Parameters</a></h1>
+<p id="rfc.section.2.1.3.p.1">By the receipt of a success XML structure, the client SHOULD issue an HTTP CONNECT request. In addition it may provide the following headers.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Address-Type: A comma separated list of the requested address types.  <dl><dt></dt><dd style="margin-left: 8">IPv4: when the client only supports IPv4 addresses.</dd><dt></dt><dd style="margin-left: 8">IPv6: when the client only supports IPv6 addresses.</dd><dt></dt><dd style="margin-left: 8">IPv4,IPv6: when the client supports both types of IP addresses.</dd></dl><p> </p></dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Base-MTU: The MTU of the link as estimated by the client.  </dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Accept-Encoding: A comma separated list of accepted compression algorithms for the CSTP channel.  </dd>
+  <dt></dt>
+  <dd style="margin-left: 8">User-Agent: A string identifying the client software.</dd>
+</dl>
+
+<p> </p>
+<p id="rfc.section.2.1.3.p.2">For the options related to compression see <a href="#compression">Appendix B</a> for more information.  </p>
+<p id="rfc.section.2.1.3.p.3">An example CONNECT request is shown below.  </p>
 <pre>
     User-Agent: Open AnyConnect VPN Agent v5.01
     X-CSTP-Base-MTU: 1280
     X-CSTP-Address-Type: IPv4,IPv6
     CONNECT /CSCOSSLC/tunnel HTTP/1.1
   </pre>
-<p id="rfc.section.2.1.3.p.1">By the receipt of a success XML structure, the client SHOULD issue an HTTP CONNECT request. In addition it should provide the "X-CSTP-Address-Type" and "X-CSTP-Base-MTU" headers. The X-CSTP-Address-Type contains one of the following values.  </p>
-
-<dl>
-  <dt></dt>
-  <dd style="margin-left: 8">IPv4: when the client only supports IPv4 addresses.</dd>
-  <dt></dt>
-  <dd style="margin-left: 8">IPv6: when the client only supports IPv6 addresses.</dd>
-  <dt></dt>
-  <dd style="margin-left: 8">IPv4,IPv6: when the client supports both types of IP addresses.</dd>
-</dl>
-
-<p> The X-CSTP-Base-MTU contains the MTU of the link between the client and the server as estimated by the client. An example CONNECT request is shown below.  </p>
-<p id="rfc.section.2.1.3.p.2">After a successful receipt of an HTTP CONNECT request, the server should reply and provide the client with configuration parameters. The available options follow.  </p>
+<p/>
+<p id="rfc.section.2.1.3.p.5">After a successful receipt of an HTTP CONNECT request, the server should reply and provide the client with configuration parameters. The available options follow.  </p>
 
 <dl>
   <dt></dt>
@@ -641,16 +648,22 @@
   <dd style="margin-left: 8">X-CSTP-Base-MTU: The MTU of the link as estimated by this server.</dd>
   <dt></dt>
   <dd style="margin-left: 8">X-CSTP-DynDNS: Set to "true" if the server is operating with a dynamic DNS address.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-CSTP-Content-Encoding: if present is it set to one of the values presented by the client in 'X-CSTP-Accept-Encoding' header. It will be the compression algorithm used in the CSTP channel.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Content-Encoding: if present is it set to one of the values presented by the client in 'X-DTLS-Accept-Encoding' header. It will be the compression algorithm used in the DTLS channel.</dd>
 </dl>
 
-<p> [XXX: compression] </p>
-<p id="rfc.section.2.1.3.p.3">The client is expected to treat the received parameters as his networking settings. If no "X-CSTP-Split-Include" headers are present, the client is expected to assign its default route through the VPN.  </p>
+<p> </p>
+<p id="rfc.section.2.1.3.p.6">The client is expected to treat the received parameters as his networking settings. If no "X-CSTP-Split-Include" headers are present, the client is expected to assign its default route through the VPN.  </p>
 <h1 id="rfc.section.2.1.4"><a href="#rfc.section.2.1.4">2.1.4.</a> <a href="#primary-channel" id="primary-channel">Establishment of Primary TCP Channel (CSTP)</a></h1>
 <p id="rfc.section.2.1.4.p.1">The previous HTTP message is the last HTTP message sent by the server.  After that message, the established TCP channel is used to transport IP packets between the client and the server. The transferred packets encoding is discussed in <a href="#primary-channel-protocol">Section 2.2</a>. This channel will be referred as CSTP in the rest of this document.  </p>
 <h1 id="rfc.section.2.1.5"><a href="#rfc.section.2.1.5">2.1.5.</a> <a href="#secondary-channel-establishment" id="secondary-channel-establishment">Establishment of Secondary UDP Channel (DTLS)</a></h1>
 <p id="rfc.section.2.1.5.p.1">To establish the secondary UDP-based channel, which will be referred to as the DTLS channel, the client must advertise support for it during the issue of the HTTP CONNECT request (see <a href="#params-exchange">Section 2.1.3</a>. This is done by appending the following headers to the request.  </p>
 
 <dl>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Accept-Encoding: A comma separated list of accepted compression algorithms for the DTLS channel.  </dd>
   <dt></dt>
   <dd style="margin-left: 8">X-DTLS-Master-Secret: A hex encoded pre-master secret to be used for the DTLS session.</dd>
   <dt></dt>
@@ -750,7 +763,7 @@
     </tr>
     <tr>
       <td class="center">6</td>
-      <td class="left">The type of the data that follows (see <a href="#packet_table">Table 3</a> for available types)</td>
+      <td class="left">The type of the payload that follows (see <a href="#packet_table">Table 3</a> for available types)</td>
     </tr>
     <tr>
       <td class="center">7</td>
@@ -759,7 +772,7 @@
   </tbody>
 </table>
 <p/>
-<p id="rfc.section.2.2.p.2">The available data types are listed in <a href="#packet_table">Table 3</a>.  </p>
+<p id="rfc.section.2.2.p.2">The available payload types are listed in <a href="#packet_table">Table 3</a>.  </p>
 <div id="rfc.table.3"/>
 <div id="packet_table"/>
 <p/>
@@ -920,8 +933,33 @@
            0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
 </pre>
 <p/>
-<h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#dtd-decl" id="dtd-decl">DTD declarations</a></h1>
-<h1 id="rfc.appendix.B.1"><a href="#rfc.appendix.B.1">B.1.</a> <a href="#dtd-decl1" id="dtd-decl1">config-auth.dtd</a></h1>
+<h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#compression" id="compression">Compression</a></h1>
+<p id="rfc.section.B.p.1">The available compression algorithms for the CSTP and DTLS channels are shown in <a href="#compression_table">Table 4</a>. Note, that all algorithms are intentionally stateless to prevent the influence of independent packets (e.g., from different sources) on each others compression. That does not eliminate all known attacks on compression before encryption, and for that reason an implentation MUST NOT enable compression by default.  </p>
+<p id="rfc.section.B.p.2">After compression is negotiated each side may choose to compress the payload and use the 'COMPRESSED DATA' header from <a href="#packet_table">Table 3</a>, or may send uncompressed data with the 'DATA' payload. Each side MUST be able to process both payloads.  </p>
+<div id="rfc.table.4"/>
+<div id="compression_table"/>
+<p/>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+  <thead>
+    <tr>
+      <th class="center">Algorithm</th>
+      <th class="center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center">oc-lz4</td>
+      <td class="center">The stateless LZ4 compression algorithm.</td>
+    </tr>
+    <tr>
+      <td class="center">lzs</td>
+      <td class="center">The stateless LZS (stacker) compression algorithm.</td>
+    </tr>
+  </tbody>
+</table>
+<p/>
+<h1 id="rfc.appendix.C"><a href="#rfc.appendix.C">Appendix C.</a> <a href="#dtd-decl" id="dtd-decl">DTD declarations</a></h1>
+<h1 id="rfc.appendix.C.1"><a href="#rfc.appendix.C.1">C.1.</a> <a href="#dtd-decl1" id="dtd-decl1">config-auth.dtd</a></h1>
 <pre>
 &lt;!ELEMENT config-auth (version*,auth*)&gt;
   &lt;!ATTLIST config-auth client CDATA #FIXED "vpn"&gt;
