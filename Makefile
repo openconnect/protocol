@@ -1,9 +1,12 @@
 ver = 01
 draft = draft-openconnect
 
-all: $(draft)-$(ver).txt $(draft)-$(ver).html
+all: $(draft)-$(ver).txt $(draft)-$(ver).html example-session1.atxt
 
 pdf: $(draft)-$(ver).pdf
+
+example-session1.atxt: example-session1.uml
+	plantuml -txt $^
 
 .PHONY: clean
 

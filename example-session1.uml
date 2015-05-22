@@ -1,0 +1,39 @@
+@startuml
+actor Client
+participant Server
+participant ServerDTLS
+
+Client -> Server : TLS handshake Client Hello
+Server -> Client : TLS handshake Finished
+
+Client -> Server : HTTP POST config-auth init
+note right
+  This is an HTTP over
+  TLS session.
+end note
+Server -> Client : config-auth auth-request
+Client -> Server : HTTP POST config-auth auth-reply
+Server -> Client : config-auth complete
+Client -> Server : HTTP CONNECT
+
+== CSTP VPN session is established ==
+
+Client -> Server : TLS record packet with CSTP payload
+note right
+  These packets show
+  that IP traffic can start
+  prior to the DTLS channel
+  establishment.
+end note
+Server -> Client : TLS record packet with CSTP payload
+
+Client --> ServerDTLS : DTLS handshake Client Hello
+ServerDTLS --> Client : DTLS handshake Finished
+
+== DTLS VPN channel is established ==
+
+Client --> ServerDTLS : DTLS record packet with payload
+ServerDTLS --> Client : DTLS record packet with payload
+
+@enduml
+

@@ -70,20 +70,20 @@ Table of Contents
      2.1.  VPN Session Establishment . . . . . . . . . . . . . . . .   3
        2.1.1.  Server Authentication . . . . . . . . . . . . . . . .   3
        2.1.2.  Client Authentication . . . . . . . . . . . . . . . .   4
-       2.1.3.  Exchange of Session Parameters  . . . . . . . . . . .   7
-       2.1.4.  Establishment of Primary TCP Channel (CSTP) . . . . .   9
-       2.1.5.  Establishment of Secondary UDP Channel (DTLS) . . . .   9
-     2.2.  The CSTP Channel Protocol . . . . . . . . . . . . . . . .  10
-     2.3.  The DTLS Channel Protocol . . . . . . . . . . . . . . . .  12
-     2.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .  12
-     2.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  13
-   3.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
-   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
-   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
-   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  17
-   Appendix B.  Compression  . . . . . . . . . . . . . . . . . . . .  17
-   Appendix C.  DTD declarations . . . . . . . . . . . . . . . . . .  17
-     C.1.  config-auth.dtd . . . . . . . . . . . . . . . . . . . . .  17
+       2.1.3.  Exchange of Session Parameters  . . . . . . . . . . .   8
+       2.1.4.  Establishment of Primary TCP Channel (CSTP) . . . . .  10
+       2.1.5.  Establishment of Secondary UDP Channel (DTLS) . . . .  10
+     2.2.  The CSTP Channel Protocol . . . . . . . . . . . . . . . .  12
+     2.3.  The DTLS Channel Protocol . . . . . . . . . . . . . . . .  14
+     2.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .  14
+     2.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  15
+   3.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
+   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  16
+   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  16
+   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  19
+   Appendix B.  Compression  . . . . . . . . . . . . . . . . . . . .  19
+   Appendix C.  DTD declarations . . . . . . . . . . . . . . . . . .  19
+     C.1.  config-auth.dtd . . . . . . . . . . . . . . . . . . . . .  19
 
 1.  Introduction
 
@@ -193,9 +193,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    It is important to note that during the password and HTTP SPNEGO
    authentication methods, any headers allowed by the HTTP protocol can
-   be present.  In fact, a there are legacy clients which assume that
-   the server will keep a state using cookies, and send their username
-   and password in different TLS and HTTP connections.  This practice
+   be present.  In fact, there are legacy clients which assume that the
+   server will keep a state using cookies, and send their username and
+   password in different TLS and HTTP connections.  This practice
    prevents the server from binding the TLS channel with the VPN session
    [RFC5056], and is discouraged.  It is RECOMMENDED for clients to
    complete authentication in the same TLS session, and rely on TLS
@@ -286,7 +286,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    as above, or may be asked combined as below.
 
       <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE auth SYSTEM "auth.dtd">
+      <!DOCTYPE auth SYSTEM "config-auth.dtd">
       <config-auth client="vpn" type="auth-request">
         <auth id="main">
           <message>Please enter your username</message>
@@ -322,6 +322,91 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    authentication the server should reply with a 200 HTTP code and use
    the authentication complete structure as in Section 2.1.2.1.
 
+   An example session is shown in figure Figure 1.
+
+        ,-.
+        `-'
+        /|\
+         |                                ,------.          ,----------.
+        / \                               |Server|          |ServerDTLS|
+      Client                              `--+---'          `----+-----'
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
+        |     TLS handshake Client Hello     |                   |
+        | ----------------------------------->                   |
+        |                                    |                   |
+        |       TLS handshake Finished       |                   |
+        | <-----------------------------------                   |
+        |                                    |                   |
+        |     HTTP POST config-auth init     |  ,--------------------!.
+        | ----------------------------------->  |This is an HTTP over|_\
+        |                                    |  |TLS session.          |
+        |                                    |  `----------------------'
+        |      config-auth auth-request      |                   |
+        | <-----------------------------------                   |
+        |                                    |                   |
+        |  HTTP POST config-auth auth-reply  |                   |
+        | ----------------------------------->                   |
+        |                                    |                   |
+        |        config-auth complete        |                   |
+        | <-----------------------------------                   |
+        |                                    |                   |
+        |            HTTP CONNECT            |                   |
+        | ----------------------------------->                   |
+        |                                    |                   |
+        |                                    |                   |
+        |            ===================================         |
+====================== CSTP VPN session is established =======================
+        |            ===================================         |
+        |                                    |                   |
+        |                                    |  ,-------------------------!.
+        | TLS record packet with CSTP payload|  |These packets show       |_\
+        | ----------------------------------->  |that IP traffic can start  |
+        |                                    |  |prior to the DTLS channel  |
+        |                                    |  |establishment.             |
+        |                                    |  `---------------------------'
+        | TLS record packet with CSTP payload|                   |
+        | <-----------------------------------                   |
+        |                                    |                   |
+        |               DTLS handshake Client Hello              |
+        |  - - - - - - - - - - - - - - - - - - - - - - - - - - - >
+        |                                    |                   |
+        |                 DTLS handshake Finished                |
+        | <- - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        |                                    |                   |
+        |                                    |                   |
+        |            ===================================         |
+====================== DTLS VPN channel is established =======================
+        |            ===================================         |
+        |                                    |                   |
+        |             DTLS record packet with payload            |
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
+        |  - - - - - - - - - - - - - - - - - - - - - - - - - - - >
+        |                                    |                   |
+        |             DTLS record packet with payload            |
+        | <- - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      Client                              ,--+---.          ,----+-----.
+        ,-.                               |Server|          |ServerDTLS|
+        `-'                               `------'          `----------'
+        /|\
+         |
+        / \
+
+                                 Figure 1
+
 2.1.2.3.  HTTP Authentication using SPNEGO
 
    That type of authentication is performed using the HTTP SPNEGO
@@ -330,13 +415,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    advertise the availability of the HTTP SPNEGO protocol by the client.
    A client which supports the HTTP SPNEGO protocol, SHOULD indicate it
    using the following header on in its initial request to the server.
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
 
        X-Support-HTTP-Auth: true
 
@@ -363,6 +441,15 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    HTTP CONNECT request.  In addition it may provide the following
    headers.
 
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
       X-CSTP-Address-Type: A comma separated list of the requested
       address types.
 
@@ -383,16 +470,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    information.
 
    An example CONNECT request is shown below.
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
 
        User-Agent: Open AnyConnect VPN Agent v5.01
        X-CSTP-Base-MTU: 1280
@@ -421,6 +498,14 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       X-CSTP-Default-Domain: The DNS domains the provided DNS servers
       respond for.
 
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
       X-CSTP-Split-Include: The network address of a route which is
       provided by this server.
 
@@ -442,14 +527,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The client is expected to treat the received parameters as his
    networking settings.  If no "X-CSTP-Split-Include" headers are
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
    present, the client is expected to assign its default route through
    the VPN.
 
@@ -477,6 +554,14 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
       string AES256-SHA:AES128-SHA:DES-CBC3-SHA).
 
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
    The DTLS established DTLS channel utilizes session resumption as a
    method for preshared-key authentication.  That is the value presented
    in X-DTLS-Master-Secret is set as a master secret to be resumed.  The
@@ -498,14 +583,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
       should be one of the options present in the client's X-DTLS-
       CipherSuite header.
 
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
       X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
       session should rekey, see Section 2.4.
 
@@ -514,6 +591,32 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The following table lists the ciphers negotiated via the X-DTLS-
    CipherSuite header, and the corresponding DTLS ciphersuite.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
 
    +--------------------+---------------------------------+------------+
    | OpenConnect cipher |         DTLS ciphersuite        |    DTLS    |
@@ -557,7 +660,16 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 12]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -613,7 +725,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 13]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -669,7 +781,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 12]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -725,7 +837,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 13]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -781,7 +893,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 16]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -837,7 +949,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 17]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -893,7 +1005,7 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 16]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 18]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -949,7 +1061,7 @@ C.1.  config-auth.dtd
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 17]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 19]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -1005,4 +1117,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 18]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 20]

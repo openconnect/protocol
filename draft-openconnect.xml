@@ -316,6 +316,76 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   the server should reply with a 200 HTTP code and use the authentication complete structure as
   in <xref target="authentication_cert"/>.
   </t>
+  <t>
+  An example session is shown in figure <xref target="example1"/>.</t>
+  <t>
+  <figure anchor='example1'><artwork><![CDATA[
+        ,-.                                                                   
+        `-'                                                                   
+        /|\                                                                   
+         |                                ,------.          ,----------.      
+        / \                               |Server|          |ServerDTLS|      
+      Client                              `--+---'          `----+-----'      
+        |     TLS handshake Client Hello     |                   |            
+        | ----------------------------------->                   |            
+        |                                    |                   |            
+        |       TLS handshake Finished       |                   |            
+        | <-----------------------------------                   |            
+        |                                    |                   |            
+        |     HTTP POST config-auth init     |  ,--------------------!.       
+        | ----------------------------------->  |This is an HTTP over|_\      
+        |                                    |  |TLS session.          |      
+        |                                    |  `----------------------'      
+        |      config-auth auth-request      |                   |            
+        | <-----------------------------------                   |            
+        |                                    |                   |            
+        |  HTTP POST config-auth auth-reply  |                   |            
+        | ----------------------------------->                   |            
+        |                                    |                   |            
+        |        config-auth complete        |                   |            
+        | <-----------------------------------                   |            
+        |                                    |                   |            
+        |            HTTP CONNECT            |                   |            
+        | ----------------------------------->                   |            
+        |                                    |                   |            
+        |                                    |                   |            
+        |            ===================================         |            
+====================== CSTP VPN session is established =======================
+        |            ===================================         |            
+        |                                    |                   |            
+        |                                    |  ,-------------------------!.  
+        | TLS record packet with CSTP payload|  |These packets show       |_\ 
+        | ----------------------------------->  |that IP traffic can start  | 
+        |                                    |  |prior to the DTLS channel  | 
+        |                                    |  |establishment.             | 
+        |                                    |  `---------------------------' 
+        | TLS record packet with CSTP payload|                   |            
+        | <-----------------------------------                   |            
+        |                                    |                   |            
+        |               DTLS handshake Client Hello              |            
+        |  - - - - - - - - - - - - - - - - - - - - - - - - - - - >            
+        |                                    |                   |            
+        |                 DTLS handshake Finished                |            
+        | <- - - - - - - - - - - - - - - - - - - - - - - - - - - -            
+        |                                    |                   |            
+        |                                    |                   |            
+        |            ===================================         |            
+====================== DTLS VPN channel is established =======================
+        |            ===================================         |            
+        |                                    |                   |            
+        |             DTLS record packet with payload            |            
+        |  - - - - - - - - - - - - - - - - - - - - - - - - - - - >            
+        |                                    |                   |            
+        |             DTLS record packet with payload            |            
+        | <- - - - - - - - - - - - - - - - - - - - - - - - - - - -            
+      Client                              ,--+---.          ,----+-----.      
+        ,-.                               |Server|          |ServerDTLS|      
+        `-'                               `------'          `----------'      
+        /|\                                                                   
+         |                                                                    
+        / \                                                                   
+  ]]></artwork></figure>
+  </t>
   </section>
   
   <section anchor="authentication_gssapi" title="HTTP Authentication using SPNEGO">

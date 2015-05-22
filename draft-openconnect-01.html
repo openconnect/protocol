@@ -518,7 +518,7 @@
 </ol>
 
 <p> The server is authenticated to the client using a PKIX certificate presented during the TLS negotiation.  </p>
-<p id="rfc.section.2.1.2.p.2">It is important to note that during the password and HTTP SPNEGO authentication methods, any headers allowed by the HTTP protocol can be present. In fact, a there are legacy clients which assume that the server will keep a state using cookies, and send their username and password in different TLS and HTTP connections. This practice prevents the server from binding the TLS channel with the VPN session <a href="#RFC5056">[RFC5056]</a>, and is discouraged.  It is RECOMMENDED for clients to complete authentication in the same TLS session, and rely on TLS session resumption if reconnections to the server are needed.  </p>
+<p id="rfc.section.2.1.2.p.2">It is important to note that during the password and HTTP SPNEGO authentication methods, any headers allowed by the HTTP protocol can be present. In fact, there are legacy clients which assume that the server will keep a state using cookies, and send their username and password in different TLS and HTTP connections. This practice prevents the server from binding the TLS channel with the VPN session <a href="#RFC5056">[RFC5056]</a>, and is discouraged.  It is RECOMMENDED for clients to complete authentication in the same TLS session, and rely on TLS session resumption if reconnections to the server are needed.  </p>
 <h1 id="rfc.section.2.1.2.1"><a href="#rfc.section.2.1.2.1">2.1.2.1.</a> <a href="#authentication_cert" id="authentication_cert">Authentication using certificates</a></h1>
 <p id="rfc.section.2.1.2.1.p.1">During the initial TLS protocol handshake the server may require a client certificate to be presented, depending on its configuration.  </p>
 <p id="rfc.section.2.1.2.1.p.2">Because the client certificate is sent in the clear during the handshake it SHOULD NOT contain other identifying information other than a username, or a pseudonymus identifier. It is RECOMMENDED to place the user identifier in the DN field of the certificate, using the UID object identifier (0.9.2342.19200300.100.1.1) <a href="#RFC4519">[RFC4519]</a>.  </p>
@@ -566,7 +566,7 @@
   </pre>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-    &lt;!DOCTYPE auth SYSTEM "auth.dtd"&gt;
+    &lt;!DOCTYPE auth SYSTEM "config-auth.dtd"&gt;
     &lt;config-auth client="vpn" type="auth-request"&gt;
       &lt;auth id="main"&gt;
         &lt;message&gt;Please enter your username&lt;/message&gt;
@@ -590,6 +590,77 @@
 <p id="rfc.section.2.1.2.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply could then be the following.  </p>
 <p id="rfc.section.2.1.2.2.p.4">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
 <p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the authentication complete structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
+<p id="rfc.section.2.1.2.2.p.6">An example session is shown in figure <a href="#example1">Figure 1</a>.</p>
+<div id="rfc.figure.1"/>
+<div id="example1"/>
+<pre>
+        ,-.                                                                   
+        `-'                                                                   
+        /|\                                                                   
+         |                                ,------.          ,----------.      
+        / \                               |Server|          |ServerDTLS|      
+      Client                              `--+---'          `----+-----'      
+        |     TLS handshake Client Hello     |                   |            
+        | -----------------------------------&gt;                   |            
+        |                                    |                   |            
+        |       TLS handshake Finished       |                   |            
+        | &lt;-----------------------------------                   |            
+        |                                    |                   |            
+        |     HTTP POST config-auth init     |  ,--------------------!.       
+        | -----------------------------------&gt;  |This is an HTTP over|_\      
+        |                                    |  |TLS session.          |      
+        |                                    |  `----------------------'      
+        |      config-auth auth-request      |                   |            
+        | &lt;-----------------------------------                   |            
+        |                                    |                   |            
+        |  HTTP POST config-auth auth-reply  |                   |            
+        | -----------------------------------&gt;                   |            
+        |                                    |                   |            
+        |        config-auth complete        |                   |            
+        | &lt;-----------------------------------                   |            
+        |                                    |                   |            
+        |            HTTP CONNECT            |                   |            
+        | -----------------------------------&gt;                   |            
+        |                                    |                   |            
+        |                                    |                   |            
+        |            ===================================         |            
+====================== CSTP VPN session is established =======================
+        |            ===================================         |            
+        |                                    |                   |            
+        |                                    |  ,-------------------------!.  
+        | TLS record packet with CSTP payload|  |These packets show       |_\ 
+        | -----------------------------------&gt;  |that IP traffic can start  | 
+        |                                    |  |prior to the DTLS channel  | 
+        |                                    |  |establishment.             | 
+        |                                    |  `---------------------------' 
+        | TLS record packet with CSTP payload|                   |            
+        | &lt;-----------------------------------                   |            
+        |                                    |                   |            
+        |               DTLS handshake Client Hello              |            
+        |  - - - - - - - - - - - - - - - - - - - - - - - - - - - &gt;            
+        |                                    |                   |            
+        |                 DTLS handshake Finished                |            
+        | &lt;- - - - - - - - - - - - - - - - - - - - - - - - - - - -            
+        |                                    |                   |            
+        |                                    |                   |            
+        |            ===================================         |            
+====================== DTLS VPN channel is established =======================
+        |            ===================================         |            
+        |                                    |                   |            
+        |             DTLS record packet with payload            |            
+        |  - - - - - - - - - - - - - - - - - - - - - - - - - - - &gt;            
+        |                                    |                   |            
+        |             DTLS record packet with payload            |            
+        | &lt;- - - - - - - - - - - - - - - - - - - - - - - - - - - -            
+      Client                              ,--+---.          ,----+-----.      
+        ,-.                               |Server|          |ServerDTLS|      
+        `-'                               `------'          `----------'      
+        /|\                                                                   
+         |                                                                    
+        / \                                                                   
+  </pre>
+<p class="figure">Figure 1</p>
+<p/>
 <h1 id="rfc.section.2.1.2.3"><a href="#rfc.section.2.1.2.3">2.1.2.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">HTTP Authentication using SPNEGO</a></h1>
 <p id="rfc.section.2.1.2.3.p.1">That type of authentication is performed using the HTTP SPNEGO protocol <a href="#RFC4559">[RFC4559]</a>, a method which is available using the Generic Security Service API <a href="#RFC2743">[RFC2743]</a>. The following approach is used to advertise the availability of the HTTP SPNEGO protocol by the client.  A client which supports the HTTP SPNEGO protocol, SHOULD indicate it using the following header on in its initial request to the server.  </p>
 <pre>
