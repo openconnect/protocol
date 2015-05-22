@@ -275,7 +275,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   above, or may be asked combined as below.
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE auth SYSTEM "auth.dtd">
+    <!DOCTYPE auth SYSTEM "config-auth.dtd">
     <config-auth client="vpn" type="auth-request">
       <auth id="main">
         <message>Please enter your username</message>
