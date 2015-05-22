@@ -80,10 +80,10 @@ Table of Contents
    3.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
    4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
    5.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
-   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  16
-   Appendix B.  Compression  . . . . . . . . . . . . . . . . . . . .  16
-   Appendix C.  DTD declarations . . . . . . . . . . . . . . . . . .  16
-     C.1.  config-auth.dtd . . . . . . . . . . . . . . . . . . . . .  16
+   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  17
+   Appendix B.  Compression  . . . . . . . . . . . . . . . . . . . .  17
+   Appendix C.  DTD declarations . . . . . . . . . . . . . . . . . .  17
+     C.1.  config-auth.dtd . . . . . . . . . . . . . . . . . . . . .  17
 
 1.  Introduction
 
@@ -762,6 +762,13 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    implementation will be distinct from an average HTTP session due to
    the DTLS session establishment, and the transferred packet sizes.
 
+   For certificate authentication OpenConnect relies on the TLS
+   protocol.  However, as mentioned in the text, TLS version 1.2 and
+   earlier do not protect the client's (or the server's) certificate
+   from eavesdroppers.  For that it is RECOMMENDED that certificates to
+   be used with this protocol contain the minimum possible identifying
+   information.
+
 4.  Acknowledgements
 
    None yet.
@@ -771,13 +778,6 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
               (TLS) Protocol Version 1.2", RFC 5246, August 2008.
 
-   [RFC5746]  Rescorla, E., Ray, M., Dispensa, S., and N. Oskov,
-              "Transport Layer Security (TLS) Renegotiation Indication
-              Extension", RFC 5746, February 2010.
-
-   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
-              Security Version 1.2", RFC 6347, January 2012.
-
 
 
 
@@ -785,6 +785,13 @@ Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
+
+   [RFC5746]  Rescorla, E., Ray, M., Dispensa, S., and N. Oskov,
+              "Transport Layer Security (TLS) Renegotiation Indication
+              Extension", RFC 5746, February 2010.
+
+   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
+              Security Version 1.2", RFC 6347, January 2012.
 
    [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
               Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
@@ -828,6 +835,13 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
               plaintex", International Workshop on Fast Software
               Encryption , 2002.
 
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
+
+Internet-Draft         The OpenConnect Version 1.0          January 2015
+
+
    [OPENCONNECT]
               Woodhouse, D. and N. Mavrogiannopoulos,
               "http://www.infradead.org/openconnect/", 2015.
@@ -837,7 +851,49 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 16]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -893,7 +949,7 @@ C.1.  config-auth.dtd
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 16]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 17]
 
 Internet-Draft         The OpenConnect Version 1.0          January 2015
 
@@ -949,4 +1005,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 17]
+Mavrogiannopoulos         Expires July 5, 2015                 [Page 18]

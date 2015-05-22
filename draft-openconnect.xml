@@ -659,7 +659,14 @@ in addition the following considerations.
        implementation will be distinct from an average HTTP session due to the
        DTLS session establishment, and the transferred packet sizes.
        </t>
-
+       <t>
+       For certificate authentication OpenConnect relies on the
+       TLS protocol. However, as mentioned in the text, TLS version 1.2 and earlier
+       do not protect the client's (or the server's) certificate from
+       eavesdroppers. For that it is RECOMMENDED that certificates to be
+       used with this protocol contain the minimum possible identifying
+       information.
+       </t>
 </section>
 
 <section title="Acknowledgements">
