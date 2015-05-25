@@ -78,8 +78,8 @@ Table of Contents
      2.4.  The Channel Re-Key Protocol . . . . . . . . . . . . . . .  14
      2.5.  The Keepalive and Dead Peer Detection Protocols . . . . .  15
    3.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
-   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  16
-   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  16
+   4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  17
+   5.  Normative References  . . . . . . . . . . . . . . . . . . . .  17
    Appendix A.  Name for Application-Layer Protocol Negotiation  . .  19
    Appendix B.  Compression  . . . . . . . . . . . . . . . . . . . .  19
    Appendix C.  DTD declarations . . . . . . . . . . . . . . . . . .  19
@@ -90,8 +90,8 @@ Table of Contents
    The purpose of this document is to specify the OpenConnect VPN
    protocol in a detail in order to allow for multiple interoperable
    implementations.  This is the protocol used by the OpenConnect client
-   and server [OPENCONNECT], and is believed to be compatible with
-   CISCO's AnyConnect protocol.
+   and server [OPENCONNECT-CLIENT][OPENCONNECT-SERVER], and is believed
+   to be compatible with CISCO's AnyConnect protocol.
 
    While there are many competing VPN protocol solutions, none of them
    was ever described in a publicly available document.  Even open
@@ -123,7 +123,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 2.  The OpenConnect Protocol
 
    The OpenConnect protocol combines the TLS protocol [RFC5246],
-   datagram TLS protocol [RFC6347] and HTTP protocols [RFC2616] to
+   Datagram TLS protocol [RFC6347] and HTTP protocols [RFC2616] to
    provide an Internet-Layer VPN channel.  The channel is designed to
    operate using UDP packets, and fallback on TCP if that's not
    possible.
@@ -881,14 +881,14 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
    be used with this protocol contain the minimum possible identifying
    information.
 
-4.  Acknowledgements
-
-   None yet.
-
-5.  Normative References
-
-   [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
-              (TLS) Protocol Version 1.2", RFC 5246, August 2008.
+   This document defines a protocol name for Application-Layer Protocol
+   Negotiation.  That, if used by a client would indicate to any
+   eavesdropping parties that the client wishes to use VPN, thus
+   compromising its intention privacy.  On the other hand, providing
+   that information would help a server that re-uses the same port for
+   different protocols under TLS, to forward to the appropriate handler
+   of the connection.  That is, it would allow hosting a plain HTTPS
+   server serving content, and a VPN server using openconnect at the
 
 
 
@@ -897,6 +897,18 @@ Mavrogiannopoulos       Expires November 26, 2015              [Page 16]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
+
+   same port.  It is left to the client to decide the balance between
+   privacy and usability with such servers.
+
+4.  Acknowledgements
+
+   None yet.
+
+5.  Normative References
+
+   [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
+              (TLS) Protocol Version 1.2", RFC 5246, August 2008.
 
    [RFC5746]  Rescorla, E., Ray, M., Dispensa, S., and N. Oskov,
               "Transport Layer Security (TLS) Renegotiation Indication
@@ -934,6 +946,14 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
               L., and T. Narten, "Using 127-Bit IPv6 Prefixes on Inter-
               Router Links", RFC 6164, April 2011.
 
+
+
+
+Mavrogiannopoulos       Expires November 26, 2015              [Page 17]
+
+Internet-Draft         The OpenConnect Version 1.0              May 2015
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
@@ -947,33 +967,13 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
               plaintex", International Workshop on Fast Software
               Encryption , 2002.
 
+   [OPENCONNECT-CLIENT]
+              Woodhouse, D., "http://www.infradead.org/openconnect/",
+              2015.
 
-
-Mavrogiannopoulos       Expires November 26, 2015              [Page 17]
-
-Internet-Draft         The OpenConnect Version 1.0              May 2015
-
-
-   [OPENCONNECT]
-              Woodhouse, D. and N. Mavrogiannopoulos,
-              "http://www.infradead.org/openconnect/", 2015.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   [OPENCONNECT-SERVER]
+              Mavrogiannopoulos, N., "http://www.infradead.org/ocserv/",
+              2015.
 
 
 

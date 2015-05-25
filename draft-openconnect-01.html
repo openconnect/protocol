@@ -485,14 +485,14 @@
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
-<p id="rfc.section.1.p.1">The purpose of this document is to specify the OpenConnect VPN protocol in a detail in order to allow for multiple interoperable implementations.  This is the protocol used by the OpenConnect client and server <a href="#OPENCONNECT">[OPENCONNECT]</a>, and is believed to be compatible with CISCO's AnyConnect protocol.  </p>
+<p id="rfc.section.1.p.1">The purpose of this document is to specify the OpenConnect VPN protocol in a detail in order to allow for multiple interoperable implementations.  This is the protocol used by the OpenConnect client and server <a href="#OPENCONNECT-CLIENT">[OPENCONNECT-CLIENT]</a><a href="#OPENCONNECT-SERVER">[OPENCONNECT-SERVER]</a>, and is believed to be compatible with CISCO's AnyConnect protocol.  </p>
 <p id="rfc.section.1.p.2">While there are many competing VPN protocol solutions, none of them was ever described in a publicly available document. Even open source VPN solutions have their source code as the primary description of their protocol. That allowed no easy study of each protocol's properties and weaknesses, and that is the secondary goal of this document, to describe a deployed TLS based <a href="#RFC5246">[RFC5246]</a> VPN protocol.  </p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> <a href="#terminology" id="terminology">Requirements Terminology</a></h1>
 <p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">[RFC2119]</a>.  </p>
 <h1 id="rfc.section.1.2"><a href="#rfc.section.1.2">1.2.</a> <a href="#goals-document" id="goals-document">Goals of This Document</a></h1>
 <p id="rfc.section.1.2.p.1">The OpenConnect protocol version 1.0 specification is intended primarily for readers who will be implementing the protocol and those doing cryptographic analysis of it.  </p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#oc-protocol" id="oc-protocol">The OpenConnect Protocol</a></h1>
-<p id="rfc.section.2.p.1">The OpenConnect protocol combines the TLS protocol <a href="#RFC5246">[RFC5246]</a>, datagram TLS protocol <a href="#RFC6347">[RFC6347]</a> and HTTP protocols <a href="#RFC2616">[RFC2616]</a> to provide an Internet-Layer VPN channel.  The channel is designed to operate using UDP packets, and fallback on TCP if that's not possible.  </p>
+<p id="rfc.section.2.p.1">The OpenConnect protocol combines the TLS protocol <a href="#RFC5246">[RFC5246]</a>, Datagram TLS protocol <a href="#RFC6347">[RFC6347]</a> and HTTP protocols <a href="#RFC2616">[RFC2616]</a> to provide an Internet-Layer VPN channel.  The channel is designed to operate using UDP packets, and fallback on TCP if that's not possible.  </p>
 <p id="rfc.section.2.p.2">In brief the protocol initiates an HTTP over TLS connection on a known port, where client authentication is performed. After this step, the client initiates an HTTP CONNECT command to establish a VPN channel over TCP. A secondary VPN channel over UDP will be established using information provided by the server using HTTP headers. At that point the raw IP packets flow, over the VPN channels.  </p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#session-establishment" id="session-establishment">VPN Session Establishment</a></h1>
 <p id="rfc.section.2.1.p.1">The client and server establish a TLS connection over a known port, typically over 443, the port used for HTTPS. The client SHOULD negotiate TLS 1.1 or later, and support the following TLS protocol extensions.  </p>
@@ -915,6 +915,7 @@
 <p id="rfc.section.3.p.3">The protocol provides a VPN channel which carries payload hidden from eavesdroppers. However, the payload's length remain visible and in certain scenarios that may be sufficient to determine the transferred payload. Furthermore, there are scenarios where compressed payload lengths may reveal more information than the uncompressed data <a href="#COMP-ISSUES">[COMP-ISSUES]</a><a href="#COMP-ISSUES2">[COMP-ISSUES2]</a>.  For that we RECOMMEND that implementations don't enable compression by default, and only allow it after notifying the users and administrators about the consequences.  </p>
 <p id="rfc.section.3.p.4">This protocol could sometimes be used because of the fact that it ressembles the TLS protocol and thus is not detected by the available VPN blockers. While an implementation could intentionally masquerade its packets to ressemble a typical HTTPS session, a fully compliant implementation will be distinct from an average HTTP session due to the DTLS session establishment, and the transferred packet sizes.  </p>
 <p id="rfc.section.3.p.5">For certificate authentication OpenConnect relies on the TLS protocol. However, as mentioned in the text, TLS version 1.2 and earlier do not protect the client's (or the server's) certificate from eavesdroppers. For that it is RECOMMENDED that certificates to be used with this protocol contain the minimum possible identifying information.  </p>
+<p id="rfc.section.3.p.6">This document defines a protocol name for Application-Layer Protocol Negotiation. That, if used by a client would indicate to any eavesdropping parties that the client wishes to use VPN, thus compromising its intention privacy. On the other hand, providing that information would help a server that re-uses the same port for different protocols under TLS, to forward to the appropriate handler of the connection. That is, it would allow hosting a plain HTTPS server serving content, and a VPN server using openconnect at the same port.  It is left to the client to decide the balance between privacy and usability with such servers.  </p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> Acknowledgements</h1>
 <p id="rfc.section.4.p.1">None yet.  </p>
 <h1 id="rfc.references"><a href="#rfc.references">5.</a> Normative References</h1>
@@ -1006,9 +1007,15 @@
     </tr>
     <tr>
       <td class="reference">
-        <b id="OPENCONNECT">[OPENCONNECT]</b>
+        <b id="OPENCONNECT-CLIENT">[OPENCONNECT-CLIENT]</b>
       </td>
-      <td class="top"><a>Woodhouse, D.</a> and <a>N. Mavrogiannopoulos</a>, "<a>http://www.infradead.org/openconnect/</a>", 2015.</td>
+      <td class="top"><a>Woodhouse, D.</a>, "<a>http://www.infradead.org/openconnect/</a>", 2015.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="OPENCONNECT-SERVER">[OPENCONNECT-SERVER]</b>
+      </td>
+      <td class="top"><a>Mavrogiannopoulos, N.</a>, "<a>http://www.infradead.org/ocserv/</a>", 2015.</td>
     </tr>
   </tbody>
 </table>

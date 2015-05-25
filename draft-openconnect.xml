@@ -87,8 +87,8 @@
    The purpose of this document is to specify the OpenConnect VPN protocol
    in a detail in order to allow for multiple interoperable implementations.
    This is the protocol used by the OpenConnect client and server
-   <xref target="OPENCONNECT"/>, and is believed to be compatible with
-   CISCO's AnyConnect protocol.
+   <xref target="OPENCONNECT-CLIENT"/><xref target="OPENCONNECT-SERVER"/>, 
+   and is believed to be compatible with CISCO's AnyConnect protocol.
    </t>
    <t>
    While there are many competing VPN protocol solutions, none of
@@ -119,7 +119,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 <section anchor="oc-protocol" title="The OpenConnect Protocol">
 <t>
    The OpenConnect protocol combines the TLS protocol <xref
-   target="RFC5246"/>, datagram TLS protocol <xref
+   target="RFC5246"/>, Datagram TLS protocol <xref
    target="RFC6347"/> and HTTP protocols <xref
    target="RFC2616"/> to provide an Internet-Layer VPN channel.
    The channel is designed to operate using UDP packets, and
@@ -739,6 +739,18 @@ in addition the following considerations.
        used with this protocol contain the minimum possible identifying
        information.
        </t>
+       <t>
+       This document defines a protocol name for Application-Layer Protocol
+       Negotiation. That, if used by a client would indicate to any
+       eavesdropping parties that the client wishes to use VPN, thus
+       compromising its intention privacy. On the other hand, providing
+       that information would help a server that re-uses the same port
+       for different protocols under TLS, to forward to the appropriate handler
+       of the connection. That is, it would allow hosting a plain HTTPS server
+       serving content, and a VPN server using openconnect at the same port.
+       It is left to the client to decide the balance between privacy and
+       usability with such servers.
+       </t>
 </section>
 
 <section title="Acknowledgements">
@@ -806,11 +818,17 @@ None yet.
 	<seriesInfo name="International Workshop on Fast Software Encryption" value=""/>
       </reference>
 
-      <reference anchor="OPENCONNECT">
+      <reference anchor="OPENCONNECT-CLIENT">
 	<front>
 	  <title>http://www.infradead.org/openconnect/</title>
 	  <author initials="D." surname="Woodhouse"
 		  fullname="David Woodhouse"/>
+	  <date year="2015" />
+	</front>
+      </reference>
+      <reference anchor="OPENCONNECT-SERVER">
+	<front>
+	  <title>http://www.infradead.org/ocserv/</title>
 	  <author initials="N." surname="Mavrogiannopoulos"
 		  fullname="Nikos Mavrogiannopoulos"/>
 	  <date year="2015" />
