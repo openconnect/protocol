@@ -55,7 +55,7 @@
          <organization>Red Hat</organization>
       </author>
 
-      <date month="January" year="2015"/>
+      <date month="May" year="2015"/>
       <area>Security</area>
 <!--      <workgroup>TLS Working Group</workgroup> -->
       <keyword>SSL</keyword>
@@ -194,6 +194,25 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   are needed.
   </t>
 
+  <t>
+  After the TLS session is established the client irrespective of the
+  supported authentication methods, should send an HTTP POST request
+  on "/" with a config-auth XML structure of type 'init'. An example of its
+  contents follow.
+  <figure><artwork><![CDATA[
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
+    <config-auth client="vpn" type="init">
+        <version who="vpn">v5.01</version>
+    </config-auth>
+  ]]></artwork></figure>
+  </t>
+  <t>
+  The precise DTD declarations for the contents of XML messages defined in
+  this document are listed in <xref target="dtd-decl"/>. Also the
+  HTTP Content-Type to be used for these XML structures MUST be 'text/xml'.
+  </t>
+
   <section anchor="authentication_cert" title="Authentication using certificates">
   <t>
   During the initial TLS protocol handshake the server may require
@@ -207,24 +226,11 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   (0.9.2342.19200300.100.1.1) <xref target="RFC4519"/>.
   </t>
   <t>
-  After the TLS session is established the client sends an HTTP POST request
-  on "/" with the following contents.
-  <figure><artwork><![CDATA[
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
-    <config-auth client="vpn" type="init">
-        <version who="vpn">v5.01</version>
-    </config-auth>
-  ]]></artwork></figure>
-  </t>
-  <t>
-  Note that precise DTD declarations for the contents of XML messages defined in
-  this document are listed in <xref target="dtd-decl"/>.
-  </t>
-  <t>
-  If the HTTP response code is 200, and contains the following indication
-  of a complete authentication, the client should proceed to the
-  establishment of the primary channel as in <xref target="primary-channel"/>.
+  After the TLS session is established and the the config-auth XML structure of type 'init'
+  is sent, the server should send it reply. If the certificate sent by the
+  client was successfully validated, it should reply using
+  the HTTP response code 200, and the contents of the reply should be
+  a config-auth XML structure of type 'complete', as follows.
   </t>
   <t>
   <figure><artwork><![CDATA[
@@ -238,26 +244,19 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
     </config-auth>
   ]]></artwork></figure>
   </t>
+  <t>
+  In that case the client should proceed to the
+  establishment of the primary channel as in <xref target="primary-channel"/>.
+  </t>
 
   </section>
 
   <section anchor="authentication_pass" title="Authentication using passwords">
   <t>
-  After the TLS session is established the client sends an HTTP POST request
-  on "/" with the following contents.
-  <figure><artwork><![CDATA[
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
-    <config-auth client="vpn" type="init">
-        <version who="vpn">v5.01</version>
-    </config-auth>
-  ]]></artwork></figure>
-  </t>
-  <t>
-  Note that all Content-Types specified in this section are 'text/xml'. At
-  this point the server will reply using forms the client software should prompt the
-  user to fill in.
-
+  After the TLS session is established and the the config-auth XML structure of type 'init'
+  is sent, the server will reply using forms the client software should prompt the
+  user to fill in. Its reply utilizes a config-auth XML structure of type
+  'auth-request'.
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE auth SYSTEM "config-auth.dtd">
@@ -270,7 +269,8 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
         </auth>
     </config-auth>
   ]]></artwork></figure>
-
+  </t>
+  <t>
   The client may be asked to provide the information in separate forms as
   above, or may be asked combined as below.
   <figure><artwork><![CDATA[
@@ -290,8 +290,9 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   <t>
   The client software will then fill in the provided form and sent it back
   to the server using an HTTP POST on the location specified by the server
-  (in the above examples it was "/auth"). The reply could then be the
-  following.
+  (in the above examples it was "/auth"). The reply would then be of type
+  'auth-reply' as in the following example.
+
   <figure><artwork><![CDATA[
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
@@ -395,7 +396,8 @@ target="RFC4559"/>, a method which is available using the Generic Security
 Service API <xref target="RFC2743"/>. The following approach is used
 to advertise the availability of the HTTP SPNEGO protocol by the client.
 A client which supports the HTTP SPNEGO protocol, SHOULD indicate it using the
-following header on in its initial request to the server.
+following header on in its initial request to the server with the
+config-auth 'init' XML structure.
 </t>
 <t>
 <figure>

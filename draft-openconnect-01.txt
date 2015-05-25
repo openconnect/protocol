@@ -4,8 +4,8 @@
 
 Network Working Group                               N. Mavrogiannopoulos
 Internet-Draft                                                   Red Hat
-Intended status: Historic                                   January 2015
-Expires: July 5, 2015
+Intended status: Historic                                   May 25, 2015
+Expires: November 26, 2015
 
 
                 The OpenConnect VPN Protocol Version 1.0
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 5, 2015.
+   This Internet-Draft will expire on November 26, 2015.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 1]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 1]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 2]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 2]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 1.2.  Goals of This Document
@@ -165,9 +165,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 3]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 3]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    The server's identity in the certificate SHOULD be placed in the
@@ -201,6 +201,31 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    complete authentication in the same TLS session, and rely on TLS
    session resumption if reconnections to the server are needed.
 
+   After the TLS session is established the client irrespective of the
+   supported authentication methods, should send an HTTP POST request on
+   "/" with a config-auth XML structure of type 'init'.  An example of
+   its contents follow.
+
+       <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
+       <config-auth client="vpn" type="init">
+           <version who="vpn">v5.01</version>
+       </config-auth>
+
+   The precise DTD declarations for the contents of XML messages defined
+   in this document are listed in Appendix C.  Also the HTTP Content-
+   Type to be used for these XML structures MUST be 'text/xml'.
+
+
+
+
+
+
+Mavrogiannopoulos       Expires November 26, 2015               [Page 4]
+
+Internet-Draft         The OpenConnect Version 1.0              May 2015
+
+
 2.1.2.1.  Authentication using certificates
 
    During the initial TLS protocol handshake the server may require a
@@ -212,32 +237,12 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    place the user identifier in the DN field of the certificate, using
    the UID object identifier (0.9.2342.19200300.100.1.1) [RFC4519].
 
-   After the TLS session is established the client sends an HTTP POST
-   request on "/" with the following contents.
-
-
-
-
-
-
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 4]
-
-Internet-Draft         The OpenConnect Version 1.0          January 2015
-
-
-       <?xml version="1.0" encoding="UTF-8"?>
-       <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
-       <config-auth client="vpn" type="init">
-           <version who="vpn">v5.01</version>
-       </config-auth>
-
-   Note that precise DTD declarations for the contents of XML messages
-   defined in this document are listed in Appendix C.
-
-   If the HTTP response code is 200, and contains the following
-   indication of a complete authentication, the client should proceed to
-   the establishment of the primary channel as in Section 2.1.4.
+   After the TLS session is established and the the config-auth XML
+   structure of type 'init' is sent, the server should send it reply.
+   If the certificate sent by the client was successfully validated, it
+   should reply using the HTTP response code 200, and the contents of
+   the reply should be a config-auth XML structure of type 'complete',
+   as follows.
 
        <?xml version="1.0" encoding="UTF-8"?>
        <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
@@ -248,20 +253,15 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
          </auth>
        </config-auth>
 
+   In that case the client should proceed to the establishment of the
+   primary channel as in Section 2.1.4.
+
 2.1.2.2.  Authentication using passwords
 
-   After the TLS session is established the client sends an HTTP POST
-   request on "/" with the following contents.
-
-       <?xml version="1.0" encoding="UTF-8"?>
-       <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
-       <config-auth client="vpn" type="init">
-           <version who="vpn">v5.01</version>
-       </config-auth>
-
-   Note that all Content-Types specified in this section are 'text/xml'.
-   At this point the server will reply using forms the client software
-   should prompt the user to fill in.
+   After the TLS session is established and the the config-auth XML
+   structure of type 'init' is sent, the server will reply using forms
+   the client software should prompt the user to fill in.  Its reply
+   utilizes a config-auth XML structure of type 'auth-request'.
 
      <?xml version="1.0" encoding="UTF-8"?>
      <!DOCTYPE auth SYSTEM "config-auth.dtd">
@@ -277,9 +277,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 5]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 5]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    The client may be asked to provide the information in separate forms
@@ -299,8 +299,8 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
    The client software will then fill in the provided form and sent it
    back to the server using an HTTP POST on the location specified by
-   the server (in the above examples it was "/auth").  The reply could
-   then be the following.
+   the server (in the above examples it was "/auth").  The reply would
+   then be of type 'auth-reply' as in the following example.
 
        <?xml version="1.0" encoding="UTF-8"?>
        <!DOCTYPE config-auth SYSTEM "config-auth.dtd">
@@ -333,9 +333,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 6]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 6]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
         |     TLS handshake Client Hello     |                   |
@@ -389,9 +389,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 7]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 7]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
         |  - - - - - - - - - - - - - - - - - - - - - - - - - - - >
@@ -414,7 +414,8 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
    Security Service API [RFC2743].  The following approach is used to
    advertise the availability of the HTTP SPNEGO protocol by the client.
    A client which supports the HTTP SPNEGO protocol, SHOULD indicate it
-   using the following header on in its initial request to the server.
+   using the following header on in its initial request to the server
+   with the config-auth 'init' XML structure.
 
        X-Support-HTTP-Auth: true
 
@@ -444,10 +445,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 8]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 8]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
       X-CSTP-Address-Type: A comma separated list of the requested
@@ -501,9 +501,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                  [Page 9]
+Mavrogiannopoulos       Expires November 26, 2015               [Page 9]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
       X-CSTP-Split-Include: The network address of a route which is
@@ -557,9 +557,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 10]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 10]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    The DTLS established DTLS channel utilizes session resumption as a
@@ -613,9 +613,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 11]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 11]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    +--------------------+---------------------------------+------------+
@@ -669,9 +669,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 12]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 12]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    +---------------------+---------------------------------------------+
@@ -725,9 +725,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 13]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 13]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    +---------------------+---------------------------------------------+
@@ -781,9 +781,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 14]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 14]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    2.  ssl: a TLS or DTLS rehandshake will be performed periodically.
@@ -837,9 +837,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 15]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 15]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 3.  Security Considerations
@@ -893,9 +893,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 16]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 16]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    [RFC5746]  Rescorla, E., Ray, M., Dispensa, S., and N. Oskov,
@@ -949,9 +949,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 17]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 17]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
    [OPENCONNECT]
@@ -1005,9 +1005,9 @@ Internet-Draft         The OpenConnect Version 1.0          January 2015
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 18]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 18]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 Appendix A.  Name for Application-Layer Protocol Negotiation
@@ -1061,9 +1061,9 @@ C.1.  config-auth.dtd
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 19]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 19]
 
-Internet-Draft         The OpenConnect Version 1.0          January 2015
+Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 <!ELEMENT config-auth (version*,auth*)>
@@ -1117,4 +1117,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos         Expires July 5, 2015                 [Page 20]
+Mavrogiannopoulos       Expires November 26, 2015              [Page 20]

@@ -402,7 +402,7 @@
 
   <meta name="dct.creator" content="Mavrogiannopoulos, N." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-openconnect-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-1" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-5-25" />
   <meta name="dct.abstract" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
   <meta name="description" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
 
@@ -423,10 +423,10 @@
 </tr>
 <tr>
   <td class="left">Intended status: Historic</td>
-  <td class="right">January 2015</td>
+  <td class="right">May 25, 2015</td>
 </tr>
 <tr>
-  <td class="left">Expires: July 5, 2015</td>
+  <td class="left">Expires: November 26, 2015</td>
   <td class="right"></td>
 </tr>
 
@@ -447,7 +447,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on July 5, 2015.</p>
+<p>This Internet-Draft will expire on November 26, 2015.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -519,9 +519,6 @@
 
 <p> The server is authenticated to the client using a PKIX certificate presented during the TLS negotiation.  </p>
 <p id="rfc.section.2.1.2.p.2">It is important to note that during the password and HTTP SPNEGO authentication methods, any headers allowed by the HTTP protocol can be present. In fact, there are legacy clients which assume that the server will keep a state using cookies, and send their username and password in different TLS and HTTP connections. This practice prevents the server from binding the TLS channel with the VPN session <a href="#RFC5056">[RFC5056]</a>, and is discouraged.  It is RECOMMENDED for clients to complete authentication in the same TLS session, and rely on TLS session resumption if reconnections to the server are needed.  </p>
-<h1 id="rfc.section.2.1.2.1"><a href="#rfc.section.2.1.2.1">2.1.2.1.</a> <a href="#authentication_cert" id="authentication_cert">Authentication using certificates</a></h1>
-<p id="rfc.section.2.1.2.1.p.1">During the initial TLS protocol handshake the server may require a client certificate to be presented, depending on its configuration.  </p>
-<p id="rfc.section.2.1.2.1.p.2">Because the client certificate is sent in the clear during the handshake it SHOULD NOT contain other identifying information other than a username, or a pseudonymus identifier. It is RECOMMENDED to place the user identifier in the DN field of the certificate, using the UID object identifier (0.9.2342.19200300.100.1.1) <a href="#RFC4519">[RFC4519]</a>.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
@@ -529,9 +526,12 @@
         &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
     &lt;/config-auth&gt;
   </pre>
-<p id="rfc.section.2.1.2.1.p.3">After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
-<p id="rfc.section.2.1.2.1.p.4">Note that precise DTD declarations for the contents of XML messages defined in this document are listed in <a href="#dtd-decl">Appendix C</a>.  </p>
-<p id="rfc.section.2.1.2.1.p.5">If the HTTP response code is 200, and contains the following indication of a complete authentication, the client should proceed to the establishment of the primary channel as in <a href="#primary-channel">Section 2.1.4</a>.  </p>
+<p id="rfc.section.2.1.2.p.3">After the TLS session is established the client irrespective of the supported authentication methods, should send an HTTP POST request on "/" with a config-auth XML structure of type 'init'. An example of its contents follow.  </p>
+<p id="rfc.section.2.1.2.p.4">The precise DTD declarations for the contents of XML messages defined in this document are listed in <a href="#dtd-decl">Appendix C</a>. Also the HTTP Content-Type to be used for these XML structures MUST be 'text/xml'.  </p>
+<h1 id="rfc.section.2.1.2.1"><a href="#rfc.section.2.1.2.1">2.1.2.1.</a> <a href="#authentication_cert" id="authentication_cert">Authentication using certificates</a></h1>
+<p id="rfc.section.2.1.2.1.p.1">During the initial TLS protocol handshake the server may require a client certificate to be presented, depending on its configuration.  </p>
+<p id="rfc.section.2.1.2.1.p.2">Because the client certificate is sent in the clear during the handshake it SHOULD NOT contain other identifying information other than a username, or a pseudonymus identifier. It is RECOMMENDED to place the user identifier in the DN field of the certificate, using the UID object identifier (0.9.2342.19200300.100.1.1) <a href="#RFC4519">[RFC4519]</a>.  </p>
+<p id="rfc.section.2.1.2.1.p.3">After the TLS session is established and the the config-auth XML structure of type 'init' is sent, the server should send it reply. If the certificate sent by the client was successfully validated, it should reply using the HTTP response code 200, and the contents of the reply should be a config-auth XML structure of type 'complete', as follows.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
@@ -543,15 +543,8 @@
     &lt;/config-auth&gt;
   </pre>
 <p/>
+<p id="rfc.section.2.1.2.1.p.5">In that case the client should proceed to the establishment of the primary channel as in <a href="#primary-channel">Section 2.1.4</a>.  </p>
 <h1 id="rfc.section.2.1.2.2"><a href="#rfc.section.2.1.2.2">2.1.2.2.</a> <a href="#authentication_pass" id="authentication_pass">Authentication using passwords</a></h1>
-<pre>
-    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-    &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
-    &lt;config-auth client="vpn" type="init"&gt;
-        &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
-    &lt;/config-auth&gt;
-  </pre>
-<p id="rfc.section.2.1.2.2.p.1">After the TLS session is established the client sends an HTTP POST request on "/" with the following contents.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;!DOCTYPE auth SYSTEM "config-auth.dtd"&gt;
@@ -564,6 +557,7 @@
         &lt;/auth&gt;
     &lt;/config-auth&gt;
   </pre>
+<p id="rfc.section.2.1.2.2.p.1">After the TLS session is established and the the config-auth XML structure of type 'init' is sent, the server will reply using forms the client software should prompt the user to fill in. Its reply utilizes a config-auth XML structure of type 'auth-request'.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;!DOCTYPE auth SYSTEM "config-auth.dtd"&gt;
@@ -577,7 +571,7 @@
       &lt;/auth&gt;
     &lt;/config-auth&gt;
   </pre>
-<p id="rfc.section.2.1.2.2.p.2">Note that all Content-Types specified in this section are 'text/xml'. At this point the server will reply using forms the client software should prompt the user to fill in.  </p>
+<p id="rfc.section.2.1.2.2.p.2">The client may be asked to provide the information in separate forms as above, or may be asked combined as below.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;!DOCTYPE config-auth SYSTEM "config-auth.dtd"&gt;
@@ -587,7 +581,7 @@
         &lt;/auth&gt;
     &lt;/config-auth&gt;  
   </pre>
-<p id="rfc.section.2.1.2.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply could then be the following.  </p>
+<p id="rfc.section.2.1.2.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply would then be of type 'auth-reply' as in the following example.  </p>
 <p id="rfc.section.2.1.2.2.p.4">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
 <p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the authentication complete structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
 <p id="rfc.section.2.1.2.2.p.6">An example session is shown in figure <a href="#example1">Figure 1</a>.</p>
@@ -662,7 +656,7 @@
 <p class="figure">Figure 1</p>
 <p/>
 <h1 id="rfc.section.2.1.2.3"><a href="#rfc.section.2.1.2.3">2.1.2.3.</a> <a href="#authentication_gssapi" id="authentication_gssapi">HTTP Authentication using SPNEGO</a></h1>
-<p id="rfc.section.2.1.2.3.p.1">That type of authentication is performed using the HTTP SPNEGO protocol <a href="#RFC4559">[RFC4559]</a>, a method which is available using the Generic Security Service API <a href="#RFC2743">[RFC2743]</a>. The following approach is used to advertise the availability of the HTTP SPNEGO protocol by the client.  A client which supports the HTTP SPNEGO protocol, SHOULD indicate it using the following header on in its initial request to the server.  </p>
+<p id="rfc.section.2.1.2.3.p.1">That type of authentication is performed using the HTTP SPNEGO protocol <a href="#RFC4559">[RFC4559]</a>, a method which is available using the Generic Security Service API <a href="#RFC2743">[RFC2743]</a>. The following approach is used to advertise the availability of the HTTP SPNEGO protocol by the client.  A client which supports the HTTP SPNEGO protocol, SHOULD indicate it using the following header on in its initial request to the server with the config-auth 'init' XML structure.  </p>
 <pre>
     X-Support-HTTP-Auth: true
 </pre>
