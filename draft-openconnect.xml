@@ -314,8 +314,8 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   <t>
   If client authentication fails, the server MUST respond with an HTTP 401
   unauthorized status code. Otherwise, on successful authentication
-  the server should reply with a 200 HTTP code and use the authentication complete structure as
-  in <xref target="authentication_cert"/>.
+  the server should reply with a 200 HTTP code and use the 'complete' config-auth
+  XML structure as in <xref target="authentication_cert"/>.
   </t>
   <t>
   An example session is shown in figure <xref target="example1"/>.</t>
@@ -426,8 +426,8 @@ authentication fails.
   </t>
   <t>
   Otherwise, on successful authentication
-  the server should reply with a 200 HTTP code and use the authentication complete structure as
-  in <xref target="authentication_cert"/>.
+  the server should reply with a 200 HTTP code and use the 'complete' config-auth
+  XML structure as in <xref target="authentication_cert"/>.
   </t>
   </section>
 
