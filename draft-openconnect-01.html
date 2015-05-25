@@ -584,7 +584,8 @@
 <p id="rfc.section.2.1.2.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply would then be of type 'auth-reply' as in the following example.  </p>
 <p id="rfc.section.2.1.2.2.p.4">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
 <p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the 'complete' config-auth XML structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
-<p id="rfc.section.2.1.2.2.p.6">An example session is shown in figure <a href="#example1">Figure 1</a>.</p>
+<p id="rfc.section.2.1.2.2.p.6">Note, that sending the username and password in different messages will reveal the length of them to a passive eavesdropper. For that is is RECOMMENDED for clients to use the 'X-Pad' HTTP header, which will contain arbitrary printable data to make the message length a multiple of 64 bytes.  </p>
+<p id="rfc.section.2.1.2.2.p.7">An example session is shown in figure <a href="#example1">Figure 1</a>.</p>
 <div id="rfc.figure.1"/>
 <div id="example1"/>
 <pre>

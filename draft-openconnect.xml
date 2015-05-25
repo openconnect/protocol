@@ -318,6 +318,12 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
   XML structure as in <xref target="authentication_cert"/>.
   </t>
   <t>
+  Note, that sending the username and password in different messages will
+  reveal the length of them to a passive eavesdropper. For that is is
+  RECOMMENDED for clients to use the 'X-Pad' HTTP header, which will contain
+  arbitrary printable data to make the message length a multiple of 64 bytes.
+  </t>
+  <t>
   An example session is shown in figure <xref target="example1"/>.</t>
   <t>
   <figure anchor='example1'><artwork><![CDATA[
