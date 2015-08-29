@@ -402,7 +402,7 @@
 
   <meta name="dct.creator" content="Mavrogiannopoulos, N." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-openconnect-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-5-25" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-5" />
   <meta name="dct.abstract" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
   <meta name="description" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
 
@@ -423,10 +423,10 @@
 </tr>
 <tr>
   <td class="left">Intended status: Historic</td>
-  <td class="right">May 25, 2015</td>
+  <td class="right">May 2015</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 26, 2015</td>
+  <td class="left">Expires: November 2, 2015</td>
   <td class="right"></td>
 </tr>
 
@@ -447,7 +447,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 26, 2015.</p>
+<p>This Internet-Draft will expire on November 2, 2015.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -898,7 +898,7 @@
 <p id="rfc.section.2.4.p.4">It should be noted that when the "ssl" rekey option is used, care must be taken by both the client and the server to ensure that either safe renegotiation is used (<a href="#RFC5746">[RFC5746]</a>), or that the identity of the peer remained the same.  </p>
 <h1 id="rfc.section.2.5"><a href="#rfc.section.2.5">2.5.</a> <a href="#dead-peer-detection" id="dead-peer-detection">The Keepalive and Dead Peer Detection Protocols</a></h1>
 <p id="rfc.section.2.5.p.1">In OpenConnect there are two packet types that can be used for keep-alive or dead peer detection, as shown in <a href="#packet_table">Table 3</a>. These are the DPD-REQ and KeepAlive packets.  </p>
-<p id="rfc.section.2.5.p.2">The timings of the transmission of these packets are set by the server, and they are advisory to a client. However, any peer receiving these packets MUST response with the appropriate packet. For DPD-REQ packets, the response MUST be DPD-RESP, and for KeepAlive packets the response must be another KeepAlive packet. The main difference between these two types of packets, is that the DPD packets allow for arbitrary data to be attached, making them suitable for Path MTU detection.  </p>
+<p id="rfc.section.2.5.p.2">The timings of the transmission of these packets are set by the server, and they for the DPD are advisory to a client. However, any peer receiving these packets MUST response with the appropriate packet. For DPD-REQ packets, the response MUST be DPD-RESP, and for KeepAlive packets the response must be another KeepAlive packet. The main difference between these two types of packets, is that the DPD packets similarly to <a href="#RFC3706">[RFC3706]</a> are sent when there is no traffic or when the other party requests them, and allow for arbitrary data to be attached, making them suitable for Path MTU detection.  </p>
 <p id="rfc.section.2.5.p.3">The server advertizes the suggested periods during the exchange of session parameters (<a href="#params-exchange">Section 2.1.3</a>). The available headers are listed below.  </p>
 <p/>
 
@@ -986,7 +986,13 @@
       <td class="reference">
         <b id="RFC6164">[RFC6164]</b>
       </td>
-      <td class="top"><a>Kohno, M.</a>, <a>Nitzan, B.</a>, <a>Bush, R.</a>, <a>Matsuzaki, Y.</a>, <a>Colitti, L.</a> and <a>T. Narten</a>, "<a href="http://tools.ietf.org/html/rfc6164">Using 127-Bit IPv6 Prefixes on Inter-Router Links</a>", RFC 6164, April 2011.</td>
+      <td class="top"><a>Kohno, M.</a>, <a>Nitzan, B.</a>, <a>Bush, R.</a>, <a>Matsuzaki, Y.</a>, <a>Colitti, L.</a> and <a>T. Narten</a>, "<a href="http://tools.ietf.org/html/rfc6164">Using 127-Bit IPv6 Prefixes on Inter-Router Links</a>", RFC 6164, DOI 10.17487/RFC6164, April 2011.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC3706">[RFC3706]</b>
+      </td>
+      <td class="top"><a>Huang, G.</a>, <a>Beaulieu, S.</a> and <a>D. Rochefort</a>, "<a href="http://tools.ietf.org/html/rfc3706">A Traffic-Based Method of Detecting Dead Internet Key Exchange (IKE) Peers</a>", RFC 3706, DOI 10.17487/RFC3706, February 2004.</td>
     </tr>
     <tr>
       <td class="reference">

@@ -4,8 +4,8 @@
 
 Network Working Group                               N. Mavrogiannopoulos
 Internet-Draft                                                   Red Hat
-Intended status: Historic                                   May 25, 2015
-Expires: November 26, 2015
+Intended status: Historic                                       May 2015
+Expires: November 2, 2015
 
 
                 The OpenConnect VPN Protocol Version 1.0
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 26, 2015.
+   This Internet-Draft will expire on November 2, 2015.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 1]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 1]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 2]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 2]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -165,7 +165,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 3]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 3]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -221,7 +221,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 4]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 4]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -277,7 +277,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 5]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 5]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -333,7 +333,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 6]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 6]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -389,7 +389,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 7]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 7]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -445,7 +445,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 8]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 8]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -501,7 +501,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015               [Page 9]
+Mavrogiannopoulos       Expires November 2, 2015                [Page 9]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -557,7 +557,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 10]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 10]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -613,7 +613,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 11]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 11]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -669,7 +669,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 12]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 12]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -725,7 +725,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 13]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 13]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -781,7 +781,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 14]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 14]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -808,13 +808,14 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
    DPD-REQ and KeepAlive packets.
 
    The timings of the transmission of these packets are set by the
-   server, and they are advisory to a client.  However, any peer
-   receiving these packets MUST response with the appropriate packet.
-   For DPD-REQ packets, the response MUST be DPD-RESP, and for KeepAlive
-   packets the response must be another KeepAlive packet.  The main
-   difference between these two types of packets, is that the DPD
-   packets allow for arbitrary data to be attached, making them suitable
-   for Path MTU detection.
+   server, and they for the DPD are advisory to a client.  However, any
+   peer receiving these packets MUST response with the appropriate
+   packet.  For DPD-REQ packets, the response MUST be DPD-RESP, and for
+   KeepAlive packets the response must be another KeepAlive packet.  The
+   main difference between these two types of packets, is that the DPD
+   packets similarly to [RFC3706] are sent when there is no traffic or
+   when the other party requests them, and allow for arbitrary data to
+   be attached, making them suitable for Path MTU detection.
 
    The server advertizes the suggested periods during the exchange of
    session parameters (Section 2.1.3).  The available headers are listed
@@ -836,8 +837,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-
-Mavrogiannopoulos       Expires November 26, 2015              [Page 15]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 15]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -893,7 +893,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 16]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 16]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -944,15 +944,20 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
    [RFC6164]  Kohno, M., Nitzan, B., Bush, R., Matsuzaki, Y., Colitti,
               L., and T. Narten, "Using 127-Bit IPv6 Prefixes on Inter-
-              Router Links", RFC 6164, April 2011.
+              Router Links", RFC 6164, DOI 10.17487/RFC6164, April 2011,
+              <http://www.rfc-editor.org/info/rfc6164>.
 
 
 
-
-Mavrogiannopoulos       Expires November 26, 2015              [Page 17]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 17]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
+
+   [RFC3706]  Huang, G., Beaulieu, S., and D. Rochefort, "A Traffic-
+              Based Method of Detecting Dead Internet Key Exchange (IKE)
+              Peers", RFC 3706, DOI 10.17487/RFC3706, February 2004,
+              <http://www.rfc-editor.org/info/rfc3706>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -1000,12 +1005,7 @@ Internet-Draft         The OpenConnect Version 1.0              May 2015
 
 
 
-
-
-
-
-
-Mavrogiannopoulos       Expires November 26, 2015              [Page 18]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 18]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -1061,7 +1061,7 @@ C.1.  config-auth.dtd
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 19]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 19]
 
 Internet-Draft         The OpenConnect Version 1.0              May 2015
 
@@ -1117,4 +1117,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos       Expires November 26, 2015              [Page 20]
+Mavrogiannopoulos       Expires November 2, 2015               [Page 20]

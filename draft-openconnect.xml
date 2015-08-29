@@ -35,6 +35,9 @@
 	<!ENTITY RFC6164 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6164.xml">
 
+	<!ENTITY RFC3706 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.3706.xml">
+
 	<!ENTITY RFC5056 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5056.xml">
 
@@ -679,12 +682,13 @@ the DPD-REQ and KeepAlive packets.
 </t>
 <t>
 The timings of the transmission of these packets are set by the server, and
-they are advisory to a client. However, any peer receiving these packets
+they for the DPD are advisory to a client. However, any peer receiving these packets
 MUST response with the appropriate packet. For DPD-REQ packets, the response
 MUST be DPD-RESP, and for KeepAlive packets the response must be another
 KeepAlive packet. The main difference between these two types of packets,
-is that the DPD packets allow for arbitrary data to be attached, making them
-suitable for Path MTU detection.
+is that the DPD packets similarly to <xref target="RFC3706"/> are sent when
+there is no traffic or when the other party requests them, and allow for arbitrary
+data to be attached, making them suitable for Path MTU detection.
 </t>
 <t>
 The server advertizes the suggested periods during the exchange of session parameters (<xref
@@ -792,6 +796,8 @@ None yet.
 	&RFC7301;
 
 	&RFC6164;
+
+	&RFC3706;
 
 	&RFC2119;
 
