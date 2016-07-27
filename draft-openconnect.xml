@@ -534,7 +534,7 @@ expected to assign its default route through the VPN.
 
   <t>To establish the secondary UDP-based channel, which will be referred to as the DTLS channel,
   the client must advertise support for it during the issue of the HTTP CONNECT request
-  (see <xref target="params-exchange"/>. This is done by appending the following headers
+  (see <xref target="params-exchange"/>). This is done by appending the following headers
   to the request.
        <list style="hanging">
         <t>X-DTLS-Accept-Encoding: A comma separated list of accepted
@@ -545,25 +545,29 @@ expected to assign its default route through the VPN.
   </t>
   <t>
   The DTLS channel utilizes the PSK key exchange method.
-  The key material for this session is generated with a <xref
+  The key material for this session is generated with an <xref
  target="RFC5705"/> exporter. The key material exporter uses the label
   "EXPORTER-openconnect-psk" without the quotes, and without any context
-  value. The client MUST copy the value received in the 'X-DTLS-Session-ID' header
-  (after hex decoding it), to its client hello session ID field.
-  That header provides a hex-encoded value of the DTLS session ID to be used by
-  the client, in order for the server to identify it. The following headers
-  are used by the server's response to CONNECT, and are related to the DTLS
-  channel establishment.
+  value.
+  </t>
+  <t>In its client hello message the client must copy the value received in the
+  'X-DTLS-Session-ID' header (after hex decoding it), to the session ID field.
+  That identifier, does not imply any session resumption, but is used by the
+  server to associate the client initiated DTLS channel with the CSTP channel.
+  The following headers are used by the server's response to CONNECT, and are
+  related to the DTLS channel establishment.
        <list style="hanging">
 	<t>X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
-	session ID by the client. It also serves as an identifier for the server to associate the
+	session ID by the client. It serves as an identifier for the server to associate the
 	incoming DTLS session with the TLS session.</t>
 	<t>X-DTLS-Port: The port number to which the client should send UDP
 	packets for DTLS.</t>
 	<t>X-DTLS-CipherSuite: It must contain the value "PSK" without any quotes.</t>
 	<t>X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
-	session should rekey, see <xref target="rekey-protocol"/>.</t>
-	<t>X-DTLS-Rekey-Method: The method used in DTLS rekey, see <xref target="rekey-protocol"/>.</t>
+	session should rekey, see <xref target="rekey-protocol"/>. Only considered if
+	applicable to the negotiated DTLS protocol.</t>
+	<t>X-DTLS-Rekey-Method: The method used in DTLS rekey, see <xref target="rekey-protocol"/>.
+	Only considered if applicable to the negotiated DTLS protocol.</t>
        </list>
   </t>
 
@@ -574,7 +578,7 @@ expected to assign its default route through the VPN.
   </t>
   <t>
   To establish the legacy UDP-based channel, the client must advertise support for it 
-  during the issue of the HTTP CONNECT request (see <xref target="params-exchange"/>. This is
+  during the issue of the HTTP CONNECT request (see <xref target="params-exchange"/>). This is
   done by appending the following headers to the request.
        <list style="hanging">
         <t>X-DTLS-Accept-Encoding: A comma separated list of accepted

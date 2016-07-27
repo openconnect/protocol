@@ -579,7 +579,7 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
    To establish the secondary UDP-based channel, which will be referred
    to as the DTLS channel, the client must advertise support for it
-   during the issue of the HTTP CONNECT request (see Section 2.1.3.
+   during the issue of the HTTP CONNECT request (see Section 2.1.3).
    This is done by appending the following headers to the request.
 
       X-DTLS-Accept-Encoding: A comma separated list of accepted
@@ -588,18 +588,20 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
       X-DTLS-CipherSuite: Must contain the keyword PSK.
 
    The DTLS channel utilizes the PSK key exchange method.  The key
-   material for this session is generated with a [RFC5705] exporter.
+   material for this session is generated with an [RFC5705] exporter.
    The key material exporter uses the label "EXPORTER-openconnect-psk"
-   without the quotes, and without any context value.  The client MUST
-   copy the value received in the 'X-DTLS-Session-ID' header (after hex
-   decoding it), to its client hello session ID field.  That header
-   provides a hex-encoded value of the DTLS session ID to be used by the
-   client, in order for the server to identify it.  The following
-   headers are used by the server's response to CONNECT, and are related
-   to the DTLS channel establishment.
+   without the quotes, and without any context value.
+
+   In its client hello message the client must copy the value received
+   in the 'X-DTLS-Session-ID' header (after hex decoding it), to the
+   session ID field.  That identifier, does not imply any session
+   resumption, but is used by the server to associate the client
+   initiated DTLS channel with the CSTP channel.  The following headers
+   are used by the server's response to CONNECT, and are related to the
+   DTLS channel establishment.
 
       X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
-      session ID by the client.  It also serves as an identifier for the
+      session ID by the client.  It serves as an identifier for the
       server to associate the incoming DTLS session with the TLS
       session.
 
@@ -611,18 +613,18 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-
-
 Mavrogiannopoulos       Expires January 28, 2017               [Page 11]
 
 Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
       X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
-      session should rekey, see Section 2.4.
+      session should rekey, see Section 2.4.  Only considered if
+      applicable to the negotiated DTLS protocol.
 
       X-DTLS-Rekey-Method: The method used in DTLS rekey, see
-      Section 2.4.
+      Section 2.4.  Only considered if applicable to the negotiated DTLS
+      protocol.
 
 2.1.5.1.  Legacy Establishment of Secondary UDP Channel (DTLS)
 
@@ -633,7 +635,7 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
    To establish the legacy UDP-based channel, the client must advertise
    support for it during the issue of the HTTP CONNECT request (see
-   Section 2.1.3.  This is done by appending the following headers to
+   Section 2.1.3).  This is done by appending the following headers to
    the request.
 
       X-DTLS-Accept-Encoding: A comma separated list of accepted
@@ -662,9 +664,7 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
       X-DTLS-Port: The port number to which the client should send UDP
       packets for DTLS.
 
-      X-DTLS-CipherSuite: The ciphersuite selected by the server.  It
-      should be one of the options present in the client's X-DTLS-
-      CipherSuite header.
+
 
 
 
@@ -673,6 +673,10 @@ Mavrogiannopoulos       Expires January 28, 2017               [Page 12]
 
 Internet-Draft         The OpenConnect Version 1.0             July 2016
 
+
+      X-DTLS-CipherSuite: The ciphersuite selected by the server.  It
+      should be one of the options present in the client's X-DTLS-
+      CipherSuite header.
 
       X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
       session should rekey, see Section 2.4.
@@ -708,18 +712,14 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
                                   Table 1
 
-   The DTLS protocol negotiation is similar to DTLS 1.0 except for the
-   following deviations:
+   The legacy DTLS protocol negotiation described in this section, is
+   similar to DTLS 1.0 except for the following deviations:
 
       The negotiated protocol version for the handshake and record
       headers is 1.0 instead of 254.255.
 
       The Hello Verify and Hello verify request messages are included in
       the handshake hashes.
-
-      The handshake header is not included as part of the handshake
-      hashes.
-
 
 
 
@@ -729,6 +729,9 @@ Mavrogiannopoulos       Expires January 28, 2017               [Page 13]
 
 Internet-Draft         The OpenConnect Version 1.0             July 2016
 
+
+      The handshake header is not included as part of the handshake
+      hashes.
 
       The ChangeCipherSpec message is 3 byte long instead of 1, and
       contains the handshake sequence number (2-bytes long) appended to
@@ -775,9 +778,6 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
    |   0x03  | DPD-REQ: used for dead peer detection. Once sent the    |
    |         | peer should reply with a DPD-RESP packet, that has the  |
    |         | same contents as the original request.                  |
-   |         |                                                         |
-   |   0x04  | DPD-RESP: used as a response to a previously received   |
-   |         | DPD-REQ.                                                |
 
 
 
@@ -786,6 +786,9 @@ Mavrogiannopoulos       Expires January 28, 2017               [Page 14]
 Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
+   |         |                                                         |
+   |   0x04  | DPD-RESP: used as a response to a previously received   |
+   |         | DPD-REQ.                                                |
    |         |                                                         |
    |   0x05  | DISCONNECT: sent by the client (or server) to terminate |
    |         | the session.  No data is associated with this request.  |
@@ -830,9 +833,6 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
    by the "X-CSTP-Rekey-Time" and "X-DTLS-Rekey-Time" headers.  These
    headers contain the time in seconds after which a session should
    rekey.
-
-
-
 
 
 
