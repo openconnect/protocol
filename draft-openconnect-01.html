@@ -12,28 +12,6 @@
 	  a {
 	  text-decoration: none;
 	  }
-      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
-      a.info {
-          /* This is the key. */
-          position: relative;
-          z-index: 24;
-          text-decoration: none;
-      }
-      a.info:hover {
-          z-index: 25;
-          color: #FFF; background-color: #900;
-      }
-      a.info span { display: none; }
-      a.info:hover span.info {
-          /* The span will display just on :hover state. */
-          display: block;
-          position: absolute;
-          font-size: smaller;
-          top: 2em; left: -5em; width: 15em;
-          padding: 2px; border: 1px solid #333;
-          color: #900; background-color: #EEE;
-          text-align: left;
-      }
 	  a.smpl {
 	  color: black;
 	  }
@@ -346,7 +324,7 @@
 		   content: "December 2010"; 
 	  } 
 	  @top-center {
-		   content: "Abbreviated Title";
+		   content: "Abbreviated Title";3
 	  } 
 	  @bottom-left {
 		   content: "Doe"; 
@@ -397,12 +375,12 @@
 <link href="#rfc.appendix.C.1" rel="Chapter" title="C.1 config-auth.dtd"/>
 
 
-  <meta name="generator" content="xml2rfc version 2.4.8 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.4.2 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Mavrogiannopoulos, N." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-openconnect-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-5" />
+  <meta name="dct.issued" scheme="ISO8601" content="2016-7-27" />
   <meta name="dct.abstract" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
   <meta name="description" content="This document specifies version 1.0 of the OpenConnect Virtual Private Network (VPN) protocol, a secure VPN protocol that provides communications privacy over the Internet.  That protocol is believed to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows the establishment of VPN tunnels in a way that is designed to prevent eavesdropping, tampering, or message forgery.  " />
 
@@ -423,10 +401,10 @@
 </tr>
 <tr>
   <td class="left">Intended status: Historic</td>
-  <td class="right">May 2015</td>
+  <td class="right">July 27, 2016</td>
 </tr>
 <tr>
-  <td class="left">Expires: November 2, 2015</td>
+  <td class="left">Expires: January 28, 2017</td>
   <td class="right"></td>
 </tr>
 
@@ -447,11 +425,11 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on November 2, 2015.</p>
+<p>This Internet-Draft will expire on January 28, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
-<p>Copyright (c) 2015 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2016 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -526,6 +504,7 @@
         &lt;version who="vpn"&gt;v5.01&lt;/version&gt;
     &lt;/config-auth&gt;
   </pre>
+<p class="figure"></p>
 <p id="rfc.section.2.1.2.p.3">After the TLS session is established the client irrespective of the supported authentication methods, should send an HTTP POST request on "/" with a config-auth XML structure of type 'init'. An example of its contents follow.  </p>
 <p id="rfc.section.2.1.2.p.4">The precise DTD declarations for the contents of XML messages defined in this document are listed in <a href="#dtd-decl">Appendix C</a>. Also the HTTP Content-Type to be used for these XML structures MUST be 'text/xml'.  </p>
 <h1 id="rfc.section.2.1.2.1"><a href="#rfc.section.2.1.2.1">2.1.2.1.</a> <a href="#authentication_cert" id="authentication_cert">Authentication using certificates</a></h1>
@@ -542,6 +521,7 @@
       &lt;/auth&gt;
     &lt;/config-auth&gt;
   </pre>
+<p class="figure"></p>
 <p/>
 <p id="rfc.section.2.1.2.1.p.5">In that case the client should proceed to the establishment of the primary channel as in <a href="#primary-channel">Section 2.1.4</a>.  </p>
 <h1 id="rfc.section.2.1.2.2"><a href="#rfc.section.2.1.2.2">2.1.2.2.</a> <a href="#authentication_pass" id="authentication_pass">Authentication using passwords</a></h1>
@@ -557,6 +537,7 @@
         &lt;/auth&gt;
     &lt;/config-auth&gt;
   </pre>
+<p class="figure"></p>
 <p id="rfc.section.2.1.2.2.p.1">After the TLS session is established and the the config-auth XML structure of type 'init' is sent, the server will reply using forms the client software should prompt the user to fill in. Its reply utilizes a config-auth XML structure of type 'auth-request'.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -571,6 +552,7 @@
       &lt;/auth&gt;
     &lt;/config-auth&gt;
   </pre>
+<p class="figure"></p>
 <p id="rfc.section.2.1.2.2.p.2">The client may be asked to provide the information in separate forms as above, or may be asked combined as below.  </p>
 <pre>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -581,6 +563,7 @@
         &lt;/auth&gt;
     &lt;/config-auth&gt;  
   </pre>
+<p class="figure"></p>
 <p id="rfc.section.2.1.2.2.p.3">The client software will then fill in the provided form and sent it back to the server using an HTTP POST on the location specified by the server (in the above examples it was "/auth"). The reply would then be of type 'auth-reply' as in the following example.  </p>
 <p id="rfc.section.2.1.2.2.p.4">As mentioned above, the server may ask repeatedly for information until it believes the user is authenticated. For example, the server could present a second form asking for the password, after the username is provided, or ask for a second password if that is necessary. In these cases the server should respond with an HTTP 200 OK status code, and proceed sending its new request.  </p>
 <p id="rfc.section.2.1.2.2.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the 'complete' config-auth XML structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
@@ -661,11 +644,13 @@
 <pre>
     X-Support-HTTP-Auth: true
 </pre>
+<p class="figure"></p>
 <p/>
 <p id="rfc.section.2.1.2.3.p.3">After that the server would report a "401 Unauthorized" status code and authentication would proceed as specified in the HTTP SPNEGO protocol.  The server may utilize the following header, to indicate that alternative authentication methods are available (e.g., with plain password), if authentication fails.  </p>
 <pre>
     X-Support-HTTP-Auth: fallback
 </pre>
+<p class="figure"></p>
 <p/>
 <p id="rfc.section.2.1.2.3.p.5">If client authentication fails, the server MUST respond with an HTTP 401 unauthorized status code. In that case, a client which received the previous header should retry authenticating to the server without sending the "X-Support-HTTP-Auth: true" header.  </p>
 <p id="rfc.section.2.1.2.3.p.6">Otherwise, on successful authentication the server should reply with a 200 HTTP code and use the 'complete' config-auth XML structure as in <a href="#authentication_cert">Section 2.1.2.1</a>.  </p>
@@ -692,6 +677,7 @@
     X-CSTP-Address-Type: IPv4,IPv6
     CONNECT /CSCOSSLC/tunnel HTTP/1.1
   </pre>
+<p class="figure"></p>
 <p/>
 <p id="rfc.section.2.1.3.p.5">After a successful receipt of an HTTP CONNECT request, the server should reply and provide the client with configuration parameters. The available options follow.  </p>
 
@@ -731,13 +717,41 @@
   <dt></dt>
   <dd style="margin-left: 8">X-DTLS-Accept-Encoding: A comma separated list of accepted compression algorithms for the DTLS channel.  </dd>
   <dt></dt>
-  <dd style="margin-left: 8">X-DTLS-Master-Secret: A hex encoded pre-master secret to be used for the DTLS session.</dd>
-  <dt></dt>
-  <dd style="margin-left: 8">X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the string AES256-SHA:AES128-SHA:DES-CBC3-SHA).</dd>
+  <dd style="margin-left: 8">X-DTLS-CipherSuite: Must contain the keyword PSK.</dd>
 </dl>
 
 <p> </p>
-<p id="rfc.section.2.1.5.p.2">The DTLS established DTLS channel utilizes session resumption as a method for preshared-key authentication. That is the value presented in X-DTLS-Master-Secret is set as a master secret to be resumed. The session ID value is sent by the server on the response to CONNECT using the 'X-DTLS-Session-ID' header. That header provides a hex-encoded value of the DTLS session ID to be used by the client. The following headers are used by the server's response to CONNECT, and are related to the DTLS channel establishment.  </p>
+<p id="rfc.section.2.1.5.p.2">The DTLS channel utilizes the PSK key exchange method.  The key material for this session is generated with a <a href="#RFC5705">[RFC5705]</a> exporter. The key material exporter uses the label "EXPORTER-openconnect-psk" without the quotes, and without any context value. The client MUST copy the value received in the 'X-DTLS-Session-ID' header (after hex decoding it), to its client hello session ID field.  That header provides a hex-encoded value of the DTLS session ID to be used by the client, in order for the server to identify it. The following headers are used by the server's response to CONNECT, and are related to the DTLS channel establishment.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Session-ID: A hex encoded value to be used as a DTLS session ID by the client. It also serves as an identifier for the server to associate the incoming DTLS session with the TLS session.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Port: The port number to which the client should send UDP packets for DTLS.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-CipherSuite: It must contain the value "PSK" without any quotes.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS session should rekey, see <a href="#rekey-protocol">Section 2.4</a>.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Rekey-Method: The method used in DTLS rekey, see <a href="#rekey-protocol">Section 2.4</a>.</dd>
+</dl>
+
+<p> </p>
+<h1 id="rfc.section.2.1.5.1"><a href="#rfc.section.2.1.5.1">2.1.5.1.</a> <a href="#legacy-secondary-channel-establishment" id="legacy-secondary-channel-establishment">Legacy Establishment of Secondary UDP Channel (DTLS)</a></h1>
+<p id="rfc.section.2.1.5.1.p.1">Previous versions of this protocol utilized a special DTLS protocol negotiation, based on an unpublished description of the DTLS protocol.  This section attempts to summarize this negotiation, but may not be entirely accurate.  </p>
+<p id="rfc.section.2.1.5.1.p.2">To establish the legacy UDP-based channel, the client must advertise support for it during the issue of the HTTP CONNECT request (see <a href="#params-exchange">Section 2.1.3</a>. This is done by appending the following headers to the request.  </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Accept-Encoding: A comma separated list of accepted compression algorithms for the DTLS channel.  </dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-Master-Secret: A hex encoded pre-master secret to be used in the legacy DTLS session negotiation.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the string PSK:AES256-SHA:AES128-SHA:DES-CBC3-SHA).</dd>
+</dl>
+
+<p> </p>
+<p id="rfc.section.2.1.5.1.p.3">The DTLS channel utilizes session resumption as a method for preshared-key authentication. That is the value presented in X-DTLS-Master-Secret is set as a master secret to be resumed. The session ID value is sent by the server on the response to CONNECT using the 'X-DTLS-Session-ID' header. That header provides a hex-encoded value of the DTLS session ID to be used by the client. The following headers are used by the server's response to CONNECT, and are related to the DTLS channel establishment.  </p>
 
 <dl>
   <dt></dt>
@@ -753,7 +767,7 @@
 </dl>
 
 <p> </p>
-<p id="rfc.section.2.1.5.p.3">The following table lists the ciphers negotiated via the X-DTLS-CipherSuite header, and the corresponding DTLS ciphersuite.  </p>
+<p id="rfc.section.2.1.5.1.p.4">The following table lists the ciphers negotiated via the X-DTLS-CipherSuite header, and the corresponding DTLS ciphersuite.  </p>
 <div id="rfc.table.1"/>
 <div id="cipher_table"/>
 <p/>
@@ -794,6 +808,20 @@
   </tbody>
 </table>
 <p/>
+<p id="rfc.section.2.1.5.1.p.5">The DTLS protocol negotiation is similar to DTLS 1.0 except for the following deviations: </p>
+
+<dl>
+  <dt></dt>
+  <dd style="margin-left: 8">The negotiated protocol version for the handshake and record headers is 1.0 instead of 254.255.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">The Hello Verify and Hello verify request messages are included in the handshake hashes.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">The handshake header is not included as part of the handshake hashes.</dd>
+  <dt></dt>
+  <dd style="margin-left: 8">The ChangeCipherSpec message is 3 byte long instead of 1, and contains the handshake sequence number (2-bytes long) appended to the message id.</dd>
+</dl>
+
+<p> </p>
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#primary-channel-protocol" id="primary-channel-protocol">The CSTP Channel Protocol</a></h1>
 <p id="rfc.section.2.2.p.1">The format of the packets sent over the primary channel consists of an 8-bytes header followed by data. The whole packet in encapsulated in a TLS record (see <a href="#RFC5246">[RFC5246]</a>). The bytes of the header indicate the type of data that follow, and their contents are explained in <a href="#cstp_table">Table 2</a>.  </p>
 <div id="rfc.table.2"/>
@@ -926,61 +954,67 @@
       <td class="reference">
         <b id="RFC5246">[RFC5246]</b>
       </td>
-      <td class="top"><a>Dierks, T.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5246">The Transport Layer Security (TLS) Protocol Version 1.2</a>", RFC 5246, August 2008.</td>
+      <td class="top"><a>Dierks, T.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5246">The Transport Layer Security (TLS) Protocol Version 1.2</a>", RFC 5246, DOI 10.17487/RFC5246, August 2008.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC5746">[RFC5746]</b>
       </td>
-      <td class="top"><a>Rescorla, E.</a>, <a>Ray, M.</a>, <a>Dispensa, S.</a> and <a>N. Oskov</a>, "<a href="http://tools.ietf.org/html/rfc5746">Transport Layer Security (TLS) Renegotiation Indication Extension</a>", RFC 5746, February 2010.</td>
+      <td class="top"><a>Rescorla, E.</a>, <a>Ray, M.</a>, <a>Dispensa, S.</a> and <a>N. Oskov</a>, "<a href="http://tools.ietf.org/html/rfc5746">Transport Layer Security (TLS) Renegotiation Indication Extension</a>", RFC 5746, DOI 10.17487/RFC5746, February 2010.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC6347">[RFC6347]</b>
       </td>
-      <td class="top"><a>Rescorla, E.</a> and <a>N. Modadugu</a>, "<a href="http://tools.ietf.org/html/rfc6347">Datagram Transport Layer Security Version 1.2</a>", RFC 6347, January 2012.</td>
+      <td class="top"><a>Rescorla, E.</a> and <a>N. Modadugu</a>, "<a href="http://tools.ietf.org/html/rfc6347">Datagram Transport Layer Security Version 1.2</a>", RFC 6347, DOI 10.17487/RFC6347, January 2012.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC2616">[RFC2616]</b>
       </td>
-      <td class="top"><a href="mailto:fielding@ics.uci.edu" title="Department of Information and Computer Science">Fielding, R.</a>, <a href="mailto:jg@w3.org" title="World Wide Web Consortium">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com" title="Compaq Computer Corporation">Mogul, J.</a>, <a href="mailto:frystyk@w3.org" title="World Wide Web Consortium">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com" title="Xerox Corporation">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com" title="Microsoft Corporation">Leach, P.</a> and <a href="mailto:timbl@w3.org" title="World Wide Web Consortium">T. Berners-Lee</a>, "<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>", RFC 2616, June 1999.</td>
+      <td class="top"><a>Fielding, R.</a>, <a>Gettys, J.</a>, <a>Mogul, J.</a>, <a>Frystyk, H.</a>, <a>Masinter, L.</a>, <a>Leach, P.</a> and <a>T. Berners-Lee</a>, "<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>", RFC 2616, DOI 10.17487/RFC2616, June 1999.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC4559">[RFC4559]</b>
       </td>
-      <td class="top"><a>Jaganathan, K.</a>, <a>Zhu, L.</a> and <a>J. Brezak</a>, "<a href="http://tools.ietf.org/html/rfc4559">SPNEGO-based Kerberos and NTLM HTTP Authentication in Microsoft Windows</a>", RFC 4559, June 2006.</td>
+      <td class="top"><a>Jaganathan, K.</a>, <a>Zhu, L.</a> and <a>J. Brezak</a>, "<a href="http://tools.ietf.org/html/rfc4559">SPNEGO-based Kerberos and NTLM HTTP Authentication in Microsoft Windows</a>", RFC 4559, DOI 10.17487/RFC4559, June 2006.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC2743">[RFC2743]</b>
       </td>
-      <td class="top"><a href="mailto:jlinn@rsasecurity.com" title="RSA Laboratories">Linn, J.</a>, "<a href="http://tools.ietf.org/html/rfc2743">Generic Security Service Application Program Interface Version 2, Update 1</a>", RFC 2743, January 2000.</td>
+      <td class="top"><a>Linn, J.</a>, "<a href="http://tools.ietf.org/html/rfc2743">Generic Security Service Application Program Interface Version 2, Update 1</a>", RFC 2743, DOI 10.17487/RFC2743, January 2000.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC5056">[RFC5056]</b>
       </td>
-      <td class="top"><a>Williams, N.</a>, "<a href="http://tools.ietf.org/html/rfc5056">On the Use of Channel Bindings to Secure Channels</a>", RFC 5056, November 2007.</td>
+      <td class="top"><a>Williams, N.</a>, "<a href="http://tools.ietf.org/html/rfc5056">On the Use of Channel Bindings to Secure Channels</a>", RFC 5056, DOI 10.17487/RFC5056, November 2007.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5705">[RFC5705]</b>
+      </td>
+      <td class="top"><a>Rescorla, E.</a>, "<a href="http://tools.ietf.org/html/rfc5705">Keying Material Exporters for Transport Layer Security (TLS)</a>", RFC 5705, DOI 10.17487/RFC5705, March 2010.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC4519">[RFC4519]</b>
       </td>
-      <td class="top"><a>Sciberras, A.</a>, "<a href="http://tools.ietf.org/html/rfc4519">Lightweight Directory Access Protocol (LDAP): Schema for User Applications</a>", RFC 4519, June 2006.</td>
+      <td class="top"><a>Sciberras, A.</a>, "<a href="http://tools.ietf.org/html/rfc4519">Lightweight Directory Access Protocol (LDAP): Schema for User Applications</a>", RFC 4519, DOI 10.17487/RFC4519, June 2006.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC6066">[RFC6066]</b>
       </td>
-      <td class="top"><a>Eastlake, D.</a>, "<a href="http://tools.ietf.org/html/rfc6066">Transport Layer Security (TLS) Extensions: Extension Definitions</a>", RFC 6066, January 2011.</td>
+      <td class="top"><a>Eastlake 3rd, D.</a>, "<a href="http://tools.ietf.org/html/rfc6066">Transport Layer Security (TLS) Extensions: Extension Definitions</a>", RFC 6066, DOI 10.17487/RFC6066, January 2011.</td>
     </tr>
     <tr>
       <td class="reference">
         <b id="RFC7301">[RFC7301]</b>
       </td>
-      <td class="top"><a>Friedl, S.</a>, <a>Popov, A.</a>, <a>Langley, A.</a> and <a>E. Stephan</a>, "<a href="http://tools.ietf.org/html/rfc7301">Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension</a>", RFC 7301, July 2014.</td>
+      <td class="top"><a>Friedl, S.</a>, <a>Popov, A.</a>, <a>Langley, A.</a> and <a>E. Stephan</a>, "<a href="http://tools.ietf.org/html/rfc7301">Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension</a>", RFC 7301, DOI 10.17487/RFC7301, July 2014.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -998,7 +1032,7 @@
       <td class="reference">
         <b id="RFC2119">[RFC2119]</b>
       </td>
-      <td class="top"><a href="mailto:sob@harvard.edu" title="Harvard University">Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, March 1997.</td>
+      <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1033,6 +1067,7 @@
            0x6f 0x70 0x65 0x6e 0x63 0x6f 0x6e 0x6e 0x65 0x63
            0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
 </pre>
+<p class="figure"></p>
 <p/>
 <h1 id="rfc.appendix.B"><a href="#rfc.appendix.B">Appendix B.</a> <a href="#compression" id="compression">Compression</a></h1>
 <p id="rfc.section.B.p.1">The available compression algorithms for the CSTP and DTLS channels are shown in <a href="#compression_table">Table 4</a>. Note, that all algorithms are intentionally stateless to prevent the influence of independent packets (e.g., from different sources) on each others compression. That does not eliminate all known attacks on compression before encryption, and for that reason an implentation MUST NOT enable compression by default.  </p>
@@ -1085,6 +1120,7 @@
        &lt;!ATTLIST select name (group_list) "group_list"&gt;
     &lt;!ELEMENT option (#PCDATA)&gt;
 </pre>
+<p class="figure"></p>
 <p/>
 <h1 id="rfc.authors">
   <a href="#rfc.authors">Author's Address</a>
