@@ -626,7 +626,7 @@ expected to assign its default route through the VPN.
 		<postamble></postamble>
 	</texttable>
   <t>
-  The DTLS protocol negotiation is similar to DTLS 1.0 except for the following deviations:
+  The legacy DTLS protocol negotiation described in this section, is similar to DTLS 1.0 except for the following deviations:
        <list style="hanging">
 	<t>The negotiated protocol version for the handshake and record headers is 1.0 instead of 254.255.</t>
 	<t>The Hello Verify and Hello verify request messages are included in the handshake hashes.</t>
