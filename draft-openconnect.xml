@@ -53,7 +53,7 @@
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 
-<rfc category="historic" ipr="trust200902" docName="draft-openconnect-01">
+<rfc category="info" ipr="trust200902" docName="draft-openconnect-01">
    <front>
       <title abbrev="The OpenConnect Version 1.0">The OpenConnect VPN Protocol Version 1.0</title>
 
@@ -61,7 +61,7 @@
          <organization>Red Hat</organization>
       </author>
 
-      <date month="July" year="2016"/>
+      <date month="August" year="2016"/>
       <area>Security</area>
 <!--      <workgroup>TLS Working Group</workgroup> -->
       <keyword>SSL</keyword>
@@ -897,7 +897,7 @@ None yet.
 	  <title>http://www.infradead.org/openconnect/</title>
 	  <author initials="D." surname="Woodhouse"
 		  fullname="David Woodhouse"/>
-	  <date year="2015" />
+	  <date year="2016" />
 	</front>
       </reference>
       <reference anchor="OPENCONNECT-SERVER">
@@ -905,7 +905,7 @@ None yet.
 	  <title>http://www.infradead.org/ocserv/</title>
 	  <author initials="N." surname="Mavrogiannopoulos"
 		  fullname="Nikos Mavrogiannopoulos"/>
-	  <date year="2015" />
+	  <date year="2016" />
 	</front>
       </reference>
 

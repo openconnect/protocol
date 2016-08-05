@@ -4,8 +4,8 @@
 
 Network Working Group                               N. Mavrogiannopoulos
 Internet-Draft                                                   Red Hat
-Intended status: Historic                                  July 27, 2016
-Expires: January 28, 2017
+Intended status: Informational                           August 05, 2016
+Expires: February 06, 2017
 
 
                 The OpenConnect VPN Protocol Version 1.0
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 28, 2017.
+   This Internet-Draft will expire on February 06, 2017.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 1]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 1]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 2]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 2]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    While there are many competing VPN protocol solutions, none of them
@@ -165,9 +165,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 3]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 3]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
       Application-Layer Protocol Negotiation [RFC7301]: the client MAY
@@ -221,9 +221,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 4]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 4]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    After the TLS session is established the client irrespective of the
@@ -277,9 +277,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 5]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 5]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
 2.1.2.2.  Authentication using passwords
@@ -333,9 +333,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 6]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 6]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    As mentioned above, the server may ask repeatedly for information
@@ -389,9 +389,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 7]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 7]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
            |                                    |                   |
@@ -445,9 +445,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 8]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 8]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
     X-Support-HTTP-Auth: true
@@ -501,9 +501,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017                [Page 9]
+Mavrogiannopoulos       Expires February 06, 2017               [Page 9]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
     User-Agent: Open AnyConnect VPN Agent v5.01
@@ -557,9 +557,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 10]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 10]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    The client is expected to treat the received parameters as his
@@ -613,9 +613,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 11]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 11]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
       X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
@@ -669,9 +669,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 12]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 12]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
       X-DTLS-CipherSuite: The ciphersuite selected by the server.  It
@@ -725,9 +725,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 13]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 13]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
       The handshake header is not included as part of the handshake
@@ -781,9 +781,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 14]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 14]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    |         |                                                         |
@@ -837,9 +837,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 15]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 15]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    It should be noted that when the "ssl" rekey option is used, care
@@ -893,9 +893,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 16]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 16]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    resumption.  Nevertheless, these particularities are not believed to
@@ -949,9 +949,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 17]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 17]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
 5.  Normative References
@@ -1005,9 +1005,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 18]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 18]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
    [RFC6066]  Eastlake 3rd, D., "Transport Layer Security (TLS)
@@ -1047,11 +1047,11 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
    [OPENCONNECT-CLIENT]
               Woodhouse, D., "http://www.infradead.org/openconnect/",
-              2015.
+              2016.
 
    [OPENCONNECT-SERVER]
               Mavrogiannopoulos, N., "http://www.infradead.org/ocserv/",
-              2015.
+              2016.
 
 
 
@@ -1061,9 +1061,9 @@ Internet-Draft         The OpenConnect Version 1.0             July 2016
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 19]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 19]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
 Appendix A.  Name for Application-Layer Protocol Negotiation
@@ -1117,9 +1117,9 @@ C.1.  config-auth.dtd
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 20]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 20]
 
-Internet-Draft         The OpenConnect Version 1.0             July 2016
+Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
        <!ATTLIST form action CDATA #FIXED "/auth">
@@ -1173,4 +1173,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos       Expires January 28, 2017               [Page 21]
+Mavrogiannopoulos       Expires February 06, 2017              [Page 21]
