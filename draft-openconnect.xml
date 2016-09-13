@@ -540,12 +540,12 @@ expected to assign its default route through the VPN.
         <t>X-DTLS-Accept-Encoding: A comma separated list of accepted
         compression algorithms for the DTLS channel.
         </t>
-	<t>X-DTLS-CipherSuite: Must contain the keyword PSK.</t>
+	<t>X-DTLS-CipherSuite: Must contain the keyword PSK-NEGOTIATE.</t>
        </list>
   </t>
   <t>
   The DTLS channel utilizes the PSK key exchange method.
-  The key material for this session is generated with an <xref
+  The key material for this session is a 256-bit value generated with an <xref
  target="RFC5705"/> exporter. The key material exporter uses the label
   "EXPORTER-openconnect-psk" without the quotes, and without any context
   value.
@@ -562,7 +562,7 @@ expected to assign its default route through the VPN.
 	incoming DTLS session with the TLS session.</t>
 	<t>X-DTLS-Port: The port number to which the client should send UDP
 	packets for DTLS.</t>
-	<t>X-DTLS-CipherSuite: It must contain the value "PSK" without any quotes.</t>
+	<t>X-DTLS-CipherSuite: It must contain the value "PSK-NEGOTIATE" without any quotes.</t>
 	<t>X-DTLS-Rekey-Time: The time (in seconds) after which the DTLS
 	session should rekey, see <xref target="rekey-protocol"/>. Only considered if
 	applicable to the negotiated DTLS protocol.</t>
@@ -587,7 +587,7 @@ expected to assign its default route through the VPN.
 	<t>X-DTLS-Master-Secret: A hex encoded pre-master secret to be used
 	in the legacy DTLS session negotiation.</t>
 	<t>X-DTLS-CipherSuite: A colon-separated list of ciphers (e.g., the
-	string PSK:AES256-SHA:AES128-SHA:DES-CBC3-SHA).</t>
+	string PSK-NEGOTIATE:AES256-SHA:AES128-SHA:DES-CBC3-SHA).</t>
        </list>
   </t>
   <t>
