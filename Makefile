@@ -1,5 +1,6 @@
-ver = 01
-draft = draft-openconnect
+ver = 00
+maindraft = draft-openconnect
+draft = draft-mavrogiannopoulos-openconnect
 
 all: $(draft)-$(ver).txt $(draft)-$(ver).html example-session1.atxt
 
@@ -10,10 +11,10 @@ example-session1.atxt: example-session1.uml
 
 .PHONY: clean
 
-$(draft)-$(ver).txt: $(draft).xml
+$(draft)-$(ver).txt: $(maindraft).xml
 	xml2rfc $^ -f $@
 
-$(draft)-$(ver).html: $(draft).xml
+$(draft)-$(ver).html: $(maindraft).xml
 	xml2rfc --html $^ -f $@
 
 $(draft)-$(ver).pdf: $(draft)-$(ver).txt
