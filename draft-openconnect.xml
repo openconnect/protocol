@@ -44,6 +44,8 @@
 	<!ENTITY RFC5705 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
 
+	<!ENTITY I-D.mavrogiannopoulos-app-id SYSTEM
+	"http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-mavrogiannopoulos-app-id-00.xml">
 ]>
 
 
@@ -551,14 +553,15 @@ expected to assign its default route through the VPN.
   value.
   </t>
   <t>In its client hello message the client must copy the value received in the
-  'X-DTLS-Session-ID' header (after hex decoding it), to the session ID field.
-  That identifier, does not imply any session resumption, but is used by the
-  server to associate the client initiated DTLS channel with the CSTP channel.
+  'X-DTLS-App-ID' header (after hex decoding it), to a TLS application-specific
+  ID field <xref target="I-D.mavrogiannopoulos-app-id"/>.
+  That identifier, can be used by the server to associate the client initiated
+  DTLS channel with the CSTP channel.
   The following headers are used by the server's response to CONNECT, and are
   related to the DTLS channel establishment.
        <list style="hanging">
-	<t>X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
-	session ID by the client. It serves as an identifier for the server to associate the
+	<t>X-DTLS-App-ID: A hex encoded value to be used as a DTLS application-specific
+	identifier by the client. It serves as an identifier for the server to associate the
 	incoming DTLS session with the TLS session.</t>
 	<t>X-DTLS-Port: The port number to which the client should send UDP
 	packets for DTLS.</t>
@@ -862,6 +865,9 @@ None yet.
 	&RFC3706;
 
 	&RFC2119;
+
+	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-mavrogiannopoulos-app-id-00.xml"?-->
+		&I-D.mavrogiannopoulos-app-id;
 
       <reference anchor="COMP-ISSUES">
 	<front>

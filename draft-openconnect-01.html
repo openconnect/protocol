@@ -738,11 +738,11 @@
 
 <p> </p>
 <p id="rfc.section.2.1.5.p.2">The DTLS channel utilizes the PSK key exchange method.  The key material for this session is a 256-bit value generated with an <a href="#RFC5705">[RFC5705]</a> exporter. The key material exporter uses the label "EXPORTER-openconnect-psk" without the quotes, and without any context value.  </p>
-<p id="rfc.section.2.1.5.p.3">In its client hello message the client must copy the value received in the 'X-DTLS-Session-ID' header (after hex decoding it), to the session ID field.  That identifier, does not imply any session resumption, but is used by the server to associate the client initiated DTLS channel with the CSTP channel.  The following headers are used by the server's response to CONNECT, and are related to the DTLS channel establishment.  </p>
+<p id="rfc.section.2.1.5.p.3">In its client hello message the client must copy the value received in the 'X-DTLS-App-ID' header (after hex decoding it), to a TLS application-specific ID field <a href="#I-D.mavrogiannopoulos-app-id">[I-D.mavrogiannopoulos-app-id]</a>.  That identifier, can be used by the server to associate the client initiated DTLS channel with the CSTP channel.  The following headers are used by the server's response to CONNECT, and are related to the DTLS channel establishment.  </p>
 
 <dl>
   <dt></dt>
-  <dd style="margin-left: 8">X-DTLS-Session-ID: A hex encoded value to be used as a DTLS session ID by the client. It serves as an identifier for the server to associate the incoming DTLS session with the TLS session.</dd>
+  <dd style="margin-left: 8">X-DTLS-App-ID: A hex encoded value to be used as a DTLS application-specific identifier by the client. It serves as an identifier for the server to associate the incoming DTLS session with the TLS session.</dd>
   <dt></dt>
   <dd style="margin-left: 8">X-DTLS-Port: The port number to which the client should send UDP packets for DTLS.</dd>
   <dt></dt>
@@ -1050,6 +1050,12 @@
         <b id="RFC2119">[RFC2119]</b>
       </td>
       <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.mavrogiannopoulos-app-id">[I-D.mavrogiannopoulos-app-id]</b>
+      </td>
+      <td class="top"><a>Mavrogiannopoulos, N.</a> and <a>D. Woodhouse</a>, "<a href="http://tools.ietf.org/html/draft-mavrogiannopoulos-app-id-00">A TLS application-specific identifier</a>", Internet-Draft draft-mavrogiannopoulos-app-id-00, September 2016.</td>
     </tr>
     <tr>
       <td class="reference">

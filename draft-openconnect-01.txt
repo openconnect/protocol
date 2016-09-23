@@ -80,11 +80,11 @@ Table of Contents
    3.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
    4.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  18
    5.  Normative References  . . . . . . . . . . . . . . . . . . . .  18
-   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  20
-   Appendix B.  Compression  . . . . . . . . . . . . . . . . . . . .  20
-   Appendix C.  DTD declarations . . . . . . . . . . . . . . . . . .  20
-     C.1.  config-auth.dtd . . . . . . . . . . . . . . . . . . . . .  20
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  21
+   Appendix A.  Name for Application-Layer Protocol Negotiation  . .  21
+   Appendix B.  Compression  . . . . . . . . . . . . . . . . . . . .  21
+   Appendix C.  DTD declarations . . . . . . . . . . . . . . . . . .  21
+     C.1.  config-auth.dtd . . . . . . . . . . . . . . . . . . . . .  21
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  22
 
 1.  Introduction
 
@@ -584,17 +584,17 @@ Internet-Draft         The OpenConnect Version 1.0           August 2016
    context value.
 
    In its client hello message the client must copy the value received
-   in the 'X-DTLS-Session-ID' header (after hex decoding it), to the
-   session ID field.  That identifier, does not imply any session
-   resumption, but is used by the server to associate the client
+   in the 'X-DTLS-App-ID' header (after hex decoding it), to a TLS
+   application-specific ID field [I-D.mavrogiannopoulos-app-id].  That
+   identifier, can be used by the server to associate the client
    initiated DTLS channel with the CSTP channel.  The following headers
    are used by the server's response to CONNECT, and are related to the
    DTLS channel establishment.
 
-      X-DTLS-Session-ID: A hex encoded value to be used as a DTLS
-      session ID by the client.  It serves as an identifier for the
-      server to associate the incoming DTLS session with the TLS
-      session.
+      X-DTLS-App-ID: A hex encoded value to be used as a DTLS
+      application-specific identifier by the client.  It serves as an
+      identifier for the server to associate the incoming DTLS session
+      with the TLS session.
 
       X-DTLS-Port: The port number to which the client should send UDP
       packets for DTLS.
@@ -1040,6 +1040,11 @@ Internet-Draft         The OpenConnect Version 1.0           August 2016
               DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
+   [I-D.mavrogiannopoulos-app-id]
+              Mavrogiannopoulos, N. and D. Woodhouse, "A TLS
+              application-specific identifier", draft-mavrogiannopoulos-
+              app-id-00 (work in progress), September 2016.
+
    [COMP-ISSUES]
               Bhargavan, K., Fournet, C., Kohlweiss, M., Pironti, A.,
               and P-Y. Strub, "TLS Compression Fingerprinting and a
@@ -1054,6 +1059,13 @@ Internet-Draft         The OpenConnect Version 1.0           August 2016
               Woodhouse, D., "http://www.infradead.org/openconnect/",
               2016.
 
+
+
+Mavrogiannopoulos       Expires February 2, 2017               [Page 19]
+
+Internet-Draft         The OpenConnect Version 1.0           August 2016
+
+
    [OPENCONNECT-SERVER]
               Mavrogiannopoulos, N., "http://www.infradead.org/ocserv/",
               2016.
@@ -1061,7 +1073,51 @@ Internet-Draft         The OpenConnect Version 1.0           August 2016
 
 
 
-Mavrogiannopoulos       Expires February 2, 2017               [Page 19]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mavrogiannopoulos       Expires February 2, 2017               [Page 20]
 
 Internet-Draft         The OpenConnect Version 1.0           August 2016
 
@@ -1117,7 +1173,7 @@ C.1.  config-auth.dtd
 
 
 
-Mavrogiannopoulos       Expires February 2, 2017               [Page 20]
+Mavrogiannopoulos       Expires February 2, 2017               [Page 21]
 
 Internet-Draft         The OpenConnect Version 1.0           August 2016
 
@@ -1173,4 +1229,4 @@ Author's Address
 
 
 
-Mavrogiannopoulos       Expires February 2, 2017               [Page 21]
+Mavrogiannopoulos       Expires February 2, 2017               [Page 22]
