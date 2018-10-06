@@ -43,9 +43,6 @@
 
 	<!ENTITY RFC5705 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
-
-	<!ENTITY I-D.mavrogiannopoulos-app-id SYSTEM
-	"http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-mavrogiannopoulos-app-id-00.xml">
 ]>
 
 
@@ -55,9 +52,9 @@
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 
-<rfc category="info" ipr="trust200902" docName="draft-mavrogiannopoulos-openconnect-00">
+<rfc category="info" ipr="trust200902" docName="draft-mavrogiannopoulos-openconnect-01">
    <front>
-      <title abbrev="The OpenConnect Version 1.0">The OpenConnect VPN Protocol Version 1.0</title>
+      <title abbrev="The OpenConnect Version 1.0">The OpenConnect VPN Protocol Version 1.1</title>
 
       <author initials="N." surname="Mavrogiannopoulos" fullname="Nikos Mavrogiannopoulos">
          <organization>Red Hat</organization>
@@ -66,9 +63,8 @@
       </address>
       </author>
 
-      <date month="September" year="2016"/>
+      <date month="October" year="2018"/>
       <area>Security</area>
-<!--      <workgroup>TLS Working Group</workgroup> -->
       <keyword>SSL</keyword>
       <keyword>TLS</keyword>
       <keyword>VPN</keyword>
@@ -556,10 +552,9 @@ expected to assign its default route through the VPN.
   value.
   </t>
   <t>In its client hello message the client must copy the value received in the
-  'X-DTLS-App-ID' header (after hex decoding it), to a TLS application-specific
-  ID field <xref target="I-D.mavrogiannopoulos-app-id"/>.
-  That identifier, can be used by the server to associate the client initiated
-  DTLS channel with the CSTP channel.
+  'X-DTLS-App-ID' header (after hex decoding it), to the session ID field of
+  the DTLS client hello.  That identifier, is not used for session resumption,
+  and is used by the server to associate the DTLS channel with the CSTP channel.
   The following headers are used by the server's response to CONNECT, and are
   related to the DTLS channel establishment.
        <list style="hanging">
@@ -868,9 +863,6 @@ None yet.
 	&RFC3706;
 
 	&RFC2119;
-
-	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-mavrogiannopoulos-app-id-00.xml"?-->
-		&I-D.mavrogiannopoulos-app-id;
 
       <reference anchor="COMP-ISSUES">
 	<front>
