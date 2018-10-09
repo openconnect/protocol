@@ -2,8 +2,8 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 
 
- 	<!ENTITY RFC5246 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
+ 	<!ENTITY RFC8446 SYSTEM
+	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml">
 
  	<!ENTITY RFC5746 SYSTEM
 	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
@@ -103,7 +103,7 @@
    source VPN solutions have their source code as the primary description
    of their protocol. That allowed no easy study of each protocol's
    properties and weaknesses, and that is the secondary goal of this
-   document, to describe a deployed TLS based <xref target="RFC5246"/>
+   document, to describe a deployed TLS based <xref target="RFC8446"/>
    VPN protocol.
    </t>
 
@@ -126,7 +126,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 <section anchor="oc-protocol" title="The OpenConnect Protocol">
 <t>
    The OpenConnect protocol combines the TLS protocol <xref
-   target="RFC5246"/>, Datagram TLS protocol <xref
+   target="RFC8446"/>, Datagram TLS protocol <xref
    target="RFC6347"/> and HTTP protocols <xref
    target="RFC2616"/> to provide an Internet-Layer VPN channel.
    The channel is designed to operate using UDP packets, and
@@ -651,7 +651,7 @@ expected to assign its default route through the VPN.
 The format of the packets sent over the primary channel consists of an
 8-bytes header followed by data. The whole packet
 in encapsulated in a TLS record (see <xref
- target="RFC5246"/>). The bytes of the header indicate the type of data
+ target="RFC8446"/>). The bytes of the header indicate the type of data
 that follow, and their contents are explained in <xref target="cstp_table"/>.
 </t>
 
@@ -772,7 +772,7 @@ target="params-exchange"/>). The available headers are listed below.
 This document provides a description of a protocol to establish
 a VPN over a TLS channel. All security
 considerations of the referenced documents in particular
-<xref target="RFC5246"/> and <xref target="RFC6347"/> are applicable,
+<xref target="RFC8446"/> and <xref target="RFC6347"/> are applicable,
 in addition the following considerations.
 </t>
        <t>The protocol is designed to be as compatible as possible with
@@ -835,8 +835,8 @@ None yet.
   <back>
 
 
-    <references title="Normative References"><!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml"?-->
-	&RFC5246;
+    <references title="Normative References">
+	&RFC8446;
 
 	&RFC5746;
 
