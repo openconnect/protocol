@@ -54,7 +54,7 @@
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 
-<rfc category="info" ipr="trust200902" docName="draft-mavrogiannopoulos-openconnect-01">
+<rfc category="info" ipr="trust200902" docName="draft-mavrogiannopoulos-openconnect-02">
    <front>
       <title abbrev="The OpenConnect Version 1.1">The OpenConnect VPN Protocol Version 1.1</title>
 
@@ -100,14 +100,16 @@
    and is believed to be compatible with CISCO's AnyConnect protocol.
    </t>
    <t>
-   While there are many competing VPN protocol solutions, none of
-   them was ever described in a publicly available document. Even open
-   source VPN solutions have their source code as the primary description
-   of their protocol. That allowed no easy study of each protocol's
-   properties and weaknesses, and that is the secondary goal of this
-   document, to describe a deployed TLS based <xref target="RFC8446"/>
-   VPN protocol.
-   </t>
+   This protocol's design follows a minimalistic modular philosophy.
+   It delegates several protocol-related elements often considered as core VPN
+   features and diversifiers, to standards protocols. That delegation, allows
+   a minimalistic core protocol which contains very few security related elements
+   and is decoupled from cryptography. That in turn transfers the auditing
+   requirements due to cryptographic and negotiation protocols to dedicated
+   for that purpose components.
+   In particular the Openconnect VPN protocol uses standard protocols such as HTTP,
+   TLS <xref target="RFC8446"/> and DTLS <xref target="RFC6347"/> to provide a
+   VPN with data security and authenticity.</t>
 
 <section anchor="terminology" title="Requirements Terminology">
 <t>
