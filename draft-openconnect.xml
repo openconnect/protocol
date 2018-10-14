@@ -56,7 +56,7 @@
 
 <rfc category="info" ipr="trust200902" docName="draft-mavrogiannopoulos-openconnect-01">
    <front>
-      <title abbrev="The OpenConnect Version 1.0">The OpenConnect VPN Protocol Version 1.1</title>
+      <title abbrev="The OpenConnect Version 1.1">The OpenConnect VPN Protocol Version 1.1</title>
 
       <author initials="N." surname="Mavrogiannopoulos" fullname="Nikos Mavrogiannopoulos">
          <organization>Red Hat</organization>
@@ -77,7 +77,7 @@
 
       <abstract>
 <t>
-   This document specifies version 1.0 of the OpenConnect Virtual Private
+   This document specifies version 1.1 of the OpenConnect Virtual Private
    Network (VPN) protocol, a secure VPN protocol that provides
    communications privacy over the Internet.  That protocol is believed
    to be compatible with CISCO's AnyConnect VPN protocol. The protocol allows
@@ -118,7 +118,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 </section>
 <section anchor="goals-document" title="Goals of This Document">
 <t>
-   The OpenConnect protocol version 1.0 specification is intended primarily
+   The OpenConnect protocol version 1.1 specification is intended primarily
    for readers who will be implementing the protocol and those doing
    cryptographic analysis of it.
 </t>
@@ -925,10 +925,10 @@ None yet.
 
 <figure>
 <artwork><![CDATA[
-   Protocol:  openconnect-vpn/1.0
+   Protocol:  openconnect-vpn/1.1
    Identification Sequence:
            0x6f 0x70 0x65 0x6e 0x63 0x6f 0x6e 0x6e 0x65 0x63
-           0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x30
+           0x74 0x2d 0x76 0x70 0x6e 0x2f 0x31 0x2e 0x31
 ]]></artwork>
 </figure></t>
 </section>
