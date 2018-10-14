@@ -1,4 +1,4 @@
-ver = 00
+ver = 01
 maindraft = draft-openconnect
 draft = draft-mavrogiannopoulos-openconnect
 

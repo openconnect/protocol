@@ -1,51 +1,50 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 
-
- 	<!ENTITY RFC5246 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml">
+ 	<!ENTITY RFC8446 SYSTEM
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.8446.xml">
 
  	<!ENTITY RFC5746 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.5746.xml">
 
 	<!ENTITY RFC2119 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 
 	<!ENTITY RFC2743 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2743.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.2743.xml">
 
 	<!ENTITY RFC6066 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6066.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.6066.xml">
 
 	<!ENTITY RFC7301 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.7301.xml">
 
 	<!ENTITY RFC6347 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6347.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.6347.xml">
 
 	<!ENTITY RFC4559 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.4559.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.4559.xml">
 
 	<!ENTITY RFC2616 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml">
 
 	<!ENTITY RFC4519 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.4519.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.4519.xml">
 
 	<!ENTITY RFC6164 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.6164.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.6164.xml">
 
 	<!ENTITY RFC3706 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.3706.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.3706.xml">
 
 	<!ENTITY RFC5056 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5056.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.5056.xml">
 
 	<!ENTITY RFC5705 SYSTEM
-	"http://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
+	"https://xml.resource.org/public/rfc/bibxml/reference.RFC.5705.xml">
 
-	<!ENTITY I-D.mavrogiannopoulos-app-id SYSTEM
-	"http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-mavrogiannopoulos-app-id-00.xml">
+	<!ENTITY I-D.draft-ietf-tls-dtls13 SYSTEM
+	"https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tls-dtls13-28.xml">
 ]>
 
 
@@ -55,9 +54,9 @@
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 
-<rfc category="info" ipr="trust200902" docName="draft-mavrogiannopoulos-openconnect-00">
+<rfc category="info" ipr="trust200902" docName="draft-mavrogiannopoulos-openconnect-01">
    <front>
-      <title abbrev="The OpenConnect Version 1.0">The OpenConnect VPN Protocol Version 1.0</title>
+      <title abbrev="The OpenConnect Version 1.0">The OpenConnect VPN Protocol Version 1.1</title>
 
       <author initials="N." surname="Mavrogiannopoulos" fullname="Nikos Mavrogiannopoulos">
          <organization>Red Hat</organization>
@@ -66,9 +65,8 @@
       </address>
       </author>
 
-      <date month="September" year="2016"/>
+      <date month="October" year="2018"/>
       <area>Security</area>
-<!--      <workgroup>TLS Working Group</workgroup> -->
       <keyword>SSL</keyword>
       <keyword>TLS</keyword>
       <keyword>VPN</keyword>
@@ -107,7 +105,7 @@
    source VPN solutions have their source code as the primary description
    of their protocol. That allowed no easy study of each protocol's
    properties and weaknesses, and that is the secondary goal of this
-   document, to describe a deployed TLS based <xref target="RFC5246"/>
+   document, to describe a deployed TLS based <xref target="RFC8446"/>
    VPN protocol.
    </t>
 
@@ -130,7 +128,7 @@ document are to be interpreted as described in <xref target="RFC2119"/>.
 <section anchor="oc-protocol" title="The OpenConnect Protocol">
 <t>
    The OpenConnect protocol combines the TLS protocol <xref
-   target="RFC5246"/>, Datagram TLS protocol <xref
+   target="RFC8446"/>, Datagram TLS protocol <xref
    target="RFC6347"/> and HTTP protocols <xref
    target="RFC2616"/> to provide an Internet-Layer VPN channel.
    The channel is designed to operate using UDP packets, and
@@ -556,10 +554,9 @@ expected to assign its default route through the VPN.
   value.
   </t>
   <t>In its client hello message the client must copy the value received in the
-  'X-DTLS-App-ID' header (after hex decoding it), to a TLS application-specific
-  ID field <xref target="I-D.mavrogiannopoulos-app-id"/>.
-  That identifier, can be used by the server to associate the client initiated
-  DTLS channel with the CSTP channel.
+  'X-DTLS-App-ID' header (after hex decoding it), to the session ID field of
+  the DTLS client hello.  That identifier, is not used for session resumption,
+  and is used by the server to associate the DTLS channel with the CSTP channel.
   The following headers are used by the server's response to CONNECT, and are
   related to the DTLS channel establishment.
        <list style="hanging">
@@ -575,6 +572,10 @@ expected to assign its default route through the VPN.
 	<t>X-DTLS-Rekey-Method: The method used in DTLS rekey, see <xref target="rekey-protocol"/>.
 	Only considered if applicable to the negotiated DTLS protocol.</t>
        </list>
+  </t>
+  <t>
+  Note that in future versions of the Datagram TLS protocol (see <xref target="I-D.draft-ietf-tls-dtls13"/>),
+  clients should supply the value in 'X-DTLS-App-ID' header as a PSK identity after hex decoding it.
   </t>
 
   <section anchor="legacy-secondary-channel-establishment" title="Legacy Establishment of Secondary UDP Channel (DTLS)">
@@ -656,7 +657,7 @@ expected to assign its default route through the VPN.
 The format of the packets sent over the primary channel consists of an
 8-bytes header followed by data. The whole packet
 in encapsulated in a TLS record (see <xref
- target="RFC5246"/>). The bytes of the header indicate the type of data
+ target="RFC8446"/>). The bytes of the header indicate the type of data
 that follow, and their contents are explained in <xref target="cstp_table"/>.
 </t>
 
@@ -777,7 +778,7 @@ target="params-exchange"/>). The available headers are listed below.
 This document provides a description of a protocol to establish
 a VPN over a TLS channel. All security
 considerations of the referenced documents in particular
-<xref target="RFC5246"/> and <xref target="RFC6347"/> are applicable,
+<xref target="RFC8446"/> and <xref target="RFC6347"/> are applicable,
 in addition the following considerations.
 </t>
        <t>The protocol is designed to be as compatible as possible with
@@ -840,8 +841,8 @@ None yet.
   <back>
 
 
-    <references title="Normative References"><!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml"?-->
-	&RFC5246;
+    <references title="Normative References">
+	&RFC8446;
 
 	&RFC5746;
 
@@ -869,8 +870,7 @@ None yet.
 
 	&RFC2119;
 
-	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-mavrogiannopoulos-app-id-00.xml"?-->
-		&I-D.mavrogiannopoulos-app-id;
+	&I-D.draft-ietf-tls-dtls13;
 
       <reference anchor="COMP-ISSUES">
 	<front>
